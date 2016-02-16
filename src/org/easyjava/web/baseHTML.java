@@ -37,7 +37,7 @@ public class baseHTML {
 			List<Map<String, String>> list = xml.read(global.PATH+"/config.xml","css-once");
 			String css = "";
 			for(Map<String, String>ls : list){
-				if(!ls.get("page").equals("upgrade")) continue;
+				if(!ls.get("page").equals(page)) continue;
 				for(String x: ls.get("value").split(";"))
 				css =css +"\t\t"+String.format("<link rel='stylesheet' href='%s' type='text/css' />\n ",x);
 			}
@@ -45,8 +45,25 @@ public class baseHTML {
 			
 		}
 		
-		public String scanJs(String js){
+		public String scanJs(){
+			List<Map<String, String>> list = xml.read(global.PATH+"/config.xml","js");
+			String js = "";
+			for(Map<String, String>ls : list){
+				for(String x: ls.get("value").split(";"))
+				js =js +"\t\t"+String.format("<script type=\"text/javascript\" src=\"%s\"></script>\n",x);
+			}
 			return js;
+		}
+		
+		public String pageJs(String page){
+			List<Map<String, String>> list = xml.read(global.PATH+"/config.xml","js-once");
+			String js = "";
+			for(Map<String, String>ls : list){
+				if(!ls.get("page").equals(page)) continue;
+				for(String x: ls.get("value").split(";"))
+				js =js +"\t\t"+String.format("<script type=\"text/javascript\" src=\"%s\"></script>\n ",x);
+			}
+			return js;		
 		}
 		
 		public String completeHTML(){
@@ -55,6 +72,8 @@ public class baseHTML {
 					+ "\t<head>\n"
 					+ scanCss()
 					+ pageCss("upgrade")
+					+ scanJs()
+					+ pageJs("upgrade")
 					+ "\t</head>\n"
 					+ "\t<body>\n"
 					+ "\t</body>\n"

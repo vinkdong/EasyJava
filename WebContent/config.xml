@@ -4,4 +4,10 @@
 		css/base.css;
 	</css>
 	<css-once  page='upgrade'>css/upgrade.css</css-once>
+	
+	<js>
+	js/base.js;
+	</js>
+	<js-once page='upgrade'>js/upgrade.js</js-once>
+	<js-once page='upgrade2'>js/upgrade2.js</js-once>
 </data>
