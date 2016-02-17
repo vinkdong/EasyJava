@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -41,17 +42,35 @@ public class filter implements Filter {
 		// place your code here
 		HttpServletRequest hq = (HttpServletRequest) request;
 		HttpServletResponse hr = (HttpServletResponse) response;
-		
-		if(hq.getRequestURI().matches(".*(\\.css|\\.js|upgrade)")){
+		String  url = hq.getServletPath();
+//		System.out.println(hq.getContextPath());	//  /EasyJava
+//		System.out.println(hq.getLocalAddr());		 //   127.0.0.1
+//		System.out.println(hq.getLocalName());	 //	localhost
+//		System.out.println(hq.getMethod());			//		GET
+//		System.out.println(hq.getPathInfo());		//		null
+//		System.out.println(hq.getPathTranslated());// null
+//		System.out.println(hq.getProtocol());			//		HTTP/1.1
+//		System.out.println(hq.getQueryString());	//		null
+//		System.out.println(hq.getRemoteAddr());//		127.0.0.1
+//		System.out.println(hq.getRemoteHost());//		127.0.0.1		
+//		System.out.println(hq.getRemotePort());//		54641
+//		System.out.println(hq.getReader());			//		org.apache.catalina.connector.CoyoteReader@4bc4dafb
+//		System.out.println(hq.getScheme());			//		http
+//		System.out.println(hq.getServletPath());	//		/aa
+//		System.out.println(hq.getServletContext());//	org.apache.catalina.core.ApplicationContextFacade@5a51ccf2
+//        System.out.println("*******************------------------******************");
+        System.out.println(global.PATH);
+		if(url.matches(".*(\\.css|\\.js|upgrade)")){
 			chain.doFilter(request, response);
 		}
-		else if(hq.getRequestURI().matches(".*/upgrade")){
-			hr.sendRedirect("upgrade");
+		else if(url.matches(".*index\\.(jsp|gsp|html|htm|asp|php)")){
+			hr.sendRedirect("index.esp");
 		}
 		else{
+			new initPage().loadPage(url);
 			PrintWriter out = response.getWriter();
 			request.setCharacterEncoding("utf-8");
-			out.print(new baseHTML().completeHTML());	
+			out.print(new baseHTML().completeHTML(url));	
 		}
 
 //		new upgrade().doPost((HttpServletRequest) request, (HttpServletResponse) response);
