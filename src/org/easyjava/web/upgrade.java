@@ -36,7 +36,6 @@ public class upgrade extends HttpServlet {
 		
 		PrintWriter out = response.getWriter();
 		request.setCharacterEncoding("utf-8");
-		new baseHTML().scanCss();
 		out.print(new baseHTML().completeHTML());
 	}
 
