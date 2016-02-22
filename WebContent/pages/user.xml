@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data> 
+  <field name="title"  layout='http://vinkdong.com/easyjava/layerout/homepage.dat'>在这里开启你的网站开发之路</field> 
+<field name='subtitle'>EasyJava Web Site Build</field>
+<button string='阅读文档'/>
+</data>

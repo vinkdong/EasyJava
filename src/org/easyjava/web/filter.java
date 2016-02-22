@@ -40,9 +40,12 @@ public class filter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		// TODO Auto-generated method stub
 		// place your code here
+		String CONTENT_TYPE = "text/html; charset=utf-8";
+		response.setContentType(CONTENT_TYPE);
 		HttpServletRequest hq = (HttpServletRequest) request;
 		HttpServletResponse hr = (HttpServletResponse) response;
 		String  url = hq.getServletPath();
+		
 //		System.out.println(hq.getContextPath());	//  /EasyJava
 //		System.out.println(hq.getLocalAddr());		 //   127.0.0.1
 //		System.out.println(hq.getLocalName());	 //	localhost
@@ -59,18 +62,23 @@ public class filter implements Filter {
 //		System.out.println(hq.getServletPath());	//		/aa
 //		System.out.println(hq.getServletContext());//	org.apache.catalina.core.ApplicationContextFacade@5a51ccf2
 //        System.out.println("*******************------------------******************");
-        System.out.println(global.PATH);
-		if(url.matches(".*(\\.css|\\.js|upgrade)")){
+		if(url.matches(".*(\\.css|\\.js|upgrade|\\.png|\\.jpg|\\.svg)")){
 			chain.doFilter(request, response);
 		}
 		else if(url.matches(".*index\\.(jsp|gsp|html|htm|asp|php)")){
 			hr.sendRedirect("index.esp");
 		}
 		else{
-			new initPage().loadPage(url);
+			
 			PrintWriter out = response.getWriter();
 			request.setCharacterEncoding("utf-8");
-			out.print(new baseHTML().completeHTML(url));	
+			hr.setCharacterEncoding("utf-8");
+//			out.print(new baseHTML().completeHTML(url));	
+			if (new initPage().loadPage(url)!=null){
+				out.print(new initPage().loadPage(url));
+			}
+			else
+				out.print(new baseHTML().completeHTML(url));
 		}
 
 //		new upgrade().doPost((HttpServletRequest) request, (HttpServletResponse) response);

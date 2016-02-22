@@ -1,15 +1,12 @@
 package org.easyjava.web;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import org.easyjava.file.file;
 import org.easyjava.file.xml;
 
 public class baseHTML {
 		public String initHtml(String html) {
-			
 			
 			return html;
 			

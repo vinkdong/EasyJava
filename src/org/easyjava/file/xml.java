@@ -11,6 +11,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.easyjava.web.global;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -58,14 +59,25 @@ public class xml {
 				return list;
 			} catch (SAXException e) {
 				System.err.println("初始化SAX失败");
+				return null;
 			} catch (IOException e) {
 				System.err.println("读取IO失败");
+				return null;
 			}
 		} catch (ParserConfigurationException e) {
 			System.err.println("创建对象失败");
-		}	
-		return null;
+			return null;
+		}
 		
+	}
+	
+	/**
+	 * TODO 扩展
+	 * @param url
+	 * @return
+	 */
+	public String urlToPath(String url){
+		return global.PATH+"/pages"+url+".xml";
 	}
 	
 

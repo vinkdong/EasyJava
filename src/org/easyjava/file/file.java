@@ -1,6 +1,9 @@
 package org.easyjava.file;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,4 +35,23 @@ public class file {
 	        }
 	        return lfile;
 	    }
+	 
+	 public String fileToString(String path){
+		 
+		return path;
+		 
+	 }
+	 
+	 public static BufferedReader  getBufferRead(String path){
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new FileReader(path));
+			return reader;
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+		 
+	 }
 }
