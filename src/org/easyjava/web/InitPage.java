@@ -5,8 +5,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import org.easyjava.DB.DATABASE;
-import org.easyjava.DB.DB;
+import org.easyjava.database.DATABASE;
+import org.easyjava.database.DB;
 import org.easyjava.file.EFile;
 import org.easyjava.file.EXml;
 import org.easyjava.network.ENetwork;

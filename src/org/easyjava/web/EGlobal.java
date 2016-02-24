@@ -10,5 +10,6 @@ public class EGlobal {
 	
 	public static String PATH = new  EFile().currentPath() ;
 	public static List<Map<String, String>>  LAYEROUT =  EXml.read(EGlobal.PATH+"/config.xml", "layerout");    	 
+	public static boolean debug = false;
 
 }

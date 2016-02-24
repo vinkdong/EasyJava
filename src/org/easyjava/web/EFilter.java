@@ -14,8 +14,9 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.easyjava.DB.DATABASE;
-import org.easyjava.DB.DB;
+import org.easyjava.database.DATABASE;
+import org.easyjava.database.DB;
+import org.easyjava.database.Model;
 
 /**
  * Servlet Filter implementation class filter
@@ -72,18 +73,28 @@ public class EFilter implements Filter {
 			hr.sendRedirect("index.esp");
 		}
 		else{
-			DATABASE.DATABASE_LOCATION = "127.0.0.1";
-			DATABASE.DATABASE_NAME = "hrp_la";
-			DATABASE.DATABASE_PORT = "5432";
-			DATABASE.DATABASE_USER = "odoo";
-			DATABASE.DATABASE_PASSWORD = "odoo";
-			DATABASE.DATABASE_TYPE="postgresql";
-			DB.init();
-			if (DB.connection != null) {
-				System.out.println("You made it, take control your database now!");
-			} else {
-				System.out.println("Failed to make connection!");
+			if (DB.connection == null) {
+				System.out.println("正在连接数据库");
+				DATABASE.DATABASE_LOCATION = "127.0.0.1";
+				DATABASE.DATABASE_NAME = "easyjava";
+				DATABASE.DATABASE_PORT = "5432";
+				DATABASE.DATABASE_USER = "odoo";
+				DATABASE.DATABASE_PASSWORD = "odoo";
+				DATABASE.DATABASE_TYPE="postgresql";
+				DB.init();
 			}
+			
+			String[] fields = new String[3] ;
+			fields[0] = "field=name,string=User,type=Text";
+			fields[1] = "field=sex,string=Sex,type=Text";
+			fields[2] = "field=salary,string=Salary,type=float";
+			
+		    Model.add("hr_employee",fields);
+			
+					  
+
+			
+//			Mo.define("ed",null, true);
 			PrintWriter out = response.getWriter();
 			request.setCharacterEncoding("utf-8");
 			hr.setCharacterEncoding("utf-8");

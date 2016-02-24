@@ -1,4 +1,4 @@
-package org.easyjava.DB;
+package org.easyjava.database;
 import java.sql.Connection;
 
 public class DATABASE {
