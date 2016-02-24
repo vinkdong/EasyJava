@@ -9,7 +9,7 @@
   </description>
 	<servlet>
 		<servlet-name>upgrade</servlet-name>
-		<servlet-class>org.easyjava.web.upgrade</servlet-class>
+		<servlet-class>org.easyjava.web.Upgrade</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>upgrade</servlet-name>
@@ -17,7 +17,7 @@
 	</servlet-mapping>
 	<filter>
 		<filter-name>easyjava</filter-name>
-		<filter-class>org.easyjava.web.filter</filter-class>
+		<filter-class>org.easyjava.web.EFilter</filter-class>
 	</filter>
 	<filter-mapping>
 		<filter-name>easyjava</filter-name>
