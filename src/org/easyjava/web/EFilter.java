@@ -84,15 +84,30 @@ public class EFilter implements Filter {
 				DB.init();
 			}
 			
+			
+			
 			String[] fields = new String[3] ;
 			fields[0] = "field=name,string=User,type=Text";
 			fields[1] = "field=sex,string=Sex,type=Text";
 			fields[2] = "field=salary,string=Salary,type=float";
+//		    Model.add("hr_employee",fields);
+		    
+//		    One2Many
+			String[]  comment = new String[3];
+			comment[0] = "field=name,string=User,type=Text";
+			comment[1] = "field=date,string=Date,type=Date";
+			comment[2] = "field=content,string=Comment,type=Text";
+			Model.add("comment", comment);
 			
-		    Model.add("hr_employee",fields);
+			String[]  one2many = new String[4];
+			one2many[0] = "field=name,string=Name,type=Text";
+			one2many[1] = "field=date,string=Date,type=Date";
+			one2many[2] = "field=content,string=Content,type=Text";
+			one2many[3] = "field=comment,string=Comment,type=one2many:comment";
+			Model.add("forum", one2many);
 			
-					  
-
+			
+			
 			
 //			Mo.define("ed",null, true);
 			PrintWriter out = response.getWriter();

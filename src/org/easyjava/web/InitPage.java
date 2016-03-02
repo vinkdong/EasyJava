@@ -29,12 +29,15 @@ public class InitPage {
 		}
 		if (reader==null) 
 			return null;
-		return  fillLayer(reader, fieldList);
+		return  fillLayer(reader, fieldList,url);
 		
 	}
 	
-	public String fillLayer(BufferedReader reader,List<Map<String, String>> fieldList ){
-		String line ="",html="";	
+	public String fillLayer(BufferedReader reader,List<Map<String, String>> fieldList ,String url){
+		String line ="";	
+		String html ="<!DOCTYPE html>\n"
+						+ "<html lang='en'>\n"
+						+new BaseHTML().getHeader(url);
 		try {
 			while ((line=reader.readLine()) !=null) {
 				if(line.contains("$field_")){
@@ -45,12 +48,16 @@ public class InitPage {
 							html+=li.get("start");
 						};
 						if(li.get("field")!=null){
-							for(Map<String, String>fl:fieldList){
-								if(fl.get("name").equals(li.get("field"))){
+							if(li.get("field").equalsIgnoreCase("header")){
+								html += Self.env.search("forum","id = 1"); 
+							}
+							else for(Map<String, String>fl:fieldList){
+								 if(fl.get("name").equals(li.get("field"))){
 									html+=fl.get("value");
 									break;
 								}
 							}
+							
 						};
 						if(li.get("end")!=null){
 							html+=li.get("end")+"\n";
@@ -65,7 +72,7 @@ public class InitPage {
 			// TODO Auto-generated catch block
 			return null;
 		}
-		return html;
+		return html+"\n</html>";
 	};
 
 }

@@ -80,12 +80,12 @@ public class BaseHTML {
 			return js;		
 		}
 		
-		public String completeHTML(String page){
-			
+		public String completeHTML(String page){			
 			page = page.substring(1);
 			String html = 
-					   "<html>\n"
-					+ "\t<head>\n"
+					"<!DOCTYPE html>\n"
+					+ "<html lang='en'>\n"
+					+ "<head>\n"
 					+ scanCss(page)
 					+ pageCss(page)
 					+ scanJs(page)
@@ -95,6 +95,23 @@ public class BaseHTML {
 					+ "\t</body>\n"
 					+ "</html>\n";
 			return html;
-			
+		}
+		
+		public String getHeader(String page){
+			page = page.substring(1);
+			String html = 
+					  "<head>\n"
+					+ "<meta charset='utf-8'/>\n"
+					+ "<meta name='viewport' content='initial-scale=1'/>\n"
+					+ "<meta name='description' content='EasyJava'/>\n"
+					+ "<meta name='keywords' content='EasyJava'/>\n"
+					+ "<meta name='generator' content='EasyJava'/>\n"
+					+ "<title>在这里开启你的网站开发之路</title>\n"
+					+ scanCss(page)
+					+ pageCss(page)
+					+ scanJs(page)
+					+ pageJs(page)
+					+ "\t</head>\n";
+			return html;			
 		}
 }
