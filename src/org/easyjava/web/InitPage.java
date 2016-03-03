@@ -37,7 +37,7 @@ public class InitPage {
 		String line ="";	
 		String html ="<!DOCTYPE html>\n"
 						+ "<html lang='en'>\n"
-						+new BaseHTML().getHeader(url);
+						+new BaseHTML().getHeader(url)+new BaseHTML().getNav(url);
 		try {
 			while ((line=reader.readLine()) !=null) {
 				if(line.contains("$field_")){
@@ -49,7 +49,8 @@ public class InitPage {
 						};
 						if(li.get("field")!=null){
 							if(li.get("field").equalsIgnoreCase("header")){
-								html += Self.env.search("forum","id = 1"); 
+								html += new BaseHTML().getFormHeader("edit", "forum", "1");
+//								html += Self.env.search("forum","id = 1"); 
 							}
 							else for(Map<String, String>fl:fieldList){
 								 if(fl.get("name").equals(li.get("field"))){

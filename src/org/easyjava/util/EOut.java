@@ -55,7 +55,7 @@ public class EOut {
 		System.out.println();
 	}
 
-	public static void out(String str) {
+	public static void print(String str) {
 		if (EGlobal.debug) {
 			System.out.println(str);
 		}

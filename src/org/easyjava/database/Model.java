@@ -54,7 +54,7 @@ public class Model {
 		sql += o2m;
 		sql = sql.substring(0,sql.length()-2);
 		sql += "); ";
-		EOut.out(sql);
+		EOut.print(sql);
 		//TODO :仅对postgres有效
 		 try {
 			Statement st = DB.connection.createStatement();

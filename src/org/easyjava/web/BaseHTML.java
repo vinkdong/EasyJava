@@ -114,4 +114,57 @@ public class BaseHTML {
 					+ "\t</head>\n";
 			return html;			
 		}
+		
+		public String getNav(String page){
+			String html = "";
+			html += "<nav class=\"navbar navbar-default site-header\">\n" +
+					"    <div class=\"container overflow\">\n" +
+					"        <div class=\"navbar-header\">\n" +
+					"            <button type=\"button\" data-toggle=\"collapse\" data-target=\"#navigation\" aria-expanded=\"false\"\n" +
+					"                    class=\"navbar-toggle collapsed\"><span class=\"sr-only\">Toggle navigation</span><span\n" +
+					"                    class=\"icon-bar\"></span><span class=\"icon-bar\"></span><span class=\"icon-bar\"></span></button>\n" +
+					"            <a href=\"/\" class=\"navbar-brand\">\n" +
+					"                <img src=\"static/img/logo.png\" width=\"73\" height=\"73\">\n" +
+					"            </a>\n" +
+					"        </div>\n" +
+					"        <div id=\"navigation\" class=\"navbar-collapse collapse\">\n" +
+					"            <ul class=\"nav navbar-nav navbar-center\">\n" +
+					"                <li><a href=\"/\" class=\"active\">首页</a></li>\n" +
+					"                <li><a href=\"/who-we-are\" class=\"\">我们是谁</a></li>\n" +
+					"                <li><a href=\"/success-stories\" class=\"\">解决方案</a></li>\n" +
+					"                <li><a href=\"/how-it-works\" class=\"\">如何使用</a></li>\n" +
+					"                <li><a href=\"/join-us\" class=\"\">加入我们</a></li>\n" +
+					"                <li class=\"visible-xs-inline visible-sm-inline\"><a href=\"/user/login\">登录</a></li>\n" +
+					"            </ul>\n" +
+					"            <ul class=\"nav navbar-nav navbar-right hidden-xs hidden-sm\">\n" +
+					"                <!--登录注册按钮-->\n" +
+					"                <li class=\"login\"><a href=\"/goLogin\">登录</a></li>\n" +
+					"            </ul>\n" +
+					"        </div>\n" +
+					"    </div>\n" +
+					"</nav><br/><br/>";
+			return html;
+		}
+		
+		public String getFormHeader(String type,String model,String id){
+			String html = "";
+			if(type.equals("edit")){
+				html  += "<div class=\"row e_form\" data-id=\"none\">\n" +
+						"        <div class=\"col-md-8\">\n" +
+						"            <p>UserName:<input name=\"name\" type=\"text\"/></p>\n" +
+						"            <br/>\n" +
+						"            <p>Sex:<input name=\"sex\" type=\"text\"/></p>\n" +
+						"            <br/>\n" +
+						"           Content:<br/><textarea name=\"content\" type=\"textarea\" class=\"text\" cols=\"50\" rows=\"20\"></textarea></p>\n" +
+						"        </div>\n" +
+						"        <div class=\"col-md-8\">\n" +
+						"            <p><button class=\"btn btn-success e_panel_submit\">Submit</button><span class=\"h3\">or</span>\n" +
+						"            <button class=\"btn btn-danger e_panel_cancel\">Cancel</button></p>\n" +
+						"        </div>\n" +
+						"</div>\n";
+				return html;
+			}
+			return null;
+			
+		}
 }

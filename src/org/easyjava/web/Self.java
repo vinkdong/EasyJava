@@ -1,9 +1,15 @@
 package org.easyjava.web;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.easyjava.database.DB;
 import org.easyjava.database.Model;
+import org.easyjava.file.EXml;
+import org.easyjava.util.ETool;
 
 public class Self {
 	
@@ -18,6 +24,18 @@ public class Self {
 					 "            <p>提交您的项目创意，将由专业项目经理与您一对一沟通，并组建精英团队，项目过程透明可跟踪，帮您快速完成产品</p>" +
 					 "        </div>";
 			return html;
+			
+		}
+		
+		public static void add(HttpServletRequest request){
+		
+			List<String> file_list  = new EXml().getFieldList(request.getServletPath());
+			Map<String, String> res = new HashMap<>();
+			
+			for(String rec:file_list){
+				res.put(rec, ETool.get(rec, request));
+			}
+			DB.add("forum", res);
 			
 		}
 	}

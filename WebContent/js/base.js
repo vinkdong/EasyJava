@@ -39,7 +39,7 @@ var easyjava = new Object({
     add_rpc: function (field_list) {
         var self = this;
         $.ajax({
-            type: 'get',
+            type: 'post',
             url: self.url+'_rpc',
             data: field_list,
             async: true,

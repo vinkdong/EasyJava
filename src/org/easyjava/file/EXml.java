@@ -71,7 +71,7 @@ public class EXml {
 		
 	}
 	
-	/**
+	/**根据请求的URL地址转换成对应的xml文件地址
 	 * TODO 扩展
 	 * @param url
 	 * @return
@@ -79,6 +79,16 @@ public class EXml {
 	public String urlToPath(String url){
 		return EGlobal.PATH+"/pages"+url+".xml";
 	}
+	
+	public List<String> getFieldList(String url){
+		String file_path = urlToPath(url);
+		List<String> field_list = new ArrayList<>();
+		field_list.add("name");
+		field_list.add("content");
+		return field_list;
+	}
+	
+	
 	
 
 }

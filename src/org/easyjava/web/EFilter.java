@@ -43,29 +43,15 @@ public class EFilter implements Filter {
 	 */
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		// TODO Auto-generated method stub
-		// place your code here
 		String CONTENT_TYPE = "text/html; charset=utf-8";
 		response.setContentType(CONTENT_TYPE);
 		HttpServletRequest hq = (HttpServletRequest) request;
 		HttpServletResponse hr = (HttpServletResponse) response;
 		String  url = hq.getServletPath();
-		
-//		System.out.println(hq.getContextPath());	//  /EasyJava
-//		System.out.println(hq.getLocalAddr());		 //   127.0.0.1
-//		System.out.println(hq.getLocalName());	 //	localhost
-//		System.out.println(hq.getMethod());			//		GET
-//		System.out.println(hq.getPathInfo());		//		null
-//		System.out.println(hq.getPathTranslated());// null
-//		System.out.println(hq.getProtocol());			//		HTTP/1.1
-//		System.out.println(hq.getQueryString());	//		null
-//		System.out.println(hq.getRemoteAddr());//		127.0.0.1
-//		System.out.println(hq.getRemoteHost());//		127.0.0.1		
-//		System.out.println(hq.getRemotePort());//		54641
-//		System.out.println(hq.getReader());			//		org.apache.catalina.connector.CoyoteReader@4bc4dafb
-//		System.out.println(hq.getScheme());			//		http
-//		System.out.println(hq.getServletPath());	//		/aa
-//		System.out.println(hq.getServletContext());//	org.apache.catalina.core.ApplicationContextFacade@5a51ccf2
-//        System.out.println("*******************------------------******************");
+		        
+        if(url.endsWith("_rpc")){
+        	Self.env.add(hq);	
+        }
 		if(url.matches(".*(\\.css|\\.js|upgrade|\\.png|\\.jpg|\\.svg)")){
 			chain.doFilter(request, response);
 		}
@@ -83,8 +69,6 @@ public class EFilter implements Filter {
 				DATABASE.DATABASE_TYPE="postgresql";
 				DB.init();
 			}
-			
-			
 			
 			String[] fields = new String[3] ;
 			fields[0] = "field=name,string=User,type=Text";
