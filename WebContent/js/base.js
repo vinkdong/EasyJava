@@ -4,9 +4,19 @@
 var easyjava = new Object({
     init: function () {
         var start = this.start();
-        this.url = window.location.href;
+        this.url = this.getUrl();
         return start;
     },
+    getUrl: function() {
+    	var  url = window.location.href;
+    	if (url.indexOf("#", 0)>0){
+    		url=  url.substring(0, url.indexOf("#", 1));
+    	}
+    	if (url.indexOf("?", 0)>0){
+    		url=  url.substring(0, url.indexOf("?", 1));
+    	}    	
+    	return url;
+	},
     start: function () {
         var self = this;
 
@@ -40,17 +50,39 @@ var easyjava = new Object({
         var self = this;
         $.ajax({
             type: 'post',
-            url: self.url+'_rpc',
+            url: self.url+'_rpc_add',
             data: field_list,
             async: true,
             success: function (msg) {
-                alert('加载成功');
+            	if(/^[0-9]+$/.test(msg)){
+            		self.read_rpc("forum", msg, "view");
+            	}
             },
             error: function (msg) {
                 self.throw_err("<h3>警告</h3><p>网络请求 <strong>失败</strong>检查您的网络连接和设备环境</p><br/>");
             }
         });
     },
+    
+    read_rpc: function (model,id,operator) {
+        var self = this;
+		if(operator=='view'){
+			window.location.hash ="model="+model+"&id="+id+"&view="+operator;
+			$.ajax({
+				type:'get',
+				url:self.url+'_rpc_read',
+				data:{model:model,id:id},
+				async:true,
+				success:function(msg){
+					$('.e_form').html(msg);
+					$('.e_button_edit').html("");
+				},
+	            error: function () {
+	                self.throw_err("<h3>警告</h3><p>网络请求 <strong>失败</strong>检查您的网络连接和设备环境</p><br/>");
+	            }
+			});
+		}
+	},
 
     throw_err : function(msg){
 		alertify.alert(msg);

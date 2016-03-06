@@ -2,6 +2,7 @@ package org.easyjava.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
@@ -27,7 +28,7 @@ public class DB {
 		}
 	}	
 	
-	public static Boolean add(String table_name,Map<String, String> val){
+	public static int add(String table_name,Map<String, String> val){
 		String column = " (";
 		String val_s = " (";
 		for(String key:val.keySet()){
@@ -39,15 +40,29 @@ public class DB {
 		String sql = "insert into "+table_name + column +" VALUES "+ val_s ;
 		EOut.print(sql);
 		try {
+			while(connection ==null){
+				System.out.println("正在连接数据库");
+				DATABASE.DATABASE_LOCATION = "127.0.0.1";
+				DATABASE.DATABASE_NAME = "easyjava";
+				DATABASE.DATABASE_PORT = "5432";
+				DATABASE.DATABASE_USER = "odoo";
+				DATABASE.DATABASE_PASSWORD = "odoo";
+				DATABASE.DATABASE_TYPE="postgresql";
+				DB.init();
+			}
 			Statement stmt =  connection.createStatement();
-			int i = stmt.executeUpdate(sql);
+			int i = stmt.executeUpdate(sql,Statement.RETURN_GENERATED_KEYS);
+			ResultSet rs = stmt.getGeneratedKeys();
+			if(rs.next()){
+				return rs.getInt(1);
+			}
 			stmt.close();
-			return i != -1;
+			return -1;
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return null;
+			return -1;
 		}
 	}
 	

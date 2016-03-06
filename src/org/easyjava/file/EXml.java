@@ -77,6 +77,7 @@ public class EXml {
 	 * @return
 	 */
 	public String urlToPath(String url){
+		System.out.println("url:"+url);
 		return EGlobal.PATH+"/pages"+url+".xml";
 	}
 	

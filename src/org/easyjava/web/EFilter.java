@@ -48,11 +48,19 @@ public class EFilter implements Filter {
 		HttpServletRequest hq = (HttpServletRequest) request;
 		HttpServletResponse hr = (HttpServletResponse) response;
 		String  url = hq.getServletPath();
-		        
-        if(url.endsWith("_rpc")){
-        	Self.env.add(hq);	
+		PrintWriter out = response.getWriter();
+		request.setCharacterEncoding("utf-8");
+		hr.setCharacterEncoding("utf-8");   
+		
+        if(url.endsWith("_rpc_add")){
+        	int id  = Self.env.add(hq);
+        	out.print(id);        	
         }
-		if(url.matches(".*(\\.css|\\.js|upgrade|\\.png|\\.jpg|\\.svg)")){
+        else if(url.endsWith("_rpc_read")){
+        	String form  = Self.env.read(hq);	
+        	out.print(form);        	
+        }
+        else if(url.matches(".*(\\.css|\\.js|upgrade|\\.png|\\.jpg|\\.svg)")){
 			chain.doFilter(request, response);
 		}
 		else if(url.matches(".*index\\.(jsp|gsp|html|htm|asp|php)")){
@@ -94,9 +102,7 @@ public class EFilter implements Filter {
 			
 			
 //			Mo.define("ed",null, true);
-			PrintWriter out = response.getWriter();
-			request.setCharacterEncoding("utf-8");
-			hr.setCharacterEncoding("utf-8");
+			
 //			out.print(new baseHTML().completeHTML(url));	
 			if (new InitPage().loadPage(url)!=null){
 				out.print(new InitPage().loadPage(url));

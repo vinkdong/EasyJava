@@ -27,17 +27,19 @@ public class Self {
 			
 		}
 		
-		public static void add(HttpServletRequest request){
-		
+		public static int add(HttpServletRequest request){		
 			List<String> file_list  = new EXml().getFieldList(request.getServletPath());
-			Map<String, String> res = new HashMap<>();
-			
+			Map<String, String> res = new HashMap<>();		
 			for(String rec:file_list){
 				res.put(rec, ETool.get(rec, request));
 			}
-			DB.add("forum", res);
-			
+			return DB.add("forum", res);
 		}
+		
+		public static String read(HttpServletRequest request){
+			return new BaseHTML().getFormHeader("view", request.getParameter("model"), request.getParameter("id"));
+		}
+		
 	}
 
 }

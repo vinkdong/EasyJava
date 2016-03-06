@@ -157,13 +157,25 @@ public class BaseHTML {
 						"            <br/>\n" +
 						"           Content:<br/><textarea name=\"content\" type=\"textarea\" class=\"text\" cols=\"50\" rows=\"20\"></textarea></p>\n" +
 						"        </div>\n" +
-						"        <div class=\"col-md-8\">\n" +
+						"        <div class=\"col-md-8 e_button_edit\">\n" +
 						"            <p><button class=\"btn btn-success e_panel_submit\">Submit</button><span class=\"h3\">or</span>\n" +
 						"            <button class=\"btn btn-danger e_panel_cancel\">Cancel</button></p>\n" +
 						"        </div>\n" +
 						"</div>\n";
 				return html;
 			}
+			if(type.equals("view")){
+				html  += "<div class=\"row e_form\" data-id=\"none\">\n" +
+						"        <div class=\"col-md-8\">\n" +
+						"            <p>UserName:<span>张三</span></p>\n" +
+						"            <br/>\n" +
+						"            <p>Sex:<span>男</span></p>\n" +
+						"            <br/>\n" +
+						"           Content:<br/><div>云南大学软件学院</div></p>\n" +
+						"        </div>\n" +
+						"</div>\n";
+				return html;
+			}			
 			return null;
 			
 		}
