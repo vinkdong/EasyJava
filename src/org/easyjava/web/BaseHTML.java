@@ -149,7 +149,7 @@ public class BaseHTML {
 		public String getFormHeader(String type,String model,String id){
 			String html = "";
 			if(type.equals("edit")){
-				html  += "<div class=\"row e_form\" data-id=\"none\">\n" +
+				html  += "<div class=\"row e_form\" data-id=\""+id+"\">\n" +
 						"        <div class=\"col-md-8\">\n" +
 						"            <p>UserName:<input name=\"name\" type=\"text\"/></p>\n" +
 						"            <br/>\n" +
@@ -165,6 +165,7 @@ public class BaseHTML {
 				return html;
 			}
 			if(type.equals("view")){
+//				Self.env
 				html  += "<div class=\"row e_form\" data-id=\"none\">\n" +
 						"        <div class=\"col-md-8\">\n" +
 						"            <p>UserName:<span>张三</span></p>\n" +
