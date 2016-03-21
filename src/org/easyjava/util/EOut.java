@@ -7,7 +7,7 @@ import java.util.List;
 import org.easyjava.web.EGlobal;
 
 public class EOut {
-	public static void out(String[][] strarr) {
+	public static void print(String[][] strarr) {
 		for (int i = 0; i < strarr.length; i++) {
 			for (int j = 0; j < strarr[i].length; j++) {
 				System.out.print(" " + strarr[i][j]);
@@ -20,7 +20,7 @@ public class EOut {
 
 	}
 
-	public static void out(Integer[] strarr) {
+	public static void print(Integer[] strarr) {
 		for (int i = 0; i < strarr.length; i++) {
 
 			if (strarr[i] != 0) {
@@ -33,7 +33,7 @@ public class EOut {
 		System.out.println();
 	}
 
-	public static void out(String[] strarr) {
+	public static void print(String[] strarr) {
 
 		for (int i = 0; i < strarr.length; i++) {
 
@@ -42,7 +42,7 @@ public class EOut {
 		}
 	}
 
-	public static void out(int[] strarr) {
+	public static void print(int[] strarr) {
 		for (int i = 0; i < strarr.length; i++) {
 
 			if (strarr[i] != 0) {
@@ -61,13 +61,19 @@ public class EOut {
 		}
 
 	}
+	
+	public static void print(char[] ch){
+		for (char a:ch){
+			System.out.println(a);
+		}
+	}
 
 	/**
 	 * 打印ResultSet
 	 * 
 	 * @param rs
 	 */
-	public static void out(ResultSet rs) {
+	public static void print(ResultSet rs) {
 
 		try {
 			int i = rs.getMetaData().getColumnCount() + 1;

@@ -45,8 +45,8 @@ public class DB {
 				DATABASE.DATABASE_LOCATION = "127.0.0.1";
 				DATABASE.DATABASE_NAME = "easyjava";
 				DATABASE.DATABASE_PORT = "5432";
-				DATABASE.DATABASE_USER = "odoo";
-				DATABASE.DATABASE_PASSWORD = "odoo";
+				DATABASE.DATABASE_USER = "ej";
+				DATABASE.DATABASE_PASSWORD = "admin";
 				DATABASE.DATABASE_TYPE="postgresql";
 				DB.init();
 			}

@@ -144,7 +144,6 @@ public class EString {
 		}
 
 		return copyArr;
-
 	}
 
 }

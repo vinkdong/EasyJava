@@ -29,7 +29,8 @@ public class Self {
 		
 		public static int add(HttpServletRequest request){		
 			List<String> file_list  = new EXml().getFieldList(request.getServletPath());
-			Map<String, String> res = new HashMap<>();		
+			Map<String, String> res = new HashMap<>();
+			System.out.println("params:"+request.getQueryString());
 			for(String rec:file_list){
 				res.put(rec, ETool.get(rec, request));
 			}

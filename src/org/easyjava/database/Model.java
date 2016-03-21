@@ -23,7 +23,7 @@ public class Model {
 	
 
 	public  static void add(String model_name,String[] fields) {
-				
+		String query_table_exist = "select count(*) from pg_class where relname = '"+model_name+"'";
 		String sql = "CREATE TABLE "+model_name+"( \n" 
 						+ "ID SERIAL PRIMARY KEY  ,\n"  ; 
 		String o2m = "";
@@ -54,11 +54,15 @@ public class Model {
 		sql += o2m;
 		sql = sql.substring(0,sql.length()-2);
 		sql += "); ";
-		EOut.print(sql);
 		//TODO :仅对postgres有效
 		 try {
 			Statement st = DB.connection.createStatement();
-			st.executeUpdate(sql);
+			ResultSet tb_rs = st.executeQuery(query_table_exist);
+			tb_rs.next();
+			if (tb_rs.getInt(1)==0){
+				EOut.print(sql);
+				st.executeUpdate(sql);
+			};
 			st.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

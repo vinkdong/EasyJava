@@ -1,7 +1,9 @@
 package org.easyjava.web;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Enumeration;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -48,69 +50,74 @@ public class EFilter implements Filter {
 		HttpServletRequest hq = (HttpServletRequest) request;
 		HttpServletResponse hr = (HttpServletResponse) response;
 		String  url = hq.getServletPath();
-		PrintWriter out = response.getWriter();
 		request.setCharacterEncoding("utf-8");
 		hr.setCharacterEncoding("utf-8");   
 		
-        if(url.endsWith("_rpc_add")){
-        	int id  = Self.env.add(hq);
-        	out.print(id);        	
-        }
-        else if(url.endsWith("_rpc_read")){
-        	String form  = Self.env.read(hq);	
-        	out.print(form);        	
-        }
-        else if(url.matches(".*(\\.css|\\.js|upgrade|\\.png|\\.jpg|\\.svg)")){
+		BufferedReader br =hq.getReader();
+		String s = br.readLine();
+		System.out.println("s:"+s);
+		
+		    
+		
+		if(url.matches(".*(\\.css|\\.js|upgrade|\\.png|\\.jpg|\\.svg)")){
 			chain.doFilter(request, response);
 		}
-		else if(url.matches(".*index\\.(jsp|gsp|html|htm|asp|php)")){
-			hr.sendRedirect("index.esp");
-		}
 		else{
-			if (DB.connection == null) {
-				System.out.println("正在连接数据库");
-				DATABASE.DATABASE_LOCATION = "127.0.0.1";
-				DATABASE.DATABASE_NAME = "easyjava";
-				DATABASE.DATABASE_PORT = "5432";
-				DATABASE.DATABASE_USER = "odoo";
-				DATABASE.DATABASE_PASSWORD = "odoo";
-				DATABASE.DATABASE_TYPE="postgresql";
-				DB.init();
+			PrintWriter out = response.getWriter();
+			if(url.endsWith("_rpc_add")){
+	        	int id  = Self.env.add(hq);
+	        	out.print(id);        	
+	        }
+	        else if(url.endsWith("_rpc_read")){
+	        	String form  = Self.env.read(hq);	
+	        	out.print(form);        	
+	        }
+			else if(url.matches(".*index\\.(jsp|gsp|html|htm|asp|php)")){
+				hr.sendRedirect("index.esp");
 			}
-			
-			String[] fields = new String[3] ;
-			fields[0] = "field=name,string=User,type=Text";
-			fields[1] = "field=sex,string=Sex,type=Text";
-			fields[2] = "field=salary,string=Salary,type=float";
-//		    Model.add("hr_employee",fields);
-		    
-//		    One2Many
-			String[]  comment = new String[3];
-			comment[0] = "field=name,string=User,type=Text";
-			comment[1] = "field=date,string=Date,type=Date";
-			comment[2] = "field=content,string=Comment,type=Text";
-			Model.add("comment", comment);
-			
-			String[]  one2many = new String[4];
-			one2many[0] = "field=name,string=Name,type=Text";
-			one2many[1] = "field=date,string=Date,type=Date";
-			one2many[2] = "field=content,string=Content,type=Text";
-			one2many[3] = "field=comment,string=Comment,type=one2many:comment";
-			Model.add("forum", one2many);
-			
-			
-			
-			
-//			Mo.define("ed",null, true);
-			
-//			out.print(new baseHTML().completeHTML(url));	
-			if (new InitPage().loadPage(url)!=null){
-				out.print(new InitPage().loadPage(url));
+			else{
+				if (DB.connection == null) {
+					System.out.println("正在连接数据库");
+					DATABASE.DATABASE_LOCATION = "127.0.0.1";
+					DATABASE.DATABASE_NAME = "easyjava";
+					DATABASE.DATABASE_PORT = "5432";
+					DATABASE.DATABASE_USER = "ej";
+					DATABASE.DATABASE_PASSWORD = "admin";
+					DATABASE.DATABASE_TYPE="postgresql";
+					DB.init();
+				}
+				
+				String[] fields = new String[3] ;
+				fields[0] = "field=name,string=User,type=Text";
+				fields[1] = "field=sex,string=Sex,type=Text";
+				fields[2] = "field=salary,string=Salary,type=float";
+//			    Model.add("hr_employee",fields);
+			    
+//			    One2Many
+				String[]  comment = new String[3];
+				comment[0] = "field=name,string=User,type=Text";
+				comment[1] = "field=date,string=Date,type=Date";
+				comment[2] = "field=content,string=Comment,type=Text";
+				Model.add("comment", comment);
+				
+				String[]  one2many = new String[4];
+				one2many[0] = "field=name,string=Name,type=Text";
+				one2many[1] = "field=date,string=Date,type=Date";
+				one2many[2] = "field=content,string=Content,type=Text";
+				one2many[3] = "field=comment,string=Comment,type=one2many:comment";
+				Model.add("forum", one2many);				
+//				Mo.define("ed",null, true);
+				
+//				out.print(new baseHTML().completeHTML(url));	
+				if (new InitPage().loadPage(url)!=null){
+					out.print(new InitPage().loadPage(url));
+				}
+				else
+					out.print(new BaseHTML().completeHTML(url));
 			}
-			else
-				out.print(new BaseHTML().completeHTML(url));
-		}
 
+		}
+		
 //		new upgrade().doPost((HttpServletRequest) request, (HttpServletResponse) response);
 
 		// pass the request along the filter chain

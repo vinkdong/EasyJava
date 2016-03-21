@@ -3,6 +3,8 @@ package org.easyjava.web;
 import java.util.List;
 import java.util.Map;
 
+import org.easyjava.database.DATABASE;
+import org.easyjava.database.Model;
 import org.easyjava.file.EXml;
 
 public class BaseHTML {
@@ -177,6 +179,24 @@ public class BaseHTML {
 						"</div>\n";
 				return html;
 			}			
+			return null;
+			
+		}
+		
+		public String getTree(String... args){
+			String type = "view";
+			String limit = "20";
+			String model = args[0];
+			if (args.length>=2) {
+				type = args[1];
+			}
+			if (args.length>=3){
+				limit = args[2];
+			}
+			String condition = "1=1 limit ="+limit;
+			
+			List<Map<String, String>> data = Model.read(model, condition);
+			
 			return null;
 			
 		}
