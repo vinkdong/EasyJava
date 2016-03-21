@@ -29,14 +29,11 @@ public class Dict {
 		char[] attr = dict.toCharArray();
 		int deep = 0;
 		List<Character> res = new ArrayList<>();
-		res.add(attr[0]);
-		char[] us = new char[attr.length-1] ;
-		System.arraycopy(attr, 1,us, 0, attr.length-1);
-		for(char a:us){
+		for(char a:attr){
 			if( a=='{'){
 				deep ++;
 			}
-			if(deep==0 && a==','){
+			if(deep==1 && a==','){
 					res.add('$');
 					res.add('$');
 			}
