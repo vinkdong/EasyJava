@@ -82,4 +82,12 @@ public class Dict {
 		}
 		return "";	
 	}
+	
+	public String[] getKeys(){
+		List<String> list = new ArrayList<>();
+		for(String s:read(dict_str)){
+			list.add(s.split("\\*\\$")[0]) ;
+		}
+		return EList.listToStringArray(list);	
+	}
 }

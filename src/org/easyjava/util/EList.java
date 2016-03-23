@@ -20,5 +20,13 @@ public class EList {
 		}
 		return str.toString();
 	}
+	
+	public static String[] listToStringArray(List<String> list){
+		String[] strArr = new String[list.size()];
+		for(int i=0;i<list.size();i++){
+			strArr[i] = list.get(i);
+		}
+		return strArr;
+	}
 
 }
