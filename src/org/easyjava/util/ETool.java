@@ -31,7 +31,5 @@ public class ETool {
 			return res;
 		return "";
 	}
-	
-	
 
 }

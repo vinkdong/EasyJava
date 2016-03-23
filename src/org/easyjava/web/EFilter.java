@@ -53,12 +53,6 @@ public class EFilter implements Filter {
 		request.setCharacterEncoding("utf-8");
 		hr.setCharacterEncoding("utf-8");   
 		
-		BufferedReader br =hq.getReader();
-		String s = br.readLine();
-		System.out.println("s:"+s);
-		
-		    
-		
 		if(url.matches(".*(\\.css|\\.js|upgrade|\\.png|\\.jpg|\\.svg)")){
 			chain.doFilter(request, response);
 		}

@@ -5,8 +5,8 @@ import java.util.List;
 
 public class EList {
 	
-	public List copy(List ls){
-		List res = new ArrayList<>();
+	public List<Object> copy(List<?> ls){
+		List<Object> res = new ArrayList<>();
 		for(Object li:ls){
 			res.add(li);
 		}

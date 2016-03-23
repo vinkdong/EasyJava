@@ -1,5 +1,7 @@
 package org.easyjava.web;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.easyjava.database.DB;
 import org.easyjava.database.Model;
+import org.easyjava.file.Dict;
 import org.easyjava.file.EXml;
 import org.easyjava.util.ETool;
 
@@ -15,7 +18,7 @@ public class Self {
 	
 	static class env{
 		public static String search(String model,String domain){
-			List<Map<String, String>> res = Model.read(model, domain);
+			Model.read(model, domain);
 			String  html = "<div class=\"col-md-8\">" +
 					 "           <a>用户名</a>" +
 					 "            时间" +
@@ -27,14 +30,25 @@ public class Self {
 			
 		}
 		
-		public static int add(HttpServletRequest request){		
-			List<String> file_list  = new EXml().getFieldList(request.getServletPath());
-			Map<String, String> res = new HashMap<>();
-			System.out.println("params:"+request.getQueryString());
-			for(String rec:file_list){
-				res.put(rec, ETool.get(rec, request));
+		public static int add(HttpServletRequest request){
+			try {
+				BufferedReader br = request.getReader();
+				String dict_str = br.readLine();
+				Dict dict  = new Dict();
+				dict.update(dict_str);
+				Dict params = dict.getDict("params");
+				List<String> file_list  = new EXml().getFieldList(request.getServletPath());
+				Map<String, String> res = new HashMap<>();
+				for(String rec:file_list){
+					res.put(rec, params.get(rec));
+				}
+				return DB.add("forum", res);
+				
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			return DB.add("forum", res);
+			return 0;
 		}
 		
 		public static String read(HttpServletRequest request){
