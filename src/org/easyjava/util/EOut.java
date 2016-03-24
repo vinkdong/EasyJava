@@ -3,6 +3,7 @@ package org.easyjava.util;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import org.easyjava.web.EGlobal;
 
@@ -15,11 +16,21 @@ public class EOut {
 					System.out.println();
 			}
 			System.out.println();
-
 		}
-
 	}
-
+	/**
+	 * 打印List<Map<String, String>>
+	 * @param strarr
+	 */
+	public static void print(List<Map<String, String>> list) {
+		for (int i = 0; i < list.size(); i++) {
+				System.out.println(list.get(i));
+				if (i % 20 == 0)
+					System.out.println();
+			
+			System.out.println();
+		}
+	}
 	public static void print(Integer[] strarr) {
 		for (int i = 0; i < strarr.length; i++) {
 

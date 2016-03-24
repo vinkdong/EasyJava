@@ -10,9 +10,16 @@ import org.easyjava.database.DB;
 import org.easyjava.file.EFile;
 import org.easyjava.file.EXml;
 import org.easyjava.network.ENetwork;
+import org.easyjava.util.EOut;
 import org.easyjava.util.EString;
 
-public class InitPage {
+public class Init {
+	
+	public void initDb(String url){
+		String path = new EXml().urlToPath(url);
+		List<Map<String, String>> fieldList = EXml.read(path, "field");
+		EOut.print(fieldList);
+	}
 	
 	public String  loadPage(String url) {
 		String path = new EXml().urlToPath(url);

@@ -15,4 +15,9 @@
 	<js-once page='upgrade2'>js/upgrade2.js</js-once>
 
 	<layerout id="homepage">layerout/homepage.dat</layerout>
+	<database>
+		<db-name>easyjava</db-name>
+		<db-user>odoo</db-user>
+		<db-pwd>odoo</db-pwd>
+	</database>
 </data>

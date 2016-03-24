@@ -20,6 +20,8 @@ import org.easyjava.database.DATABASE;
 import org.easyjava.database.DB;
 import org.easyjava.database.Model;
 
+import com.sun.org.apache.bcel.internal.generic.INEG;
+
 /**
  * Servlet Filter implementation class filter
  */
@@ -71,6 +73,7 @@ public class EFilter implements Filter {
 			}
 			else{
 				if (DB.connection == null) {
+					new Init().initDb(url);
 					System.out.println("正在连接数据库");
 					DATABASE.DATABASE_LOCATION = "127.0.0.1";
 					DATABASE.DATABASE_NAME = "easyjava";
@@ -103,8 +106,8 @@ public class EFilter implements Filter {
 //				Mo.define("ed",null, true);
 				
 //				out.print(new baseHTML().completeHTML(url));	
-				if (new InitPage().loadPage(url)!=null){
-					out.print(new InitPage().loadPage(url));
+				if (new Init().loadPage(url)!=null){
+					out.print(new Init().loadPage(url));
 				}
 				else
 					out.print(new BaseHTML().completeHTML(url));
