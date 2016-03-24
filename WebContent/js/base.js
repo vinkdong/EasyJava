@@ -12,7 +12,7 @@ var genericJsonRpc = function(params, fct) {
         if (result.error !== undefined) {
             return $.Deferred().reject("server", result.error);
         } else {
-            return result.result;
+            return result;
         }
     }, function() {
         var def = $.Deferred();
@@ -50,7 +50,11 @@ var easyjava = new Object({
                 cr = cr.parent();
                 id = cr.find('.e_form').attr("data-id");
             }
-            return self.add(self.read_field(cr,id));
+            return self.add(self.read_field(cr,id)).done(function(data){
+            	if(/^[0-9]+$/.test(data)){
+            		self.read_rpc("forum", data, "view");
+            	}
+            });
         });
     },
     read_field : function(cr,id){
@@ -64,7 +68,7 @@ var easyjava = new Object({
         return res;
     },
     add: function(field_list){
-        this.add_rpc(field_list);
+        return this.add_rpc(field_list);
     },
 
     add_rpc: function (field_list) {
