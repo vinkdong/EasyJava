@@ -1,19 +1,16 @@
 package org.easyjava.web;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import org.easyjava.database.DATABASE;
-import org.easyjava.database.DB;
 import org.easyjava.file.EFile;
 import org.easyjava.file.EXml;
 import org.easyjava.network.ENetwork;
 import org.easyjava.util.EOut;
 import org.easyjava.util.EString;
 
-public class Init {
+public class WebView {
 	
 	public void initDb(String url){
 		String path = new EXml().urlToPath(url);

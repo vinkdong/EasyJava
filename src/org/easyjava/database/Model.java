@@ -13,8 +13,6 @@ import java.util.regex.Pattern;
 import org.easyjava.util.EOut;
 import org.easyjava.util.EString;
 
-import com.sun.org.apache.xerces.internal.util.SynchronizedSymbolTable;
-
 public class Model {	
 	protected String string ="";
 	protected String relation ="";

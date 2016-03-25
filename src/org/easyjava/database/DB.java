@@ -51,7 +51,7 @@ public class DB {
 				DB.init();
 			}
 			Statement stmt =  connection.createStatement();
-			int i = stmt.executeUpdate(sql,Statement.RETURN_GENERATED_KEYS);
+			stmt.executeUpdate(sql,Statement.RETURN_GENERATED_KEYS);
 			ResultSet rs = stmt.getGeneratedKeys();
 			if(rs.next()){
 				return rs.getInt(1);

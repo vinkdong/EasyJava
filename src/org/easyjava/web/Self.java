@@ -12,7 +12,6 @@ import org.easyjava.database.DB;
 import org.easyjava.database.Model;
 import org.easyjava.file.Dict;
 import org.easyjava.file.EXml;
-import org.easyjava.util.ETool;
 
 public class Self {
 	
