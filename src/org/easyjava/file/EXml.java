@@ -12,6 +12,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.easyjava.web.EGlobal;
+import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -88,7 +89,34 @@ public class EXml {
 		return field_list;
 	}
 	
-	
-	
+	@Test
+	public void xx(){
+		toDict("/Users/Vink/easyjava/WebContent/pages/forum.xml");
+	}
+	public Dict toDict(String path) {
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		try {
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			File file = new File(path);
+			try {
+				Document doc = builder.parse(file);
+				Element root = doc.getDocumentElement();
+				NodeList nodeList = root.getChildNodes();
+				for(int i=0;i<nodeList.getLength();i++){
+					Node node = nodeList.item(i);
+					if(node.getNodeType()== Node.ELEMENT_NODE){
+						System.out.println(node.getNodeName());
+					}
+				}
+			} catch (SAXException e) {
+				System.err.println("初始化SAX失败");
+			} catch (IOException e) {
+				System.err.println("读取IO失败");
+			}
+		} catch (ParserConfigurationException e) {
+			System.err.println("创建对象失败");
+		}
+		return null;
 
+	}
 }
