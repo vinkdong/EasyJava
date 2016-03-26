@@ -145,5 +145,23 @@ public class EString {
 
 		return copyArr;
 	}
+	
+	/**
+	 * 
+	 * @param start
+	 * @param end
+	 * @param origin_string
+	 * @param insert_string
+	 * @return
+	 */
+	public static String insert(int start,int end,String origin_string,String insert_string){
+		String first = origin_string.substring(0, start);
+		String last = origin_string.substring(end);
+		return first+insert_string+last;
+	}
+	
+	public static String insert(int position,String origin_string,String insert_string){
+		return origin_string.substring(0, position)+insert_string+origin_string.substring(position, origin_string.length());
+	}
 
 }

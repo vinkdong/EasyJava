@@ -54,13 +54,16 @@ public class EOut {
 	}
 
 	public static void print(int[] strarr) {
+		if(strarr==null){
+			System.out.println("null");
+		}
 		for (int i = 0; i < strarr.length; i++) {
 
-			if (strarr[i] != 0) {
+			
 				System.out.print(" " + strarr[i]);
 				if (i % 20 == 0)
 					System.out.println();
-			}
+			
 
 		}
 		System.out.println();
