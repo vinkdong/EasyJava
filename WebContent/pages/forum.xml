@@ -4,7 +4,7 @@
 		<rec name="type">view</rec>
 		<rec name="model">forum</rec>
 		<rec name="name">欢迎</rec>
-		<rec name="groups">who can see it</rec>
+		<rec name="groups">all</rec>
 		<rec name="layout">none</rec>
 		<rec name="view">
 			<tree>
