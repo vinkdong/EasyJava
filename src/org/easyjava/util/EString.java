@@ -154,7 +154,7 @@ public class EString {
 	 * @param insert_string
 	 * @return
 	 */
-	public static String insert(int start,int end,String origin_string,String insert_string){
+	public static String replace(int start,int end,String origin_string,String insert_string){
 		String first = origin_string.substring(0, start);
 		String last = origin_string.substring(end);
 		return first+insert_string+last;

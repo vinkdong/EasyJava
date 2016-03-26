@@ -13,11 +13,13 @@ public class Dict {
 	@Test
 	public void xx() {
 		String dict = "{\"jsonrpc\":  \"2,0\",\"params\":{\"id\":\"1\",\"name\":\""
-				+ "341\",\"sex\":\"4241\",content:\"42341412\"},\"id\":\"742983313\"}";
+				+ "341\",\"sex\":\"4241\",content:\"42341412\"},,\"id\":\"742983313\"}";
 		Dict dt = new Dict();
 		dt.update(dict);
-		dt.update("{params:123}");
-		System.out.println(dt.get("id"));
+//		dt.update("{params:123}");
+		Dict dd = dt.getDict("params");
+		dd.delete("id");
+		System.out.println(dd);
 	    
 	}
 	
@@ -37,11 +39,22 @@ public class Dict {
 			}
 		}
 	}
+	public void delete(String key){
+		if(this.hasKey(key)){
+			int[] addr = readAddr(key);
+			int next =0;
+			while(dict_str.charAt(addr[1]+next)==','||dict_str.charAt(addr[1]+next)==' '){
+				next++;
+				addr[1]++;
+			}
+			dict_str = EString.replace(addr[0], addr[1], dict_str,"");
+		}
+	}
 	
 	public void update(String key,String val){
 		if(this.hasKey(key)){
 			int[] addr = readAddr(key);
-			dict_str = EString.insert(addr[0], addr[1], dict_str,key+":"+val);
+			dict_str = EString.replace(addr[0], addr[1], dict_str,key+":"+val);
 		}
 		else{
 			String insert_dict = "";
@@ -64,7 +77,7 @@ public class Dict {
 	public void update(String key, Dict dict) {
 		if(this.hasKey(key)){
 			int[] addr = readAddr(key);
-			dict_str = EString.insert(addr[0], addr[1], dict_str,key+":"+dict.toString());
+			dict_str = EString.replace(addr[0], addr[1], dict_str,key+":"+dict.toString());
 		}
 		else{
 			String insert_dict = "";
