@@ -30,21 +30,38 @@ public class EWebView {
 	public void test(){
 //		Node node= EXml.getNodeById("/Users/Vink/easyjava/WebContent/layout/base.xml","base_layout");
 //		ReadByChild(node);
-		ReadByNode(EXml.getNodeById("base_layout"));
+		String str = ReadByNode(EXml.getNodeById("base_layout"));
+		int type = 1;
+		EWebView c = new EWebView();
+		
+		System.out.println(str);
 		
 //		System.out.println(node.getDict());
 	}
 	
 	private String parseTag(Node node) {
 		NamedNodeMap attrs = node.getAttributes();
+		String html = "";
 		for (int i = 0; i < attrs.getLength(); i++) {
 			Node attr = attrs.item(i);
 			if (attr.getNodeName().equals("load")) {
 				Node tNode = EXml.getNodeById(attr.getNodeValue());
-//				System.out.println(tNode.getTextContent());
+				if(tNode.hasChildNodes()){
+					html += ReadByNode(tNode);
+				}
+			}
+			if (attr.getNodeName().equals("t-if")) {
+				//TODO:此处添加判断方法
+				//暂时表示条件成立
+				if(attr.getNodeValue().equals("type=form")){
+					if(node.hasChildNodes()){
+						html += ReadByNode(node);
+					}
+				}
+				
 			}
 		}
-		return null;
+		return html;
 	}
 	
 	/**
@@ -58,14 +75,35 @@ public class EWebView {
 		
 		for(int i=0;i<nodelist.getLength();i++){
 			Node child =  nodelist.item(i);
-			String val=child.getNodeValue();
+			if(child.getNodeType()==Node.TEXT_NODE){
+				html +=child.getNodeValue();
+			}
 			if(child.getNodeType()==Node.ELEMENT_NODE){
 				if(child.getNodeName().equals("t")){
-					parseTag(child);
+					html+=parseTag(child);
+				}
+				else{
+					//TODO : 这里添加上class条件判断
+					html+=" <"+child.getNodeName();
+					NamedNodeMap attrs = child.getAttributes();
+					for(int j=0;j<attrs.getLength();j++){
+						Node attr = attrs.item(j);
+						html = html + " "+attr.getNodeName()+"=\""+attr.getNodeValue()+"\"";
+					}
+					html +=">\n";
+					if(child.hasChildNodes()){
+						html += ReadByNode(child);
+					}
+					else{
+						if(child.getNodeValue()!=null){
+							html += child.getNodeValue();
+						}
+					}
+					html = html + "</"+child.getNodeName()+">\n";
 				}
 			}
 		}
-		return null;
+		return html;
 	}
 	public String  loadPage(String url,String type) {
 		String path = new EXml().urlToPath(url);
@@ -74,18 +112,19 @@ public class EWebView {
 			return null;
 		EViewType et = getNodeByType(path, type);
 		Dict property = et.getDict();
+		String html ="<!DOCTYPE html>\n"
+				+ "<html lang='en'>\n"
+				+new BaseHTML().getHeader(url);
 		if(property.get("layout").equalsIgnoreCase("none")){
 //			et.getNode().
 			System.out.println(EGlobal.PATH+"/layout/base.xml");
-			Node nav = EXml.getNodeById(EGlobal.PATH+"/layout/base.xml", "base_form");
-			if(nav.hasChildNodes()){
-				String nav_html = this.ReadByNode(nav);
+			Node root = EXml.getNodeById(EGlobal.PATH+"/layout/base.xml", "base_layout");
+			if(root.hasChildNodes()){
+				html += this.ReadByNode(root);
+				return html;
 			}
-			System.out.println(nav.getTextContent());
 		}
 		System.out.println();
-//		Dict d = EXml.readProperitesById(path, id);
-//		String layerout= EXml.read(path, "field").get(0).get("layout");
 		String layerout = "/layerout/panel2.html";
 		System.out.println(layerout);
 		BufferedReader reader = null;

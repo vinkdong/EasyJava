@@ -5,7 +5,7 @@
 			<div class="col-md-8">
 				<t t-foreach='$fields'>
 					<p>
-						$field
+						<t t-esc='field'/>
 						<!-- <input name="name" type="text" /> -->
 					</p>
 					<br />
@@ -14,17 +14,17 @@
 		</div>
 	</lay>
 	<lay id="base_layout">
-			<t load='base_nav'></t>
-			<t t-if="type=form">
-				<div class="container">
-					$form
-				</div>
-			</t>
-			<t t-if="type=tree">
-				<div class="container">
-					$tree
-				</div>
-			</t>
+		<t load='base_nav'></t>
+		<t t-if="type=form">
+			<div class="container">
+				<t load='base_form'></t>
+			</div>
+		</t>
+		<t t-if="type=tree">
+			<div class="container">
+				<t load='base_tree'></t>
+			</div>
+		</t>
 	</lay>
 
 	<lay id='base_tree'>
@@ -46,55 +46,52 @@
 		</div>
 	</lay>
 	<lay id="base_nav">
-		<value>
-			<nav class="navbar navbar-default site-header">
-				<div class="container overflow">
-					<div class="navbar-header">
-						<button type="button" data-toggle="collapse" data-target="#navigation"
-							aria-expanded="false" class="navbar-toggle collapsed">
-							<span class="sr-only">Toggle navigation</span>
-							<span class="icon-bar"></span>
-							<span class="icon-bar"></span>
-							<span class="icon-bar"></span>
-						</button>
-						<a href="/" class="navbar-brand">
-							<img src="static/img/logo.png" width="73" height="73" />
-						</a>
-					</div>
-					<div id="navigation" class="navbar-collapse collapse">
-						<ul class="nav navbar-nav navbar-center">
-							<li>
-								<a href="/" class="active">首页</a>
-							</li>
-							<li>
-								<a href="/who-we-are" class="">我们是谁</a>
-							</li>
-							<li>
-								<a href="/success-stories" class="">解决方案</a>
-							</li>
-							<li>
-								<a href="/how-it-works" class="">如何使用</a>
-							</li>
-							<li>
-								<a href="/join-us" class="">加入我们</a>
-							</li>
-							<li class="visible-xs-inline visible-sm-inline">
-								<a href="/user/login">登录</a>
-							</li>
-						</ul>
-						<ul class="nav navbar-nav navbar-right hidden-xs hidden-sm">
-							<!--登录注册按钮 -->
-							<li class="login">
-								<a href="/goLogin">登录</a>
-							</li>
-						</ul>
-					</div>
+		<nav class="navbar navbar-default site-header">
+			<div class="container overflow">
+				<div class="navbar-header">
+					<button type="button" data-toggle="collapse" data-target="#navigation"
+						aria-expanded="false" class="navbar-toggle collapsed">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a href="/" class="navbar-brand">
+						<img src="static/img/logo.png" width="73" height="73" />
+					</a>
 				</div>
-			</nav>
-			<br />
-			<br />
-			<br />
-			<br />
-		</value>
+				<div id="navigation" class="navbar-collapse collapse">
+					<ul class="nav navbar-nav navbar-center">
+						<li>
+							<a href="/" class="active">首页</a>
+						</li>
+						<li>
+							<a href="/who-we-are" class="">我们是谁</a>
+						</li>
+						<li>
+							<a href="/success-stories" class="">解决方案</a>
+						</li>
+						<li>
+							<a href="/how-it-works" class="">如何使用</a>
+						</li>
+						<li>
+							<a href="/join-us" class="">加入我们</a>
+						</li>
+						<li class="visible-xs-inline visible-sm-inline">
+							<a href="/user/login">登录</a>
+						</li>
+					</ul>
+					<ul class="nav navbar-nav navbar-right hidden-xs hidden-sm">
+						<!--登录注册按钮 -->
+						<li class="login">
+							<a href="/goLogin">登录</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+		<br />
+		<br />
+		<br />
 	</lay>
 </layout>
