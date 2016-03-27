@@ -2,10 +2,12 @@ package org.easyjava.util;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.easyjava.web.EGlobal;
+import org.junit.Test;
 
 public class EOut {
 	public static void print(String[][] strarr) {
@@ -24,13 +26,17 @@ public class EOut {
 	 */
 	public static void print(List<Map<String, String>> list) {
 		for (int i = 0; i < list.size(); i++) {
-				System.out.println(list.get(i));
+				print(list.get(i));
 				if (i % 20 == 0)
 					System.out.println();
-			
-			System.out.println();
 		}
 	}
+	
+	private static void print(Map<String, String> map) {
+		// TODO Auto-generated method stub
+		System.out.println(map);
+	}
+	
 	public static void print(Integer[] strarr) {
 		for (int i = 0; i < strarr.length; i++) {
 

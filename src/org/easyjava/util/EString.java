@@ -161,6 +161,9 @@ public class EString {
 	}
 	
 	public static String insert(int position,String origin_string,String insert_string){
+		if(origin_string.equals("")){
+			return insert_string;
+		}
 		return origin_string.substring(0, position)+insert_string+origin_string.substring(position, origin_string.length());
 	}
 

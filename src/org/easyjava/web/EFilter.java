@@ -67,7 +67,7 @@ public class EFilter implements Filter {
 			}
 			else{
 				if (DB.connection == null) {
-					new WebView().initDb(url);
+					new EWebView().initDb(url);
 					System.out.println("正在连接数据库");
 					DATABASE.DATABASE_LOCATION = "127.0.0.1";
 					DATABASE.DATABASE_NAME = "easyjava";
@@ -100,8 +100,8 @@ public class EFilter implements Filter {
 //				Mo.define("ed",null, true);
 				
 //				out.print(new baseHTML().completeHTML(url));	
-				if (new WebView().loadPage(url)!=null){
-					out.print(new WebView().loadPage(url));
+				if (new EWebView().loadPage(url,"tree")!=null){
+					out.print(new EWebView().loadPage(url,"tree"));
 				}
 				else
 					out.print(new BaseHTML().completeHTML(url));

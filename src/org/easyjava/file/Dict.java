@@ -16,7 +16,6 @@ public class Dict {
 				+ "341\",\"sex\":\"4241\",content:\"42341412\"},,\"id\":\"742983313\"}";
 		Dict dt = new Dict();
 		dt.update(dict);
-//		dt.update("{params:123}");
 		Dict dd = dt.getDict("params");
 		dd.delete("id");
 		System.out.println(dd);
@@ -52,7 +51,10 @@ public class Dict {
 	}
 	
 	public void update(String key,String val){
-		if(this.hasKey(key)){
+		if(dict_str.equals("")){
+			dict_str = "{"+key+":"+val+"}";
+		}
+		else if(this.hasKey(key)){
 			int[] addr = readAddr(key);
 			dict_str = EString.replace(addr[0], addr[1], dict_str,key+":"+val);
 		}
@@ -152,6 +154,9 @@ public class Dict {
 		
 	}
 	public String[] read(String dict) {
+		if(dict.equals("")){
+			return null;
+		}
 		char[] attr = dict.toCharArray();
 		int deep = 0;
 		List<Character> res = new ArrayList<>();
@@ -223,15 +228,23 @@ public class Dict {
 	}
 
 	public String[] getKeys() {
+		String[] str_arr = read(dict_str);
+		if(str_arr==null){
+			return new String[0];
+		}
 		List<String> list = new ArrayList<>();
-		for (String s : read(dict_str)) {
+		for (String s : str_arr) {
 			list.add(s.split("\\*\\$")[0].replace("\"", ""));
 		}
 		return EList.listToStringArray(list);
 	}
 
 	public boolean hasKey(String key) {
-		for (String s : read(dict_str)) {
+		String[] str_arr = read(dict_str);
+		if(str_arr==null){
+			return false;
+		}
+		for (String s : str_arr) {
 			if (s.split("\\*\\$")[0].replace("\"", "").equals(key)) {
 				return true;
 			} else if (s.equals("\"" + key + "\"")) {
