@@ -3,7 +3,7 @@
 	<lay id="base_form">
 		<div class="row e_form" data-id="$fields">
 			<div class="col-md-8">
-				<t t-foreach='$fields'>
+				<t t-foreach='this.fields'>
 					<p>
 						<t t-esc='field'/>
 						<!-- <input name="name" type="text" /> -->

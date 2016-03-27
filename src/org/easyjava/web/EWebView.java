@@ -30,16 +30,15 @@ public class EWebView {
 	public void test(){
 //		Node node= EXml.getNodeById("/Users/Vink/easyjava/WebContent/layout/base.xml","base_layout");
 //		ReadByChild(node);
-		String str = ReadByNode(EXml.getNodeById("base_layout"));
+		EViewType et = getNodeByType("/Users/Vink/easyjava/WebContent/pages/forum.xml", "tree");
+		String str = ReadByNode(EXml.getNodeById("base_layout"),et);
 		int type = 1;
 		EWebView c = new EWebView();
-		
-		System.out.println(str);
 		
 //		System.out.println(node.getDict());
 	}
 	
-	private String parseTag(Node node) {
+	private String parseTag(Node node,EViewType et) {
 		NamedNodeMap attrs = node.getAttributes();
 		String html = "";
 		for (int i = 0; i < attrs.getLength(); i++) {
@@ -47,7 +46,7 @@ public class EWebView {
 			if (attr.getNodeName().equals("load")) {
 				Node tNode = EXml.getNodeById(attr.getNodeValue());
 				if(tNode.hasChildNodes()){
-					html += ReadByNode(tNode);
+					html += ReadByNode(tNode,et);
 				}
 			}
 			if (attr.getNodeName().equals("t-if")) {
@@ -55,9 +54,19 @@ public class EWebView {
 				//暂时表示条件成立
 				if(attr.getNodeValue().equals("type=form")){
 					if(node.hasChildNodes()){
-						html += ReadByNode(node);
+						html += ReadByNode(node,et);
 					}
 				}
+				
+			}
+			if (attr.getNodeName().equals("t-foreach")) {
+				String[] doc = attr.getNodeValue().split(".");
+				if(doc.length>1&&doc[0].equals("this")){
+					if(doc[1].equals("fields")){
+						System.out.println(et.getNode().getNodeName());;
+					}
+				}
+				
 				
 			}
 		}
@@ -69,7 +78,7 @@ public class EWebView {
 	 * @param node
 	 * @return
 	 */
-	private String ReadByNode(Node node){
+	private String ReadByNode(Node node,EViewType et){
 		NodeList nodelist = node.getChildNodes();
 		String html = "";
 		
@@ -80,7 +89,7 @@ public class EWebView {
 			}
 			if(child.getNodeType()==Node.ELEMENT_NODE){
 				if(child.getNodeName().equals("t")){
-					html+=parseTag(child);
+					html+=parseTag(child,et);
 				}
 				else{
 					//TODO : 这里添加上class条件判断
@@ -92,7 +101,7 @@ public class EWebView {
 					}
 					html +=">\n";
 					if(child.hasChildNodes()){
-						html += ReadByNode(child);
+						html += ReadByNode(child,et);
 					}
 					else{
 						if(child.getNodeValue()!=null){
@@ -116,11 +125,9 @@ public class EWebView {
 				+ "<html lang='en'>\n"
 				+new BaseHTML().getHeader(url);
 		if(property.get("layout").equalsIgnoreCase("none")){
-//			et.getNode().
-			System.out.println(EGlobal.PATH+"/layout/base.xml");
 			Node root = EXml.getNodeById(EGlobal.PATH+"/layout/base.xml", "base_layout");
 			if(root.hasChildNodes()){
-				html += this.ReadByNode(root);
+				html += this.ReadByNode(root,et);
 				return html;
 			}
 		}
