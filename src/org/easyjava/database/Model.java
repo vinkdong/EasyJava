@@ -74,12 +74,11 @@ public class Model {
 			List<Map<String, String>> res = new ArrayList<>();
 			String sql = "select * from "+table_name+" where "+condition;
 			Statement st = DB.connection.createStatement();
-			
 			ResultSet rs = st.executeQuery(sql);
 			ResultSetMetaData rsmd = rs.getMetaData();
 			while(rs.next()){
 				Map<String, String> map = new HashMap<>();
-				for(int i = 0 ;i <rsmd.getColumnCount();i++){
+				for(int i = 1 ;i <= rsmd.getColumnCount();i++){
 					map.put(rsmd.getColumnName(i), rs.getString(i));
 				}
 				res.add(map);

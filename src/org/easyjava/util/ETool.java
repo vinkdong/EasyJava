@@ -12,7 +12,7 @@ public class ETool {
 	 * @param map
 	 * @return
 	 */
-	public static String get(String key,Map<String, String> map){
+	public static String get(Map<String, String> map,String key){
 		if(map.containsKey(key)){
 			return map.get(key);
 		}

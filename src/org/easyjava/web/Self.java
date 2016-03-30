@@ -54,6 +54,15 @@ public class Self {
 			return new BaseHTML().getFormHeader("view", request.getParameter("model"), request.getParameter("id"));
 		}
 		
+		public static List<Map<String, String>> read(Dict properties){
+			if(properties.get("model").equals("")){
+				return null;
+			}
+			else {
+				return Model.read(properties.get("model"), "1=1");
+			}
+		}
+		
 	}
 
 }

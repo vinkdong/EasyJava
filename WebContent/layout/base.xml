@@ -3,12 +3,8 @@
 	<lay id="base_form">
 		<div class="row e_form" data-id="$fields">
 			<div class="col-md-8">
-				<t t-foreach='this.fields'>
-					<p>
-						<t t-esc='field'/>
-						<!-- <input name="name" type="text" /> -->
-					</p>
-					<br />
+				<t t-read='this.form'>
+					
 				</t>
 			</div>
 		</div>
@@ -17,7 +13,7 @@
 		<t load='base_nav'></t>
 		<t t-if="type=form">
 			<div class="container">
-				<t load='base_form'></t>
+				<t load='base_form'></t> ·
 			</div>
 		</t>
 		<t t-if="type=tree">
@@ -31,13 +27,13 @@
 		<div class="row e_list">
 			<table class="table table-responsive">
 				<thead>
-					<t t-foreach="$fields.string">
+					<t t-foreach="$fields.string" t-as='field'>
 						<th>$field</th>
 					</t>
 				</thead>
 				<tbody>
-					<t t-foreach="$dateset">
-						<t t-foreach='$fields.value'>
+					<t t-read="$dateset">
+						<t t-foreach='$fields.value' t-as='val'>
 							<td>field</td>
 						</t>
 					</t>

@@ -1,9 +1,13 @@
 package org.easyjava.web;
 
 import java.io.BufferedReader;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.easyjava.database.DATABASE;
+import org.easyjava.database.DB;
+import org.easyjava.database.Model;
 import org.easyjava.file.Dict;
 import org.easyjava.file.EFile;
 import org.easyjava.file.EViewType;
@@ -11,6 +15,7 @@ import org.easyjava.file.EXml;
 import org.easyjava.network.ENetwork;
 import org.easyjava.util.EOut;
 import org.easyjava.util.EString;
+import org.easyjava.util.ETool;
 import org.junit.Test;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -30,10 +35,19 @@ public class EWebView {
 	public void test(){
 //		Node node= EXml.getNodeById("/Users/Vink/easyjava/WebContent/layout/base.xml","base_layout");
 //		ReadByChild(node);
+		if (DB.connection == null) {
+			System.out.println("正在连接数据库");
+			DATABASE.DATABASE_LOCATION = "127.0.0.1";
+			DATABASE.DATABASE_NAME = "easyjava";
+			DATABASE.DATABASE_PORT = "5432";
+			DATABASE.DATABASE_USER = "ej";
+			DATABASE.DATABASE_PASSWORD = "admin";
+			DATABASE.DATABASE_TYPE="postgresql";
+			DB.init();
+		}
 		EViewType et = getNodeByType("/Users/Vink/easyjava/WebContent/pages/forum.xml", "tree");
 		String str = ReadByNode(EXml.getNodeById("base_layout"),et);
-		int type = 1;
-		EWebView c = new EWebView();
+		System.out.println(et.getDict());
 		
 //		System.out.println(node.getDict());
 	}
@@ -59,11 +73,11 @@ public class EWebView {
 				}
 				
 			}
-			if (attr.getNodeName().equals("t-foreach")) {
-				String[] doc = attr.getNodeValue().split(".");
+			if (attr.getNodeName().equals("t-read")) {
+				String[] doc = attr.getNodeValue().split("\\.");
 				if(doc.length>1&&doc[0].equals("this")){
-					if(doc[1].equals("fields")){
-						System.out.println(et.getNode().getNodeName());;
+					if(doc[1].equals("form")){
+						html += loadTree(et);
 					}
 				}
 				
@@ -71,6 +85,85 @@ public class EWebView {
 			}
 		}
 		return html;
+	}
+	
+	public static String loadTree(EViewType et){
+		NodeList nodelist = et.getNode().getChildNodes();
+		Dict properties = et.getDict();
+		List<Map<String, String>> dataset = Self.env.read(properties);
+		StringBuilder tbody = new StringBuilder();
+		List<String> head = new ArrayList<>(); 
+		boolean init_head = true;
+		for(Map<String,String> line :dataset){
+			tbody.append("<tr>\n");
+			for(int i=0;i<nodelist.getLength();i++){
+				Node node = nodelist.item(i);
+				//TODO:权限屏蔽
+				if(node.getNodeType()==Node.ELEMENT_NODE){
+					if(node.getNodeName().equals("field")){
+						NamedNodeMap attr = node.getAttributes();
+						for (int j = 0; j < attr.getLength(); j++) {
+							Node attNode = attr.item(j);
+							if (attNode.getNodeName().equals("name")) {
+								tbody.append("\t<td>");
+								//TODO:对象翻译，读取String
+								if(init_head){
+									head.add(attNode.getNodeValue());
+								}
+								tbody.append(ETool.get(line, attNode.getNodeValue()));
+								tbody.append("</td>\n");
+							}
+						}
+					}
+					if(node.getNodeName().equals("button")){
+						tbody.append("\t<td>");
+						NamedNodeMap attr = node.getAttributes();
+						tbody.append("\n\t\t<button ");
+						String val = "";
+						for (int j = 0; j < attr.getLength(); j++) {
+							Node attNode = attr.item(j);
+							if (attNode.getNodeName().equals("string")) {								
+								//TODO:对象翻译，读取String
+								val = attNode.getNodeValue();
+								if(init_head){
+									head.add(val);
+								}
+							}
+							tbody.append(attNode.getNodeName());
+							tbody.append("=\"");
+							tbody.append(attNode.getNodeValue());
+							tbody.append("\" ");
+						}
+						tbody.append(">");
+						tbody.append(val);
+						tbody.append("</button>\n");
+						tbody.append("</td>\n");
+					}
+					
+				}
+			}
+			tbody.append("</tr>\n");
+			init_head = false;
+		}
+		StringBuilder thead = new StringBuilder();
+		thead.append("<thead>\n\t<tr>");
+		for(String h:head){
+			thead.append("<th>");
+			thead.append(h);
+			thead.append("</th>");
+		}
+		thead.append("\t</tr>\n</thead>");
+		StringBuilder table = new StringBuilder();
+		table.append("<table class=\"table table-responsive\">\n");
+		table.append(thead);
+		table.append(tbody);
+		table.append("</table>");
+		return table.toString();
+	}
+	
+	public static String loadForm(){
+		
+		return null;
 	}
 	
 	/**
