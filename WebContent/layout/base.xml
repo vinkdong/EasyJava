@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <layout>
 	<lay id="base_form">
-		<div class="row e_form" data-id="$fields">
+		<div class="row e_form" data-id="$this.id">
 			<div class="col-md-8">
 				<t t-read='this.form'>
 					

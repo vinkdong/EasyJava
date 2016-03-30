@@ -9,7 +9,7 @@
 		<rec name="view">
 			<tree>
 				<field name="name" />
-				<field name="sex" />
+				<field name="id" />
 				<button name="xxx" string="asdasass" onclick="javascript:window.location.href='//vinkdong.com';"/>
 			</tree>
 		</rec>

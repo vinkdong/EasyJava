@@ -15,6 +15,8 @@ import org.easyjava.file.EXml;
 
 public class Self {
 	
+	public static String model = "";
+	
 	static class env{
 		public static String search(String model,String domain){
 			Model.read(model, domain);
@@ -60,6 +62,20 @@ public class Self {
 			}
 			else {
 				return Model.read(properties.get("model"), "1=1");
+			}
+		}
+		
+		public static Map<String,String> browse(int id){
+			if(model.equals("")){
+				return null;
+			}
+			else{
+				List<Map<String, String>> dataset = Model.read(model, "id ="+id+"");
+				if (dataset!=null&&dataset.size()==1){
+					return dataset.get(0);
+				}
+				else
+					return null;
 			}
 		}
 		

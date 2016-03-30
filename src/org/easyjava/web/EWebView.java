@@ -21,6 +21,8 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.sun.org.apache.regexp.internal.recompile;
+
 import jdk.nashorn.internal.objects.Global;
 
 public class EWebView {
@@ -46,8 +48,9 @@ public class EWebView {
 			DB.init();
 		}
 		EViewType et = getNodeByType("/Users/Vink/easyjava/WebContent/pages/forum.xml", "tree");
+		et.getDict().update("id","10");
 		String str = ReadByNode(EXml.getNodeById("base_layout"),et);
-		System.out.println(et.getDict());
+		System.out.println(str);
 		
 //		System.out.println(node.getDict());
 	}
@@ -77,7 +80,8 @@ public class EWebView {
 				String[] doc = attr.getNodeValue().split("\\.");
 				if(doc.length>1&&doc[0].equals("this")){
 					if(doc[1].equals("form")){
-						html += loadTree(et);
+//						html += loadTree(et);
+						html = loadForm(et);
 					}
 				}
 				
@@ -161,8 +165,114 @@ public class EWebView {
 		return table.toString();
 	}
 	
-	public static String loadForm(){
+	/**
+	 * 仅加载不编辑
+	 * @param et
+	 * @param id
+	 * @return
+	 */
+	public static String loadForm(EViewType et,int id){
+		Self.model = et.getDict().get("model");
+		Map<String, String> dataset = Self.env.browse(id);
+		System.out.println(dataset);
+		if(dataset==null){
+			return "";
+		}
+		Node node = et.getNode();
+		if(node.hasChildNodes()){
+			StringBuilder form = new StringBuilder();
+			form.append("\t<form class=\"form-horizontal\" role=\"form\">\n");
+			NodeList fieldList = node.getChildNodes();
+			for(int i=0;i<fieldList.getLength();i++){
+				Node field = fieldList.item(i);
+				if(field.getNodeType()==Node.ELEMENT_NODE){
+					if(field.getNodeName().equals("field")){
+						NamedNodeMap attr = field.getAttributes();
+						String val = "";
+						String ext_class = "";
+						form.append("\t\t<div ");
+						
+						for (int j = 0; j < attr.getLength(); j++) {
+							Node attNode = attr.item(j);
+							if (attNode.getNodeName().equals("name")) {
+								val = attNode.getNodeValue();
+								System.out.println(val);
+							}
+							if (attNode.getNodeName().equals("class")) {
+								ext_class = attNode.getNodeValue();
+							}
+							else{
+								form.append(attNode.getNodeName());
+								form.append("=\"");
+								form.append(attNode.getNodeValue());
+								form.append("\" ");
+							}
+						}
+						form.append("class=\"form-group "+ext_class+"\"");
+						form.append(">\n<label class=\"col-sm-2 control-label\">");
+						form.append(val);
+						form.append("</label>\n");
+						form.append("\t\t\t<div class=\"col-sm-10\">");
+						//TODO:对象翻译，读取String
+						form.append(dataset.get(ETool.get(dataset, val)));
+						form.append("\t\t\t</div>\n\t\t</div>\n");
+					}
+					if(field.getNodeName().equals("button")){
+						NamedNodeMap attr = field.getAttributes();
+						
+						String val = "";
+						for (int j = 0; j < attr.getLength(); j++) {
+							Node attNode = attr.item(j);
+							if (attNode.getNodeName().equals("string")) {								
+								
+								val = attNode.getNodeValue();
+								}
+							}
 		
+						}
+					}
+			}
+			form.append("</form>");
+			return form.toString();
+		}
+		else{
+			return "";
+		}		
+	}
+	
+	/**
+	 * 新建
+	 * @param et
+	 * @param type
+	 * @return
+	 */
+	public static String loadForm(EViewType et){
+		if(!et.getDict().get("id").equals("")){
+			return loadForm(et, Integer.parseInt(et.getDict().get("id")));
+		}
+		else{
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * 加载form
+	 * @param et
+	 * @param id
+	 * @param type
+	 * @return
+	 */
+	public static String loadForm(EViewType et,int id, String type){
+		if(type.equals("edit")&&id>0){
+			
+		}
+		else if(type.equals("view")&&id>0){
+			return loadForm(et,id);
+		}
+		else{
+			return loadForm(et);
+		}
 		return null;
 	}
 	
@@ -213,6 +323,7 @@ public class EWebView {
 		if(fieldList ==null)
 			return null;
 		EViewType et = getNodeByType(path, type);
+		et.getDict().update("id","10");
 		Dict property = et.getDict();
 		String html ="<!DOCTYPE html>\n"
 				+ "<html lang='en'>\n"
@@ -224,19 +335,7 @@ public class EWebView {
 				return html;
 			}
 		}
-		System.out.println();
-		String layerout = "/layerout/panel2.html";
-		System.out.println(layerout);
-		BufferedReader reader = null;
-		if(layerout.matches("http://.*")){
-			reader = new ENetwork().Get(layerout);
-		}
-		else{
-			reader= EFile.getBufferRead(EGlobal.PATH+"/layerout/panel2.html");			
-		}
-		if (reader==null) 
-			return null;
-		return  fillLayer(reader, fieldList,url);
+		return  null;
 		
 	}
 	
