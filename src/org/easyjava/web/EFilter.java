@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.easyjava.database.DATABASE;
 import org.easyjava.database.DB;
 import org.easyjava.database.Model;
+import org.easyjava.file.Dict;
 
 /**
  * Servlet Filter implementation class filter
@@ -58,6 +59,12 @@ public class EFilter implements Filter {
 	        	int id  = Self.env.add(hq);
 	        	out.print(id);        	
 	        }
+			else if(url.endsWith("_rpc_loadview")){
+				Dict dict = Self.env.rpcToDict(hq);
+			
+				out.print("ddd");
+				System.out.println(dict);
+			}
 	        else if(url.endsWith("_rpc_read")){
 	        	String form  = Self.env.read(hq);	
 	        	out.print(form);        	

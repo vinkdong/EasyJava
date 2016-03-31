@@ -31,25 +31,28 @@ public class Self {
 			
 		}
 		
-		public static int add(HttpServletRequest request){
+		public static Dict rpcToDict(HttpServletRequest request) {
 			try {
 				BufferedReader br = request.getReader();
 				String dict_str = br.readLine();
-				Dict dict  = new Dict();
+				Dict dict = new Dict();
 				dict.update(dict_str.replaceAll("\"", "&%&").replaceAll("\\\\&%&", "\"").replace("&%&", ""));
-				Dict params = dict.getDict("params");
-				List<String> file_list  = new EXml().getFieldList(request.getServletPath());
-				Map<String, String> res = new HashMap<>();
-				for(String rec:file_list){
-					res.put(rec, params.get(rec));
-				}
-				return DB.add("forum", res);
-				
+				return dict;
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			return 0;
+			return null;
+		}
+		
+		public static int add(HttpServletRequest request) {
+			Dict dict = rpcToDict(request);
+			Dict params = dict.getDict("params");
+			List<String> file_list = new EXml().getFieldList(request.getServletPath());
+			Map<String, String> res = new HashMap<>();
+			for (String rec : file_list) {
+				res.put(rec, params.get(rec));
+			}
+			return DB.add("forum", res);
 		}
 		
 		public static String read(HttpServletRequest request){

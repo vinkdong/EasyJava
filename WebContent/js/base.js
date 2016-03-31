@@ -29,9 +29,16 @@ var easyjava = new Object({
         return start;
     },
     getUrl: function() {
+    	var self  = this;
     	var  url = window.location.href;
     	if (url.indexOf("#", 0)>0){
+    		var parameters=url.substring(url.indexOf("#", 1)+1,url.length).split("&");
     		url=  url.substring(0, url.indexOf("#", 1));
+    		res = {};
+    		_.each(parameters,function(para){
+    			res[para.substring(0,para.indexOf("=", 1))] = para.substring(para.indexOf("=", 1)+1,para.length);
+    		});
+    		self.loadview(res);
     	}
     	if (url.indexOf("?", 0)>0){
     		url=  url.substring(0, url.indexOf("?", 1));
@@ -69,6 +76,19 @@ var easyjava = new Object({
     },
     add: function(field_list){
         return this.add_rpc(field_list);
+    },
+    
+    loadview:function(res){
+    	 var self = this;
+         return genericJsonRpc(res, function (data) {
+             return $.ajax(self.url+'_rpc_loadview', _.extend({}, '', {
+                 url: self.url+'_rpc_loadview',
+                 dataType: 'json',
+                 type: 'POST',
+                 data: JSON.stringify(data, ''),
+                 contentType: 'application/json'
+             }));
+         });
     },
 
     add_rpc: function (field_list) {
