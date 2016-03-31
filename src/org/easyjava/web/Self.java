@@ -36,7 +36,7 @@ public class Self {
 				BufferedReader br = request.getReader();
 				String dict_str = br.readLine();
 				Dict dict  = new Dict();
-				dict.update(dict_str);
+				dict.update(dict_str.replaceAll("\"", "&%&").replaceAll("\\\\&%&", "\"").replace("&%&", ""));
 				Dict params = dict.getDict("params");
 				List<String> file_list  = new EXml().getFieldList(request.getServletPath());
 				Map<String, String> res = new HashMap<>();

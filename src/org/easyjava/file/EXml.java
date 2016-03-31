@@ -65,7 +65,7 @@ public class EXml {
 	}
 	
 	public static Node getNodeById(String id){
-		return getNodeById("/Users/Vink/easyjava/WebContent/layout/base.xml", id);
+		return getNodeById(EGlobal.PATH+"/layout/base.xml", id);
 	}
 	
 
@@ -163,7 +163,6 @@ public class EXml {
 	 * @return
 	 */
 	public String urlToPath(String url){
-		System.out.println("url:"+url);
 		return EGlobal.PATH+"/pages"+url+".xml";
 	}
 	

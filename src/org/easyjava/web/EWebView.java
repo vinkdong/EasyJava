@@ -30,8 +30,8 @@ public class EWebView {
 
 	public void initDb(String url){
 		String path = new EXml().urlToPath(url);
-		List<Map<String, String>> fieldList = EXml.read(path, "field");
-		EOut.print(fieldList);
+//		List<Map<String, String>> fieldList = EXml.read(path, "field");
+//		EOut.print(fieldList);
 	}
 	@Test
 	public void test(){
@@ -50,9 +50,6 @@ public class EWebView {
 		EViewType et = getNodeByType("/Users/Vink/easyjava/WebContent/pages/forum.xml", "tree");
 		et.getDict().update("id","10");
 		String str = ReadByNode(EXml.getNodeById("base_layout"),et);
-		System.out.println(str);
-		
-//		System.out.println(node.getDict());
 	}
 	
 	private String parseTag(Node node,EViewType et) {
@@ -81,7 +78,7 @@ public class EWebView {
 				if(doc.length>1&&doc[0].equals("this")){
 					if(doc[1].equals("form")){
 //						html += loadTree(et);
-						html = loadForm(et);
+						html = loadForm(et,46,"edit");
 					}
 				}
 				
@@ -174,7 +171,6 @@ public class EWebView {
 	public static String loadForm(EViewType et,int id){
 		Self.model = et.getDict().get("model");
 		Map<String, String> dataset = Self.env.browse(id);
-		System.out.println(dataset);
 		if(dataset==null){
 			return "";
 		}
@@ -196,7 +192,6 @@ public class EWebView {
 							Node attNode = attr.item(j);
 							if (attNode.getNodeName().equals("name")) {
 								val = attNode.getNodeValue();
-								System.out.println(val);
 							}
 							if (attNode.getNodeName().equals("class")) {
 								ext_class = attNode.getNodeValue();
@@ -214,7 +209,7 @@ public class EWebView {
 						form.append("</label>\n");
 						form.append("\t\t\t<div class=\"col-sm-10\">");
 						//TODO:对象翻译，读取String
-						form.append(dataset.get(ETool.get(dataset, val)));
+						form.append(ETool.get(dataset, val));
 						form.append("\t\t\t</div>\n\t\t</div>\n");
 					}
 					if(field.getNodeName().equals("button")){
@@ -241,19 +236,77 @@ public class EWebView {
 	}
 	
 	/**
-	 * 新建
+	 * et中无id则新建
 	 * @param et
 	 * @param type
 	 * @return
 	 */
 	public static String loadForm(EViewType et){
+		et.getDict().delete("id");
 		if(!et.getDict().get("id").equals("")){
 			return loadForm(et, Integer.parseInt(et.getDict().get("id")));
 		}
 		else{
+			Node node = et.getNode();
+			if(node.hasChildNodes()){
+				StringBuilder form = new StringBuilder();
+				form.append("\t<form class=\"form-horizontal\" role=\"form\">\n");
+				NodeList fieldList = node.getChildNodes();
+				for(int i=0;i<fieldList.getLength();i++){
+					Node field = fieldList.item(i);
+					if(field.getNodeType()==Node.ELEMENT_NODE){
+						if(field.getNodeName().equals("field")){
+							NamedNodeMap attr = field.getAttributes();
+							String val = "";
+							String ext_class = "";
+							form.append("\t\t<div ");
+							
+							for (int j = 0; j < attr.getLength(); j++) {
+								Node attNode = attr.item(j);
+								if (attNode.getNodeName().equals("name")) {
+									val = attNode.getNodeValue();
+								}
+								if (attNode.getNodeName().equals("class")) {
+									ext_class = attNode.getNodeValue();
+								}
+								else{
+									form.append(attNode.getNodeName());
+									form.append("=\"");
+									form.append(attNode.getNodeValue());
+									form.append("\" ");
+								}
+							}
+							form.append("class=\"form-group "+ext_class+"\"");
+							form.append(">\n<label class=\"col-sm-2 control-label\">");
+							//TODO:对象翻译，读取String
+							form.append(val);
+							form.append("</label>\n");
+							form.append("\t\t\t<div class=\"col-sm-10\">\n");
+							form.append("<input type=\"text\" class=\"form-control\"");
+							form.append("name='"+val+"'>");
+							form.append("\t\t\t</div>\n\t\t</div>\n");
+						}
+						if(field.getNodeName().equals("button")){
+							NamedNodeMap attr = field.getAttributes();							
+							String val = "";
+							for (int j = 0; j < attr.getLength(); j++) {
+								Node attNode = attr.item(j);
+								if (attNode.getNodeName().equals("string")) {
+									val = attNode.getNodeValue();
+									}
+								}			
+							}
+						}
+				}
+				form.append("<div class=\"col-md-8 col-md-offset-2 \">\n<p><button class=\"btn btn-success e_panel_submit\">Submit</button>");
+				form.append("<span class=\"h3\">or</span><button class=\"btn btn-danger e_panel_cancel\">Cancel</button></p></div>");
+				form.append("</form>");
+				return form.toString();
+			}
+			else{
+				return "";
+			}		
 		}
-		
-		return null;
 	}
 	
 	/**
@@ -264,8 +317,71 @@ public class EWebView {
 	 * @return
 	 */
 	public static String loadForm(EViewType et,int id, String type){
-		if(type.equals("edit")&&id>0){
-			
+		if (type.equals("edit") && id > 0) {
+			Self.model = et.getDict().get("model");
+			Map<String, String> dataset = Self.env.browse(id);
+			if (dataset == null) {
+				return "";
+			}
+			Node node = et.getNode();
+			if (node.hasChildNodes()) {
+				StringBuilder form = new StringBuilder();
+				form.append("\t<form class=\"form-horizontal\" role=\"form\">\n");
+				NodeList fieldList = node.getChildNodes();
+				for (int i = 0; i < fieldList.getLength(); i++) {
+					Node field = fieldList.item(i);
+					if (field.getNodeType() == Node.ELEMENT_NODE) {
+						if (field.getNodeName().equals("field")) {
+							NamedNodeMap attr = field.getAttributes();
+							String val = "";
+							String ext_class = "";
+							form.append("\t\t<div ");
+
+							for (int j = 0; j < attr.getLength(); j++) {
+								Node attNode = attr.item(j);
+								if (attNode.getNodeName().equals("name")) {
+									val = attNode.getNodeValue();
+								}
+								if (attNode.getNodeName().equals("class")) {
+									ext_class = attNode.getNodeValue();
+								} else {
+									form.append(attNode.getNodeName());
+									form.append("=\"");
+									form.append(attNode.getNodeValue());
+									form.append("\" ");
+								}
+							}
+							form.append("class=\"form-group " + ext_class + "\"");
+							form.append(">\n<label class=\"col-sm-2 control-label\">");
+							form.append(val);
+							form.append("</label>\n");
+							form.append("\t\t\t<div class=\"col-sm-10\">");
+							// TODO:对象翻译，读取String
+							form.append("<input type=\"text\" class=\"form-control\"");
+							form.append("name='"+val+"' value='"+ETool.get(dataset, val)+"'>");
+							form.append("\t\t\t</div>\n\t\t</div>\n");
+						}
+						if (field.getNodeName().equals("button")) {
+							NamedNodeMap attr = field.getAttributes();
+							String val = "";
+							for (int j = 0; j < attr.getLength(); j++) {
+								Node attNode = attr.item(j);
+								if (attNode.getNodeName().equals("string")) {
+
+									val = attNode.getNodeValue();
+								}
+							}
+
+						}
+					}
+				}
+				form.append("<div class=\"col-md-8 col-md-offset-2 \">\n<p><button class=\"btn btn-success e_panel_submit\">Submit</button>");
+				form.append("<span class=\"h3\">or</span><button class=\"btn btn-danger e_panel_cancel\">Cancel</button></p></div>");
+				form.append("</form>");
+				return form.toString();
+			} else {
+				return "";
+			}
 		}
 		else if(type.equals("view")&&id>0){
 			return loadForm(et,id);
@@ -273,7 +389,6 @@ public class EWebView {
 		else{
 			return loadForm(et);
 		}
-		return null;
 	}
 	
 	/**
