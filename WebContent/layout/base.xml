@@ -12,12 +12,12 @@
 	<lay id="base_layout">
 		<t load='base_nav'></t>
 		<t t-if="type=form">
-			<div class="container">
+			<div class="container main">
 				<t load='base_form'></t> ·
 			</div>
 		</t>
 		<t t-if="type=tree">
-			<div class="container">
+			<div class="container main">
 				<t load='base_tree'></t>
 			</div>
 		</t>

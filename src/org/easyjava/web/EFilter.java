@@ -61,9 +61,8 @@ public class EFilter implements Filter {
 	        }
 			else if(url.endsWith("_rpc_loadview")){
 				Dict dict = Self.env.rpcToDict(hq);
-			
-				out.print("ddd");
-				System.out.println(dict);
+				String html = EWebView.loadPage(dict);
+				out.print(html);
 			}
 	        else if(url.endsWith("_rpc_read")){
 	        	String form  = Self.env.read(hq);	

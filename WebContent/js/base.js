@@ -31,18 +31,24 @@ var easyjava = new Object({
     getUrl: function() {
     	var self  = this;
     	var  url = window.location.href;
+    	res = {};
     	if (url.indexOf("#", 0)>0){
     		var parameters=url.substring(url.indexOf("#", 1)+1,url.length).split("&");
     		url=  url.substring(0, url.indexOf("#", 1));
-    		res = {};
+    		
     		_.each(parameters,function(para){
     			res[para.substring(0,para.indexOf("=", 1))] = para.substring(para.indexOf("=", 1)+1,para.length);
     		});
-    		self.loadview(res);
     	}
     	if (url.indexOf("?", 0)>0){
     		url=  url.substring(0, url.indexOf("?", 1));
-    	}    	
+    	}
+    	if(!jQuery.isEmptyObject(res)){
+    		self.loadview(res,url).done(function(data){
+			var s = $('.container.main');
+			s.html(data);
+		});
+    	}
     	return url;
 	},
     start: function () {
@@ -59,7 +65,12 @@ var easyjava = new Object({
             }
             return self.add(self.read_field(cr,id)).done(function(data){
             	if(/^[0-9]+$/.test(data)){
-            		self.read_rpc("forum", data, "view");
+            		self.read_rpc("forum", data, "view").done(function(view){
+            			var s = $('.container.main');
+            			s.html(view);
+            		}).fail(function(){
+            			self.throw_err("<h3>警告</h3><p>网络请求 <strong>失败</strong>检查您的网络连接和设备环境</p><br/>");
+            		});
             	}
             });
         });
@@ -78,12 +89,12 @@ var easyjava = new Object({
         return this.add_rpc(field_list);
     },
     
-    loadview:function(res){
+    loadview:function(res,url){
     	 var self = this;
          return genericJsonRpc(res, function (data) {
-             return $.ajax(self.url+'_rpc_loadview', _.extend({}, '', {
-                 url: self.url+'_rpc_loadview',
-                 dataType: 'json',
+             return $.ajax(url+'_rpc_loadview', _.extend({}, '', {
+                 url: url+'_rpc_loadview',
+//                 dataType: 'json',
                  type: 'POST',
                  data: JSON.stringify(data, ''),
                  contentType: 'application/json'
@@ -107,7 +118,9 @@ var easyjava = new Object({
     read_rpc: function (model,id,operator) {
         var self = this;
 		if(operator=='view'){
-			window.location.hash ="model="+model+"&id="+id+"&view="+operator;
+			window.location.hash ="model="+model+"&id="+id+"&type="+operator;
+			res = {model:model,id:id,type:"view"};
+			return self.loadview(res, self.url);
 			$.ajax({
 				type:'get',
 				url:self.url+'_rpc_read',
@@ -123,11 +136,9 @@ var easyjava = new Object({
 			});
 		}
 	},
-
+	
     throw_err : function(msg){
 		alertify.alert(msg);
     },
-
-
 });
 easyjava.init();

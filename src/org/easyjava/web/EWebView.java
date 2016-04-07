@@ -7,23 +7,15 @@ import java.util.Map;
 
 import org.easyjava.database.DATABASE;
 import org.easyjava.database.DB;
-import org.easyjava.database.Model;
 import org.easyjava.file.Dict;
-import org.easyjava.file.EFile;
 import org.easyjava.file.EViewType;
 import org.easyjava.file.EXml;
-import org.easyjava.network.ENetwork;
-import org.easyjava.util.EOut;
 import org.easyjava.util.EString;
 import org.easyjava.util.ETool;
 import org.junit.Test;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-import com.sun.org.apache.regexp.internal.recompile;
-
-import jdk.nashorn.internal.objects.Global;
 
 public class EWebView {
 	
@@ -77,8 +69,18 @@ public class EWebView {
 				String[] doc = attr.getNodeValue().split("\\.");
 				if(doc.length>1&&doc[0].equals("this")){
 					if(doc[1].equals("form")){
-//						html += loadTree(et);
-						html = loadForm(et,46,"edit");
+						if(et.getDict().get("ttype").equalsIgnoreCase("edit")){
+							html += loadForm(et,Integer.parseInt(et.getDict().get("id")),"edit");
+						}
+						if(et.getDict().get("id").equalsIgnoreCase("")){
+							html += loadForm(et);
+						}
+						else{
+							html += loadForm(et, Integer.parseInt(et.getDict().get("id")));
+						}
+					}
+					else {
+						html += loadTree(et);
 					}
 				}
 				
@@ -415,7 +417,19 @@ public class EWebView {
 					NamedNodeMap attrs = child.getAttributes();
 					for(int j=0;j<attrs.getLength();j++){
 						Node attr = attrs.item(j);
-						html = html + " "+attr.getNodeName()+"=\""+attr.getNodeValue()+"\"";
+						html = html + " "+attr.getNodeName()+"=\"";
+						if(attr.getNodeValue().equals("$this.id")){
+							System.out.println(et.getDict().get("id").equals(""));
+							if(et.getDict().get("id").equals("")){
+								html += "none\"";
+							}
+							else{
+								html += et.getDict().get("id")+"\"";
+							}	
+						}
+						else{
+							html += attr.getNodeValue()+"\"";
+						}
 					}
 					html +=">\n";
 					if(child.hasChildNodes()){
@@ -438,7 +452,6 @@ public class EWebView {
 		if(fieldList ==null)
 			return null;
 		EViewType et = getNodeByType(path, type);
-		et.getDict().update("id","10");
 		Dict property = et.getDict();
 		String html ="<!DOCTYPE html>\n"
 				+ "<html lang='en'>\n"
@@ -452,6 +465,25 @@ public class EWebView {
 		}
 		return  null;
 		
+	}
+	
+	public static String loadPage(Dict dict){
+		List<Map<String, String>> fieldList = EXml.read(dict.get("path"), "field");
+		if(fieldList ==null)
+			return null;
+		Dict params = dict.getDict("params");
+		EViewType et =  new EViewType();
+		if(params.get("type").equalsIgnoreCase("edit")){
+			et = getNodeByType(dict.get("path"), "tree");
+			et.getDict().update("id", params.get("id"));
+			et.getDict().update("type", "edit");
+			Node form =  EXml.getNodeById("base_form");
+			return new EWebView().ReadByNode(form, et);
+		}
+		else{
+			et = getNodeByType(dict.get("path"), "tree");
+		}
+		return "";
 	}
 	
 	public String fillLayer(BufferedReader reader,List<Map<String, String>> fieldList ,String url){
@@ -496,7 +528,13 @@ public class EWebView {
 		}
 		return html+"\n</html>";
 	};
-		
+	
+	/**
+	 * 读取tree 或from 的视图node
+	 * @param path
+	 * @param type
+	 * @return
+	 */
 	public static EViewType getNodeByType(String path,String type){
 		NodeList nodeList = EXml.getNodeList(path);
 		EViewType et = new EViewType();

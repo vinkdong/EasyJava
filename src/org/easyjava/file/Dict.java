@@ -56,7 +56,7 @@ public class Dict {
 		}
 		else if(this.hasKey(key)){
 			int[] addr = readAddr(key);
-			dict_str = EString.replace(addr[0], addr[1], dict_str,key+":"+val);
+			dict_str = EString.replace(addr[0]+1, addr[1], dict_str,key+":"+val);
 		}
 		else{
 			String insert_dict = "";

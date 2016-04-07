@@ -35,7 +35,9 @@ public class Self {
 			try {
 				BufferedReader br = request.getReader();
 				String dict_str = br.readLine();
+				String path = new EXml().urlToPath(request.getServletPath());
 				Dict dict = new Dict();
+				dict.update("path",path);
 				dict.update(dict_str.replaceAll("\"", "&%&").replaceAll("\\\\&%&", "\"").replace("&%&", ""));
 				return dict;
 			} catch (IOException e) {
