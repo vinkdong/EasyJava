@@ -88,6 +88,11 @@
 		</nav>
 		<br />
 		<br />
+		<div class="container">
+			<button class="btn btn-success e_create">新建</button>
+			<button class="btn btn-success e_edit">编辑</button>
+			<button class="btn e_back">返回</button>
+		</div>
 		<br />
 	</lay>
 </layout>

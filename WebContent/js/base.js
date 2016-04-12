@@ -25,12 +25,13 @@ var genericJsonRpc = function(params, fct) {
 var easyjava = new Object({
     init: function () {
         var start = this.start();
+        this.res = {};
         this.url = this.getUrl();
         return start;
     },
     getUrl: function() {
     	var self  = this;
-    	var  url = window.location.href;
+    	var url = window.location.href;
     	res = {};
     	if (url.indexOf("#", 0)>0){
     		var parameters=url.substring(url.indexOf("#", 1)+1,url.length).split("&");
@@ -44,9 +45,14 @@ var easyjava = new Object({
     		url=  url.substring(0, url.indexOf("?", 1));
     	}
     	if(!jQuery.isEmptyObject(res)){
+    		self.res = res ;
     		self.loadview(res,url).done(function(data){
 			var s = $('.container.main');
 			s.html(data);
+			if(res.type=='tree'){
+				$('.e_back').attr('style','display:none');
+				$('.e_edit').attr('style','display:none');
+			}
 		});
     	}
     	return url;
@@ -65,7 +71,7 @@ var easyjava = new Object({
             }
             return self.add(self.read_field(cr,id)).done(function(data){
             	if(/^[0-9]+$/.test(data)){
-            		self.read_rpc("forum", data, "view").done(function(view){
+            		self.read_rpc("forum", data, "form").done(function(view){
             			var s = $('.container.main');
             			s.html(view);
             		}).fail(function(){
@@ -73,6 +79,51 @@ var easyjava = new Object({
             		});
             	}
             });
+        });
+        $('.row.e_form').find("tbody tr td").live('click',function(e){
+        	e.preventDefault();
+        	var id = $(this).parent().attr("data-id");
+        	self.res.type = 'view';
+        	self.res.id = id;
+        	if($(this).find('button').length>0){
+        		return null;
+        	}
+        	self.loadview(self.res,self.url).done(function(data){
+    			var s = $('.container.main');
+    			s.html(data);
+    			$('.e_back').attr('style','display:display');
+    			$('.e_edit').attr('style','display:display');
+        	})});
+        $('.e_create').live('click',function(){
+        	delete self.res.id;
+        	self.res.type='view';
+        	var cr = this;
+        	self.loadview(self.res,self.url).done(function(data){
+    			var s = $('.container.main');
+    			s.html(data);
+    			$('.e_back').attr('style','display:display');
+            	$(cr).attr('style','display:none');
+        	});
+        });
+        $('.e_edit').live('click',function(){
+        	self.res.type='edit';
+        	var cr = this;
+        	self.loadview(self.res,self.url).done(function(data){
+    			var s = $('.container.main');
+    			s.html(data);
+    			$('.e_back').attr('style','display:display');
+            	$(cr).attr('style','display:none');
+        	});
+        });
+        $('.e_back').live('click',function(){
+        	self.res.type='tree';
+        	var cr = this;
+        	self.loadview(self.res,self.url).done(function(data){
+    			var s = $('.container.main');
+    			s.html(data);
+    			$('.e_create').attr('style','display:display');
+    			$(cr).attr('style','display:none');
+        	});  	
         });
     },
     read_field : function(cr,id){
@@ -117,9 +168,9 @@ var easyjava = new Object({
     
     read_rpc: function (model,id,operator) {
         var self = this;
-		if(operator=='view'){
+		if(operator=='form'){
 			window.location.hash ="model="+model+"&id="+id+"&type="+operator;
-			res = {model:model,id:id,type:"view"};
+			res = {model:model,id:id,type:"form"};
 			return self.loadview(res, self.url);
 			$.ajax({
 				type:'get',

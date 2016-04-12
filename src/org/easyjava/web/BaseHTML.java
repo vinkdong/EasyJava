@@ -108,6 +108,7 @@ public class BaseHTML {
 					+ "<meta name='description' content='EasyJava'/>\n"
 					+ "<meta name='keywords' content='EasyJava'/>\n"
 					+ "<meta name='generator' content='EasyJava'/>\n"
+					+ "<meta http-equiv='Pragma' content='no-cache'>\n"
 					+ "<title>在这里开启你的网站开发之路</title>\n"
 					+ scanCss(page)
 					+ pageCss(page)

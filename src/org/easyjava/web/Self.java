@@ -37,8 +37,11 @@ public class Self {
 				String dict_str = br.readLine();
 				String path = new EXml().urlToPath(request.getServletPath());
 				Dict dict = new Dict();
-				dict.update("path",path);
 				dict.update(dict_str.replaceAll("\"", "&%&").replaceAll("\\\\&%&", "\"").replace("&%&", ""));
+				Dict params = dict.getDict("params");
+				if(params.hasKey("model")){
+					dict.update("path",path+"/"+params.get("model")+".xml");
+				}
 				return dict;
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -54,7 +57,10 @@ public class Self {
 			for (String rec : file_list) {
 				res.put(rec, params.get(rec));
 			}
-			return DB.add("forum", res);
+			if(params.get("id").equals("")||params.get("id").equals("none")){
+				return DB.add("forum", res);
+			}
+			return DB.update("forum", res, params.get("id"));
 		}
 		
 		public static String read(HttpServletRequest request){

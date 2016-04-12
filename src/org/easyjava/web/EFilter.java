@@ -1,3 +1,6 @@
+/***
+ * GPL3.0
+ */
 package org.easyjava.web;
 
 import java.io.IOException;
@@ -73,7 +76,7 @@ public class EFilter implements Filter {
 			}
 			else{
 				if (DB.connection == null) {
-					new EWebView().initDb(url);
+//					new EWebView().initDb(url);
 					System.out.println("正在连接数据库");
 					DATABASE.DATABASE_LOCATION = "127.0.0.1";
 					DATABASE.DATABASE_NAME = "easyjava";
@@ -106,8 +109,8 @@ public class EFilter implements Filter {
 //				Mo.define("ed",null, true);
 				
 //				out.print(new baseHTML().completeHTML(url));	
-				if (new EWebView().loadPage(url,"tree")!=null){
-					out.print(new EWebView().loadPage(url,"tree"));
+				if (new EWebView().loadPage(url)!=null){
+					out.print(new EWebView().loadPage(url));
 				}
 				else
 					out.print(new BaseHTML().completeHTML(url));

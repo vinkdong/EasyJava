@@ -72,7 +72,11 @@ public class Model {
 	public static List<Map<String, String>> read(String table_name,String condition){
 		try {
 			List<Map<String, String>> res = new ArrayList<>();
-			String sql = "select * from "+table_name+" where "+condition;
+			String sql = "select * from "+table_name+" where "+condition +" order by id";
+			if(DB.connection==null){
+				DATABASE.init();
+				DB.init();
+			}
 			Statement st = DB.connection.createStatement();
 			ResultSet rs = st.executeQuery(sql);
 			ResultSetMetaData rsmd = rs.getMetaData();

@@ -42,12 +42,7 @@ public class DB {
 		try {
 			while(connection ==null){
 				System.out.println("正在连接数据库");
-				DATABASE.DATABASE_LOCATION = "127.0.0.1";
-				DATABASE.DATABASE_NAME = "easyjava";
-				DATABASE.DATABASE_PORT = "5432";
-				DATABASE.DATABASE_USER = "ej";
-				DATABASE.DATABASE_PASSWORD = "admin";
-				DATABASE.DATABASE_TYPE="postgresql";
+				DATABASE.init();
 				DB.init();
 			}
 			Statement stmt =  connection.createStatement();
@@ -66,8 +61,34 @@ public class DB {
 		}
 	}
 	
-	public static void add(String table,List<Map<String, String>> vals){
-		
+	public static int update(String table,Map<String, String> vals,String id){
+		StringBuilder sb = new StringBuilder();
+		for(String key:vals.keySet()){
+			sb.append(key+"='"+vals.get(key)+"',");
+		}
+		if(sb.length()>0){
+			String val = sb.toString();
+			val = val.substring(0, val.length()-1);
+			while(connection ==null){
+				System.out.println("正在连接数据库");
+				DATABASE.init();
+				DB.init();
+			}
+			String sql = "update "+table + " set "+val+" where id="+id;
+			Statement stmt;
+			EOut.print(sql);
+			try {
+				stmt = connection.createStatement();
+				stmt.executeUpdate(sql);
+				stmt.close();
+				return Integer.parseInt(id);	
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return -1;
+		}
+		return 1;
 	}
 
 }

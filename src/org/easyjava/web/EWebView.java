@@ -10,6 +10,7 @@ import org.easyjava.database.DB;
 import org.easyjava.file.Dict;
 import org.easyjava.file.EViewType;
 import org.easyjava.file.EXml;
+import org.easyjava.util.EOut;
 import org.easyjava.util.EString;
 import org.easyjava.util.ETool;
 import org.junit.Test;
@@ -20,11 +21,11 @@ import org.w3c.dom.NodeList;
 public class EWebView {
 	
 
-	public void initDb(String url){
-		String path = new EXml().urlToPath(url);
+//	public void initDb(String url){
+//		String path = new EXml().urlToPath(url);
 //		List<Map<String, String>> fieldList = EXml.read(path, "field");
 //		EOut.print(fieldList);
-	}
+//	}
 	@Test
 	public void test(){
 //		Node node= EXml.getNodeById("/Users/Vink/easyjava/WebContent/layout/base.xml","base_layout");
@@ -72,7 +73,13 @@ public class EWebView {
 						if(et.getDict().get("ttype").equalsIgnoreCase("edit")){
 							html += loadForm(et,Integer.parseInt(et.getDict().get("id")),"edit");
 						}
-						if(et.getDict().get("id").equalsIgnoreCase("")){
+						else if(et.getDict().get("ttype").equalsIgnoreCase("form")){
+							html += loadForm(et,Integer.parseInt(et.getDict().get("id")));
+						}
+						else if(et.getDict().get("ttype").equalsIgnoreCase("tree")){
+							html += loadTree(et);
+						}
+						else if(et.getDict().get("id").equalsIgnoreCase("")){
 							html += loadForm(et);
 						}
 						else{
@@ -98,7 +105,7 @@ public class EWebView {
 		List<String> head = new ArrayList<>(); 
 		boolean init_head = true;
 		for(Map<String,String> line :dataset){
-			tbody.append("<tr>\n");
+			tbody.append("<tr data-id="+ETool.get(line, "id")+">\n");
 			for(int i=0;i<nodelist.getLength();i++){
 				Node node = nodelist.item(i);
 				//TODO:权限屏蔽
@@ -419,7 +426,6 @@ public class EWebView {
 						Node attr = attrs.item(j);
 						html = html + " "+attr.getNodeName()+"=\"";
 						if(attr.getNodeValue().equals("$this.id")){
-							System.out.println(et.getDict().get("id").equals(""));
 							if(et.getDict().get("id").equals("")){
 								html += "none\"";
 							}
@@ -446,12 +452,16 @@ public class EWebView {
 		}
 		return html;
 	}
-	public String  loadPage(String url,String type) {
+	public String  loadPage(String url) {
 		String path = new EXml().urlToPath(url);
+		if(url.endsWith("/web")){
+			path+="/forum.xml";
+		}
+		
 		List<Map<String, String>> fieldList = EXml.read(path, "field");
 		if(fieldList ==null)
 			return null;
-		EViewType et = getNodeByType(path, type);
+		EViewType et = getNodeByType(path, "tree");
 		Dict property = et.getDict();
 		String html ="<!DOCTYPE html>\n"
 				+ "<html lang='en'>\n"
@@ -473,17 +483,19 @@ public class EWebView {
 			return null;
 		Dict params = dict.getDict("params");
 		EViewType et =  new EViewType();
-		if(params.get("type").equalsIgnoreCase("edit")){
+		if(params.get("type").equalsIgnoreCase("tree")){
 			et = getNodeByType(dict.get("path"), "tree");
-			et.getDict().update("id", params.get("id"));
-			et.getDict().update("type", "edit");
+			et.getDict().update("ttype", "tree");
 			Node form =  EXml.getNodeById("base_form");
 			return new EWebView().ReadByNode(form, et);
 		}
 		else{
 			et = getNodeByType(dict.get("path"), "tree");
+			et.getDict().update("id", params.get("id"));
+			et.getDict().update("ttype", params.get("type"));
+			Node form =  EXml.getNodeById("base_form");
+			return new EWebView().ReadByNode(form, et);
 		}
-		return "";
 	}
 	
 	public String fillLayer(BufferedReader reader,List<Map<String, String>> fieldList ,String url){

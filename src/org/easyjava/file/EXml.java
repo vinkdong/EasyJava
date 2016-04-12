@@ -163,8 +163,8 @@ public class EXml {
 	 * @return
 	 */
 	public String urlToPath(String url){
-		url = url.replaceAll("(_rpc_add|_rpc_loadview|_rpc_read)", "");
-		return EGlobal.PATH+"/pages"+url+".xml";
+		url = url.replaceAll("(web|_rpc_add|_rpc_loadview|_rpc_read)", "");
+		return EGlobal.PATH+"/pages";
 	}
 	
 	public List<String> getFieldList(String url){
