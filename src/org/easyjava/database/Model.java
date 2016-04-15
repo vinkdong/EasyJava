@@ -10,25 +10,32 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import org.easyjava.file.Dict;
 import org.easyjava.util.EOut;
 import org.easyjava.util.EString;
+import org.easyjava.util.ETool;
+import org.easyjava.web.EGlobal;
 
 public class Model {	
-	protected String string ="";
-	protected String relation ="";
-	protected String help ="";
-	protected String type = "";
+	protected static String string ="";
+	protected static String relation ="";
+	protected static String help ="";
+	protected static String type = "";
+	protected static String field = "";
 	
-
+	//添加模型数据
 	public  static void add(String model_name,String[] fields) {
 		String query_table_exist = "select count(*) from pg_class where relname = '"+model_name+"'";
 		String sql = "CREATE TABLE "+model_name+"( \n" 
 						+ "ID SERIAL PRIMARY KEY  ,\n"  ; 
 		String o2m = "";
+		Map<String, Map<String,String>> f = new HashMap<>();
 		for(String s:fields){
 			Map<String, String> field = EString.stringToMap(s);
-			String type = field.get("type");
-			switch (type) {
+			string = field.get("string");
+			type = field.get("type");
+			String ttype = field.get("type");
+			switch (ttype) {
 			case "Char":
 			case "char":
 				sql +=  " "+field.get("field")+" CHAR(255)  ,\n" ;
@@ -43,12 +50,21 @@ public class Model {
 				break;
 			default:
 				Pattern p = Pattern.compile("(o|O)ne2many:.*");
-				if(p.matcher(type).matches()){
-					//一对多关系,原则不设立
+				if(p.matcher(ttype).matches()){
+					String[] t_r = ttype.replace(" ", "").split(":");
+					type = t_r[0];
+					relation = t_r[1];
 				}
 				break;
 			}
+			Map<String, String> m = new HashMap<>();
+			m.put("string", string);
+			m.put("type",type);
+			m.put("relation", relation);
+			f.put(field.get("field"), m);
 		}
+		
+		EGlobal.models.put(model_name,f);
 		sql += o2m;
 		sql = sql.substring(0,sql.length()-2);
 		sql += "); ";
@@ -96,5 +112,33 @@ public class Model {
 		return null;		
 	}
 	
-
+	public static String getString(String model_name,String field){
+		if(EGlobal.models.containsKey(model_name)){
+			Map<String,Map<String,String>>f = EGlobal.models.get(model_name);
+			if(f.containsKey(field)){
+				return f.get(field).get("string");
+			}
+		}
+		return null;
+	}
+	
+	public static String getType(String model_name,String field){
+		if(EGlobal.models.containsKey(model_name)){
+			Map<String,Map<String,String>>f = EGlobal.models.get(model_name);
+			if(f.containsKey(field)){
+				return f.get(field).get("type");
+			}
+		}
+		return null;
+	}
+	
+	public static String getRelation(String model_name,String field){
+		if(EGlobal.models.containsKey(model_name)){
+			Map<String,Map<String,String>>f = EGlobal.models.get(model_name);
+			if(f.containsKey(field)){
+				return f.get(field).get("relation");
+			}
+		}
+		return null;
+	}
 }

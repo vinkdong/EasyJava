@@ -10,7 +10,10 @@
 			<tree>
 				<field name="name" />
 				<field name="content" />
-				<button name="xxx" string="asdasass" onclick="javascript:window.location.href='//vinkdong.com';"/>
+				<button name="xxx" string="测试按钮" onclick="javascript:window.location.href='//vinkdong.com';"/>
+				<field name='comment'>
+					<field name="date"></field>
+				</field>
 			</tree>
 		</rec>
 	</rec>

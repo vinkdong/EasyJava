@@ -100,12 +100,12 @@ public class EFilter implements Filter {
 				comment[2] = "field=content,string=Comment,type=Text";
 				Model.add("comment", comment);
 				
-				String[]  one2many = new String[4];
-				one2many[0] = "field=name,string=Name,type=Text";
-				one2many[1] = "field=date,string=Date,type=Date";
-				one2many[2] = "field=content,string=Content,type=Text";
-				one2many[3] = "field=comment,string=Comment,type=one2many:comment";
-				Model.add("forum", one2many);				
+				String[]  forum = new String[4];
+				forum[0] = "field=name,string=Name,type=Text";
+				forum[1] = "field=date,string=Date,type=Date";
+				forum[2] = "field=content,string=Content,type=Text";
+				forum[3] = "field=comment,string=Comment,type=one2many:comment";
+				Model.add("forum", forum);				
 //				Mo.define("ed",null, true);
 				
 //				out.print(new baseHTML().completeHTML(url));	

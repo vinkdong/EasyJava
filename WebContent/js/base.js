@@ -80,6 +80,21 @@ var easyjava = new Object({
             	}
             });
         });
+        $('.e_panel_cancel').live('click', function (e) {
+            e.preventDefault();
+        	var id = $(this).parents().find('.e_form').attr("data-id");
+        	self.res.type = 'view';
+        	self.res.id = id;
+        	if($(this).find('button').length>0){
+        		return null;
+        	}
+        	return self.loadview(self.res,self.url).done(function(data){
+    			var s = $('.container.main');
+    			s.html(data);
+    			$('.e_back').attr('style','display:display');
+    			$('.e_edit').attr('style','display:display');
+        	});
+        });
         $('.row.e_form').find("tbody tr td").live('click',function(e){
         	e.preventDefault();
         	var id = $(this).parent().attr("data-id");

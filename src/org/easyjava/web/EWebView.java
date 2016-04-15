@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.easyjava.database.DATABASE;
 import org.easyjava.database.DB;
+import org.easyjava.database.Model;
 import org.easyjava.file.Dict;
 import org.easyjava.file.EViewType;
 import org.easyjava.file.EXml;
@@ -218,6 +219,11 @@ public class EWebView {
 						form.append("</label>\n");
 						form.append("\t\t\t<div class=\"col-sm-10\">");
 						//TODO:对象翻译，读取String
+//						String model = et.getDict().get("model");
+//						String type = Model.getType(model, val);
+//						if(type.equalsIgnoreCase("one2many")){
+//							System.out.println(Model.getRelation(model, val));
+//						}
 						form.append(ETool.get(dataset, val));
 						form.append("\t\t\t</div>\n\t\t</div>\n");
 					}
