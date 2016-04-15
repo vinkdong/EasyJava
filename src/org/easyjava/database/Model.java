@@ -54,6 +54,20 @@ public class Model {
 					String[] t_r = ttype.replace(" ", "").split(":");
 					type = t_r[0];
 					relation = t_r[1];
+					String alter = "alter table "+relation+" add "+model_name+"_id int ";
+					try{
+						Statement st_alert = DB.connection.createStatement();
+						ResultSet co_rs = st_alert.executeQuery("select count(*)from information_schema.columns where table_name = '"+relation+"' and column_name='"+model_name+"_id'");
+						co_rs.next();
+						if (co_rs.getInt(1)==0){
+							EOut.print(alter);
+							st_alert.executeUpdate(alter);
+						}
+						st_alert.close();
+					}
+					catch(SQLException e){
+						
+					}
 				}
 				break;
 			}
@@ -139,6 +153,10 @@ public class Model {
 				return f.get(field).get("relation");
 			}
 		}
+		return null;
+	}
+	
+	public static int[] getO2mId(String model_name,int id,String field){
 		return null;
 	}
 }

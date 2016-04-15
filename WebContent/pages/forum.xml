@@ -8,6 +8,7 @@
 		<rec name="layout">none</rec>
 		<rec name="view">
 			<tree>
+				<field name='id'></field>
 				<field name="name" />
 				<field name="content" />
 				<button name="xxx" string="测试按钮" onclick="javascript:window.location.href='//vinkdong.com';"/>

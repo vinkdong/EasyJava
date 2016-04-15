@@ -74,6 +74,7 @@ var easyjava = new Object({
             		self.read_rpc("forum", data, "form").done(function(view){
             			var s = $('.container.main');
             			s.html(view);
+            			$('.e_edit').attr('style','display:display');
             		}).fail(function(){
             			self.throw_err("<h3>警告</h3><p>网络请求 <strong>失败</strong>检查您的网络连接和设备环境</p><br/>");
             		});
@@ -157,6 +158,7 @@ var easyjava = new Object({
     
     loadview:function(res,url){
     	 var self = this;
+    	 window.location.hash ="model="+res.model+"&id="+res.id+"&type="+res.type;
          return genericJsonRpc(res, function (data) {
              return $.ajax(url+'_rpc_loadview', _.extend({}, '', {
                  url: url+'_rpc_loadview',

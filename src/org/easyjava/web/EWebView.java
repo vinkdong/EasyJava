@@ -217,15 +217,28 @@ public class EWebView {
 						form.append(">\n<label class=\"col-sm-2 control-label\">");
 						form.append(val);
 						form.append("</label>\n");
-						form.append("\t\t\t<div class=\"col-sm-10\">");
-						//TODO:对象翻译，读取String
-//						String model = et.getDict().get("model");
-//						String type = Model.getType(model, val);
-//						if(type.equalsIgnoreCase("one2many")){
-//							System.out.println(Model.getRelation(model, val));
-//						}
-						form.append(ETool.get(dataset, val));
-						form.append("\t\t\t</div>\n\t\t</div>\n");
+						String model = et.getDict().get("model");
+						String type = Model.getType(model, val);
+						if(type.equalsIgnoreCase("one2many")){
+							String relation = Model.getRelation(model, val);
+							form.append("\t\t<div class=\"col-xs-8 e_o2m\" model=\""+relation+"\">");
+							for(int cr:Model.getO2mId(model, id, val)){
+								form.append("<br/>\n<div class=\"e_o2m\"> data-id='"+cr+"' model='"+relation+"'");
+								EViewType e = new EViewType();
+								e.setDict(null);
+								e.setNode(node.getFirstChild());
+								form.append(loadForm(e, cr));
+								form.append("</div>");
+							}
+							form.append("</div>");
+						}
+						else{
+							//TODO:对象翻译，读取String
+							form.append("\t\t\t<div class=\"col-sm-10\">");
+							form.append(ETool.get(dataset, val));
+							form.append("\t\t\t</div>\n\t\t</div>\n");
+						}
+						
 					}
 					if(field.getNodeName().equals("button")){
 						NamedNodeMap attr = field.getAttributes();
@@ -257,7 +270,6 @@ public class EWebView {
 	 * @return
 	 */
 	public static String loadForm(EViewType et){
-		et.getDict().delete("id");
 		if(!et.getDict().get("id").equals("")){
 			return loadForm(et, Integer.parseInt(et.getDict().get("id")));
 		}
@@ -547,6 +559,10 @@ public class EWebView {
 		return html+"\n</html>";
 	};
 	
+	public static String loadO2mList(EViewType et){
+		Dict dt = et.getDict();
+		return "";
+	}
 	/**
 	 * 读取tree 或from 的视图node
 	 * @param path
