@@ -46,6 +46,12 @@ public class EWebView {
 		String str = ReadByNode(EXml.getNodeById("base_layout"),et);
 	}
 	
+	/**
+	 * 处理t标签及判断加载何种视图
+	 * @param node
+	 * @param et
+	 * @return
+	 */
 	private String parseTag(Node node,EViewType et) {
 		NamedNodeMap attrs = node.getAttributes();
 		String html = "";
@@ -80,7 +86,7 @@ public class EWebView {
 						else if(et.getDict().get("ttype").equalsIgnoreCase("tree")){
 							html += loadTree(et);
 						}
-						else if(et.getDict().get("id").equalsIgnoreCase("")){
+						else if(et.getDict().get("id").equalsIgnoreCase("")||et.getDict().get("id").equalsIgnoreCase("undefined")){
 							html += loadForm(et);
 						}
 						else{
@@ -228,8 +234,7 @@ public class EWebView {
 								Dict dt = new Dict();
 								dt.update("model",relation);
 								e.setDict(dt);
-								e.setNode(field.getFirstChild());
-								System.out.println(e.getDict());
+								e.setNode(field);
 								form.append(loadForm(e, cr));
 								form.append("</div>");
 							}
@@ -273,7 +278,7 @@ public class EWebView {
 	 * @return
 	 */
 	public static String loadForm(EViewType et){
-		if(!et.getDict().get("id").equals("")){
+		if(!et.getDict().get("id").equals("")&&!et.getDict().get("id").equals("undefined")){
 			return loadForm(et, Integer.parseInt(et.getDict().get("id")));
 		}
 		else{
@@ -306,15 +311,22 @@ public class EWebView {
 									form.append("\" ");
 								}
 							}
-							form.append("class=\"form-group "+ext_class+"\"");
-							form.append(">\n<label class=\"col-sm-2 control-label\">");
-							//TODO:对象翻译，读取String
-							form.append(val);
-							form.append("</label>\n");
-							form.append("\t\t\t<div class=\"col-sm-10\">\n");
-							form.append("<input type=\"text\" class=\"form-control\"");
-							form.append("name='"+val+"'>");
-							form.append("\t\t\t</div>\n\t\t</div>\n");
+							form.append("class=\"form-group "+ext_class+"\">\n");
+							String model = et.getDict().get("model");
+							String ttype = Model.getType(model, val);
+							if(ttype!=null&&ttype.equalsIgnoreCase("one2many")){
+								
+							}
+							else{
+								form.append("<label class=\"col-sm-2 control-label\">");
+								//TODO:对象翻译，读取String
+								form.append(val);
+								form.append("</label>\n");
+								form.append("\t\t\t<div class=\"col-sm-10\">\n");
+								form.append("<input type=\"text\" class=\"form-control\"");
+								form.append("name='"+val+"'>");
+								form.append("\t\t\t</div>\n\t\t</div>\n");
+							}
 						}
 						if(field.getNodeName().equals("button")){
 							NamedNodeMap attr = field.getAttributes();							
@@ -385,11 +397,30 @@ public class EWebView {
 							form.append(">\n<label class=\"col-sm-2 control-label\">");
 							form.append(val);
 							form.append("</label>\n");
-							form.append("\t\t\t<div class=\"col-sm-10\">");
-							// TODO:对象翻译，读取String
-							form.append("<input type=\"text\" class=\"form-control\"");
-							form.append("name='"+val+"' value='"+ETool.get(dataset, val)+"'>");
-							form.append("\t\t\t</div>\n\t\t</div>\n");
+							String model = et.getDict().get("model");
+							String ttype = Model.getType(model, val);
+							if(ttype!=null&&ttype.equalsIgnoreCase("one2many")){
+								String relation = Model.getRelation(model, val);
+								form.append("\t\t<div class=\"col-xs-8 e_o2m\" model=\""+relation+"\">");
+								for(int cr:Model.getO2mId(model, id, val)){
+									form.append("<br/>\n<div class=\"e_o2m\" data-id='"+cr+"' model='"+relation+"'>");
+									EViewType e = new EViewType();
+									Dict dt = new Dict();
+									dt.update("model",relation);
+									e.setDict(dt);
+									e.setNode(field);
+									form.append(loadForm(e, cr));
+									form.append("</div>");
+								}
+								form.append("</div>");
+							}
+							else{
+								form.append("\t\t\t<div class=\"col-sm-10\">");
+								// TODO:对象翻译，读取String
+								form.append("<input type=\"text\" class=\"form-control\"");
+								form.append("name='"+val+"' value='"+ETool.get(dataset, val)+"'>");
+								form.append("\t\t\t</div>\n\t\t</div>\n");
+							}	
 						}
 						if (field.getNodeName().equals("button")) {
 							NamedNodeMap attr = field.getAttributes();

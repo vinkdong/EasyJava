@@ -55,11 +55,17 @@ public class Self {
 			Dict params = dict.getDict("params");
 			System.out.println("pARM:"+params);
 			List<String> file_list = new EXml().getFieldList(request.getServletPath(),params.get("model"));
-			System.out.println(file_list);
 			Map<String, String> res = new HashMap<>();
 			for (String rec : file_list) {
-				res.put(rec, params.get(rec));
+				String type = Model.getType(params.get("model"), rec);
+				if((type!=null&&type.equalsIgnoreCase("one2many"))||rec.equals("id")){
+					
+				}
+				else{
+					res.put(rec, params.get(rec));
+				}
 			}
+			System.out.println(res);
 			if(params.get("id").equals("")||params.get("id").equals("none")){
 				return DB.add(params.get("model"), res);
 			}

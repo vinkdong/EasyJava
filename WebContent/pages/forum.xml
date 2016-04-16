@@ -13,7 +13,8 @@
 				<field name="content" />
 				<button name="xxx" string="测试按钮" onclick="javascript:window.location.href='//vinkdong.com';"/>
 				<field name='comment'>
-					<field name="date"></field>
+					<field name="content"></field>
+					<field name='name'/>
 				</field>
 			</tree>
 		</rec>
