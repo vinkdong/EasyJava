@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+	<rec id="view_comment_form">
+		<rec name="type">view</rec>
+		<rec name="model">comment</rec>
+		<rec name="name">评论</rec>
+		<rec name="groups">all</rec>
+		<rec name="layout">none</rec>
+		<rec name="view">
+			<tree>
+				<field name='id'></field>
+				<field name="name" />
+				<field name="content" />
+				<field name='forum_id'>
+				</field>
+			</tree>
+		</rec>
+	</rec>
+	<action id="forum_action">
+		<type>tree,form,edit</type>
+	</action>
+</data>

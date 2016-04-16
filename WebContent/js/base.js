@@ -71,7 +71,7 @@ var easyjava = new Object({
             }
             return self.add(self.read_field(cr,id)).done(function(data){
             	if(/^[0-9]+$/.test(data)){
-            		self.read_rpc("forum", data, "form").done(function(view){
+            		self.read_rpc(res.model, data, "form").done(function(view){
             			var s = $('.container.main');
             			s.html(view);
             			$('.e_edit').attr('style','display:display');
@@ -172,6 +172,7 @@ var easyjava = new Object({
 
     add_rpc: function (field_list) {
         var self = this;
+        field_list.model =  self.res.model;
         return genericJsonRpc(field_list, function (data) {
             return $.ajax(self.url+'_rpc_add', _.extend({}, '', {
                 url: self.url+'_rpc_add',

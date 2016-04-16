@@ -12,6 +12,7 @@ import org.easyjava.database.DB;
 import org.easyjava.database.Model;
 import org.easyjava.file.Dict;
 import org.easyjava.file.EXml;
+import org.easyjava.util.EOut;
 
 public class Self {
 	
@@ -52,15 +53,17 @@ public class Self {
 		public static int add(HttpServletRequest request) {
 			Dict dict = rpcToDict(request);
 			Dict params = dict.getDict("params");
-			List<String> file_list = new EXml().getFieldList(request.getServletPath());
+			System.out.println("pARM:"+params);
+			List<String> file_list = new EXml().getFieldList(request.getServletPath(),params.get("model"));
+			System.out.println(file_list);
 			Map<String, String> res = new HashMap<>();
 			for (String rec : file_list) {
 				res.put(rec, params.get(rec));
 			}
 			if(params.get("id").equals("")||params.get("id").equals("none")){
-				return DB.add("forum", res);
+				return DB.add(params.get("model"), res);
 			}
-			return DB.update("forum", res, params.get("id"));
+			return DB.update(params.get("model"), res, params.get("id"));
 		}
 		
 		public static String read(HttpServletRequest request){

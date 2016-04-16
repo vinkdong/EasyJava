@@ -11,7 +11,9 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.easyjava.util.EOut;
 import org.easyjava.web.EGlobal;
+import org.easyjava.web.EWebView;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -167,11 +169,25 @@ public class EXml {
 		return EGlobal.PATH+"/pages";
 	}
 	
-	public List<String> getFieldList(String url){
-		String file_path = urlToPath(url);
+	public List<String> getFieldList(String url,String model){
+		String file_path = urlToPath(url)+"/"+model+".xml";
 		List<String> field_list = new ArrayList<>();
-		field_list.add("name");
-		field_list.add("content");
+		EViewType et = EWebView.getNodeByType(file_path, "tree");
+		Node node = et.getNode();
+		if(node.hasChildNodes()){
+			NodeList nodelist = node.getChildNodes();
+			for(int i=0;i<nodelist.getLength();i++){
+				Node nd = nodelist.item(i);
+				if(nd.getNodeType()==Node.ELEMENT_NODE&&nd.getNodeName().equalsIgnoreCase("field")){
+					NamedNodeMap ndmp = nd.getAttributes();
+					for(int j=0;j<ndmp.getLength();j++){
+						if(ndmp.item(j).getNodeName().equals("name")){
+							field_list.add(ndmp.item(j).getNodeValue());
+						}
+					}
+				}
+			}
+		}
 		return field_list;
 	}
 }

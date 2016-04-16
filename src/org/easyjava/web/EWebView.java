@@ -219,14 +219,17 @@ public class EWebView {
 						form.append("</label>\n");
 						String model = et.getDict().get("model");
 						String type = Model.getType(model, val);
-						if(type.equalsIgnoreCase("one2many")){
+						if(type!=null&&type.equalsIgnoreCase("one2many")){
 							String relation = Model.getRelation(model, val);
 							form.append("\t\t<div class=\"col-xs-8 e_o2m\" model=\""+relation+"\">");
 							for(int cr:Model.getO2mId(model, id, val)){
-								form.append("<br/>\n<div class=\"e_o2m\"> data-id='"+cr+"' model='"+relation+"'");
+								form.append("<br/>\n<div class=\"e_o2m\" data-id='"+cr+"' model='"+relation+"'>");
 								EViewType e = new EViewType();
-								e.setDict(null);
-								e.setNode(node.getFirstChild());
+								Dict dt = new Dict();
+								dt.update("model",relation);
+								e.setDict(dt);
+								e.setNode(field.getFirstChild());
+								System.out.println(e.getDict());
 								form.append(loadForm(e, cr));
 								form.append("</div>");
 							}

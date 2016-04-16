@@ -157,6 +157,28 @@ public class Model {
 	}
 	
 	public static int[] getO2mId(String model_name,int id,String field){
+		if(DB.connection==null){
+			DATABASE.init();
+			DB.init();
+		}
+		String relation = getRelation(model_name, field);
+		String sql = "select id from "+relation+" where "+model_name+"_id ="+id +" order by id";
+		try {
+			Statement stmt = DB.connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_READ_ONLY);
+			ResultSet rs = stmt.executeQuery(sql);
+			rs.last();
+			int[] ids = new int[rs.getRow()];
+			rs.beforeFirst();
+			int cr = 0;
+			while(rs.next()){
+				ids[cr] = rs.getInt(1);
+			}
+			return ids;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		return null;
 	}
 }
