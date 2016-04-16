@@ -65,7 +65,6 @@ public class Self {
 					res.put(rec, params.get(rec));
 				}
 			}
-			System.out.println(res);
 			if(params.get("id").equals("")||params.get("id").equals("none")){
 				return DB.add(params.get("model"), res);
 			}

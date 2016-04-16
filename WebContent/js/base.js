@@ -27,6 +27,7 @@ var easyjava = new Object({
         var start = this.start();
         this.res = {};
         this.url = this.getUrl();
+        this.$el= "";
         return start;
     },
     getUrl: function() {
@@ -140,6 +141,29 @@ var easyjava = new Object({
     			$('.e_create').attr('style','display:display');
     			$(cr).attr('style','display:none');
         	});  	
+        });
+        $('.e_o2m_edit').live('click',function(){
+        	res = {};
+        	var self = this;
+        	res.id = $(this).parent().attr("data-id");
+        	alert(res.id);
+        });
+        $('.e_o2m_delete').live('click',function(){
+        	res = {};
+        	var self = this;
+        	this.$el = $(this);
+        	res.id = this.$el.parent().attr("data-id");
+        	this.$el.parent().prev().remove();
+        	this.$el.parent().remove();
+        });
+        $('.e_o2m_add').live('click',function(){
+        	res = {};
+        	var self = this;
+        	this.$el = $(this);
+        	res.id = this.$el.parent().attr("model");
+        	this.$el.parent().append("<input type='text'>");
+        	this.$el.parent().append("<a class=\"col-sm-10 e_o2m_add\">添加一个项目</a>");
+        	this.$el.remove();
         });
     },
     read_field : function(cr,id){

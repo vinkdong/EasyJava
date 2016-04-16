@@ -229,7 +229,7 @@ public class EWebView {
 							String relation = Model.getRelation(model, val);
 							form.append("\t\t<div class=\"col-xs-8 e_o2m\" model=\""+relation+"\">");
 							for(int cr:Model.getO2mId(model, id, val)){
-								form.append("<br/>\n<div class=\"e_o2m\" data-id='"+cr+"' model='"+relation+"'>");
+								form.append("<br/>\n<div class=\"e_o2m col-sm-10\" data-id='"+cr+"' model='"+relation+"'>");
 								EViewType e = new EViewType();
 								Dict dt = new Dict();
 								dt.update("model",relation);
@@ -237,6 +237,17 @@ public class EWebView {
 								e.setNode(field);
 								form.append(loadForm(e, cr));
 								form.append("</div>");
+								form.append("<div class=\"e_o2m_op col-sm-2\"  data-id='"+cr+"' model='"+relation+"'>");
+								if(true){
+									form.append("\t\t\t<a class='e_o2m_edit'>编辑</a>");
+								}
+								if(true){
+									form.append("\t\t\t<a class='e_o2m_delete'>删除</a>");
+								}
+								form.append("\t\t</div>");
+							}
+							if(true){
+								form.append("<a class=\"col-sm-10 e_o2m_add\">添加一个项目</a>");
 							}
 							form.append("</div>");
 						}
@@ -393,28 +404,16 @@ public class EWebView {
 									form.append("\" ");
 								}
 							}
-							form.append("class=\"form-group " + ext_class + "\"");
-							form.append(">\n<label class=\"col-sm-2 control-label\">");
-							form.append(val);
-							form.append("</label>\n");
+							form.append("class=\"form-group " + ext_class + "\">\n");
 							String model = et.getDict().get("model");
 							String ttype = Model.getType(model, val);
 							if(ttype!=null&&ttype.equalsIgnoreCase("one2many")){
-								String relation = Model.getRelation(model, val);
-								form.append("\t\t<div class=\"col-xs-8 e_o2m\" model=\""+relation+"\">");
-								for(int cr:Model.getO2mId(model, id, val)){
-									form.append("<br/>\n<div class=\"e_o2m\" data-id='"+cr+"' model='"+relation+"'>");
-									EViewType e = new EViewType();
-									Dict dt = new Dict();
-									dt.update("model",relation);
-									e.setDict(dt);
-									e.setNode(field);
-									form.append(loadForm(e, cr));
-									form.append("</div>");
-								}
-								form.append("</div>");
+								
 							}
 							else{
+								form.append("<label class=\"col-sm-2 control-label\">");
+								form.append(val);
+								form.append("</label>\n");
 								form.append("\t\t\t<div class=\"col-sm-10\">");
 								// TODO:对象翻译，读取String
 								form.append("<input type=\"text\" class=\"form-control\"");
