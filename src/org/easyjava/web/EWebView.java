@@ -194,86 +194,7 @@ public class EWebView {
 		if(node.hasChildNodes()){
 			StringBuilder form = new StringBuilder();
 			form.append("\t<form class=\"form-horizontal\" role=\"form\">\n");
-			NodeList fieldList = node.getChildNodes();
-			for(int i=0;i<fieldList.getLength();i++){
-				Node field = fieldList.item(i);
-				if(field.getNodeType()==Node.ELEMENT_NODE){
-					if(field.getNodeName().equals("field")){
-						NamedNodeMap attr = field.getAttributes();
-						String val = "";
-						String ext_class = "";
-						form.append("\t\t<div ");
-						
-						for (int j = 0; j < attr.getLength(); j++) {
-							Node attNode = attr.item(j);
-							if (attNode.getNodeName().equals("name")) {
-								val = attNode.getNodeValue();
-							}
-							if (attNode.getNodeName().equals("class")) {
-								ext_class = attNode.getNodeValue();
-							}
-							else{
-								form.append(attNode.getNodeName());
-								form.append("=\"");
-								form.append(attNode.getNodeValue());
-								form.append("\" ");
-							}
-						}
-						form.append("class=\"form-group "+ext_class+"\"");
-						form.append(">\n<label class=\"col-sm-2 control-label\">");
-						form.append(val);
-						form.append("</label>\n");
-						String model = et.getDict().get("model");
-						String type = Model.getType(model, val);
-						if(type!=null&&type.equalsIgnoreCase("one2many")){
-							String relation = Model.getRelation(model, val);
-							form.append("\t\t<div class=\"col-xs-8 e_o2m\" model=\""+relation+"\">");
-							for(int cr:Model.getO2mId(model, id, val)){
-								form.append("<br/>\n<div class=\"e_o2m col-sm-10\" data-id='"+cr+"' model='"+relation+"'>");
-								EViewType e = new EViewType();
-								Dict dt = new Dict();
-								dt.update("model",relation);
-								e.setDict(dt);
-								e.setNode(field);
-								form.append(loadForm(e, cr));
-								form.append("</div>");
-								form.append("<div class=\"e_o2m_op col-sm-2\"  data-id='"+cr+"' model='"+relation+"'>");
-								if(true){
-									form.append("\t\t\t<a class='e_o2m_edit'>编辑</a>");
-								}
-								if(true){
-									form.append("\t\t\t<a class='e_o2m_delete'>删除</a>");
-								}
-								form.append("\t\t</div>");
-							}
-							if(true){
-								form.append("<a class=\"col-sm-10 e_o2m_add\">添加一个项目</a>");
-							}
-							form.append("</div>");
-						}
-						else{
-							//TODO:对象翻译，读取String
-							form.append("\t\t\t<div class=\"col-sm-10\">");
-							form.append(ETool.get(dataset, val));
-							form.append("\t\t\t</div>\n\t\t</div>\n");
-						}
-						
-					}
-					if(field.getNodeName().equals("button")){
-						NamedNodeMap attr = field.getAttributes();
-						
-						String val = "";
-						for (int j = 0; j < attr.getLength(); j++) {
-							Node attNode = attr.item(j);
-							if (attNode.getNodeName().equals("string")) {								
-								
-								val = attNode.getNodeValue();
-								}
-							}
-		
-						}
-					}
-			}
+			form.append(loadGeneralView(Self.model, node, id, dataset));
 			form.append("</form>");
 			return form.toString();
 		}
@@ -297,60 +218,7 @@ public class EWebView {
 			if(node.hasChildNodes()){
 				StringBuilder form = new StringBuilder();
 				form.append("\t<form class=\"form-horizontal\" role=\"form\">\n");
-				NodeList fieldList = node.getChildNodes();
-				for(int i=0;i<fieldList.getLength();i++){
-					Node field = fieldList.item(i);
-					if(field.getNodeType()==Node.ELEMENT_NODE){
-						if(field.getNodeName().equals("field")){
-							NamedNodeMap attr = field.getAttributes();
-							String val = "";
-							String ext_class = "";
-							form.append("\t\t<div ");
-							
-							for (int j = 0; j < attr.getLength(); j++) {
-								Node attNode = attr.item(j);
-								if (attNode.getNodeName().equals("name")) {
-									val = attNode.getNodeValue();
-								}
-								if (attNode.getNodeName().equals("class")) {
-									ext_class = attNode.getNodeValue();
-								}
-								else{
-									form.append(attNode.getNodeName());
-									form.append("=\"");
-									form.append(attNode.getNodeValue());
-									form.append("\" ");
-								}
-							}
-							form.append("class=\"form-group "+ext_class+"\">\n");
-							String model = et.getDict().get("model");
-							String ttype = Model.getType(model, val);
-							if(ttype!=null&&ttype.equalsIgnoreCase("one2many")){
-								
-							}
-							else{
-								form.append("<label class=\"col-sm-2 control-label\">");
-								//TODO:对象翻译，读取String
-								form.append(val);
-								form.append("</label>\n");
-								form.append("\t\t\t<div class=\"col-sm-10\">\n");
-								form.append("<input type=\"text\" class=\"form-control\"");
-								form.append("name='"+val+"'>");
-								form.append("\t\t\t</div>\n\t\t</div>\n");
-							}
-						}
-						if(field.getNodeName().equals("button")){
-							NamedNodeMap attr = field.getAttributes();							
-							String val = "";
-							for (int j = 0; j < attr.getLength(); j++) {
-								Node attNode = attr.item(j);
-								if (attNode.getNodeName().equals("string")) {
-									val = attNode.getNodeValue();
-									}
-								}			
-							}
-						}
-				}
+				form.append(loadCreateView(et.getDict().get("model"), node));
 				form.append("<div class=\"col-md-8 col-md-offset-2 \">\n<p><button class=\"btn btn-success e_panel_submit\">Submit</button>");
 				form.append("<span class=\"h3\">or</span><button class=\"btn btn-danger e_panel_cancel\">Cancel</button></p></div>");
 				form.append("</form>");
@@ -380,61 +248,7 @@ public class EWebView {
 			if (node.hasChildNodes()) {
 				StringBuilder form = new StringBuilder();
 				form.append("\t<form class=\"form-horizontal\" role=\"form\">\n");
-				NodeList fieldList = node.getChildNodes();
-				for (int i = 0; i < fieldList.getLength(); i++) {
-					Node field = fieldList.item(i);
-					if (field.getNodeType() == Node.ELEMENT_NODE) {
-						if (field.getNodeName().equals("field")) {
-							NamedNodeMap attr = field.getAttributes();
-							String val = "";
-							String ext_class = "";
-							form.append("\t\t<div ");
-
-							for (int j = 0; j < attr.getLength(); j++) {
-								Node attNode = attr.item(j);
-								if (attNode.getNodeName().equals("name")) {
-									val = attNode.getNodeValue();
-								}
-								if (attNode.getNodeName().equals("class")) {
-									ext_class = attNode.getNodeValue();
-								} else {
-									form.append(attNode.getNodeName());
-									form.append("=\"");
-									form.append(attNode.getNodeValue());
-									form.append("\" ");
-								}
-							}
-							form.append("class=\"form-group " + ext_class + "\">\n");
-							String model = et.getDict().get("model");
-							String ttype = Model.getType(model, val);
-							if(ttype!=null&&ttype.equalsIgnoreCase("one2many")){
-								
-							}
-							else{
-								form.append("<label class=\"col-sm-2 control-label\">");
-								form.append(val);
-								form.append("</label>\n");
-								form.append("\t\t\t<div class=\"col-sm-10\">");
-								// TODO:对象翻译，读取String
-								form.append("<input type=\"text\" class=\"form-control\"");
-								form.append("name='"+val+"' value='"+ETool.get(dataset, val)+"'>");
-								form.append("\t\t\t</div>\n\t\t</div>\n");
-							}	
-						}
-						if (field.getNodeName().equals("button")) {
-							NamedNodeMap attr = field.getAttributes();
-							String val = "";
-							for (int j = 0; j < attr.getLength(); j++) {
-								Node attNode = attr.item(j);
-								if (attNode.getNodeName().equals("string")) {
-
-									val = attNode.getNodeValue();
-								}
-							}
-
-						}
-					}
-				}
+				form.append(loadEditView(Self.model,node,dataset));
 				form.append("<div class=\"col-md-8 col-md-offset-2 \">\n<p><button class=\"btn btn-success e_panel_submit\">Submit</button>");
 				form.append("<span class=\"h3\">or</span><button class=\"btn btn-danger e_panel_cancel\">Cancel</button></p></div>");
 				form.append("</form>");
@@ -449,6 +263,207 @@ public class EWebView {
 		else{
 			return loadForm(et);
 		}
+	}
+	
+	public static String loadGeneralView(String model,Node node,int id,Map<String, String >dataset){
+		NodeList fieldList = node.getChildNodes();
+		StringBuilder form = new StringBuilder();
+		for(int i=0;i<fieldList.getLength();i++){
+			Node field = fieldList.item(i);
+			if(field.getNodeType()==Node.ELEMENT_NODE){
+				if(field.getNodeName().equals("field")){
+					NamedNodeMap attr = field.getAttributes();
+					String val = "";
+					String ext_class = "";
+					form.append("\t\t<div ");
+					
+					for (int j = 0; j < attr.getLength(); j++) {
+						Node attNode = attr.item(j);
+						if (attNode.getNodeName().equals("name")) {
+							val = attNode.getNodeValue();
+						}
+						if (attNode.getNodeName().equals("class")) {
+							ext_class = attNode.getNodeValue();
+						}
+						else{
+							form.append(attNode.getNodeName());
+							form.append("=\"");
+							form.append(attNode.getNodeValue());
+							form.append("\" ");
+						}
+					}
+					form.append("class=\"form-group "+ext_class+"\"");
+					form.append(">\n<label class=\"col-sm-2 control-label\">");
+					form.append(val);
+					form.append("</label>\n");
+					String type = Model.getType(model, val);
+					if(type!=null&&type.equalsIgnoreCase("one2many")){
+						String relation = Model.getRelation(model, val);
+						form.append("\t\t<div class=\"col-xs-8 e_o2m\" model=\""+relation+"\" field='"+val+"'>");
+						for(int cr:Model.getO2mId(model, id, val)){
+							form.append("<br/>\n<div class=\"e_o2m col-sm-10\" data-id='"+cr+"' model='"+relation+"'>");
+							EViewType e = new EViewType();
+							Dict dt = new Dict();
+							dt.update("model",relation);
+							e.setDict(dt);
+							e.setNode(field);
+							form.append(loadForm(e, cr));
+							form.append("</div>");
+							form.append("<div class=\"e_o2m_op col-sm-2\"  data-id='"+cr+"' model='"+relation+"'>");
+							if(true){
+								form.append("\t\t\t<a class='e_o2m_edit'>编辑</a>");
+								form.append("\t\t\t<a class='e_o2m_submit' style='display:none'>提交</a>");
+							}
+							if(true){
+								form.append("\t\t\t<a class='e_o2m_delete'>删除</a>");
+							}
+							form.append("\t\t</div>");
+						}
+						if(true){
+							form.append("<a class=\"col-sm-10 e_o2m_add\">添加一个项目</a>");
+						}
+						form.append("</div>");
+					}
+					else{
+						//TODO:对象翻译，读取String
+						form.append("\t\t\t<div class=\"col-sm-10\">");
+						form.append(ETool.get(dataset, val));
+						form.append("\t\t\t</div>\n\t\t</div>\n");
+					}
+					
+				}
+				if(field.getNodeName().equals("button")){
+					NamedNodeMap attr = field.getAttributes();
+					
+					String val = "";
+					for (int j = 0; j < attr.getLength(); j++) {
+						Node attNode = attr.item(j);
+						if (attNode.getNodeName().equals("string")) {								
+							
+							val = attNode.getNodeValue();
+							}
+						}
+	
+					}
+				}
+		}
+		return form.toString();
+	}
+	
+	public static String loadCreateView(String model,Node node){
+		NodeList fieldList = node.getChildNodes();
+		StringBuilder form = new StringBuilder();
+		for(int i=0;i<fieldList.getLength();i++){
+			Node field = fieldList.item(i);
+			if(field.getNodeType()==Node.ELEMENT_NODE){
+				if(field.getNodeName().equals("field")){
+					NamedNodeMap attr = field.getAttributes();
+					String val = "";
+					String ext_class = "";
+					form.append("\t\t<div ");
+					
+					for (int j = 0; j < attr.getLength(); j++) {
+						Node attNode = attr.item(j);
+						if (attNode.getNodeName().equals("name")) {
+							val = attNode.getNodeValue();
+						}
+						if (attNode.getNodeName().equals("class")) {
+							ext_class = attNode.getNodeValue();
+						}
+						else{
+							form.append(attNode.getNodeName());
+							form.append("=\"");
+							form.append(attNode.getNodeValue());
+							form.append("\" ");
+						}
+					}
+					form.append("class=\"form-group "+ext_class+"\">\n");
+					String ttype = Model.getType(model, val);
+					if(ttype!=null&&ttype.equalsIgnoreCase("one2many")){
+						
+					}
+					else{
+						form.append("<label class=\"col-sm-2 control-label\">");
+						//TODO:对象翻译，读取String
+						form.append(val);
+						form.append("</label>\n");
+						form.append("\t\t\t<div class=\"col-sm-10\">\n");
+						form.append("<input type=\"text\" class=\"form-control\"");
+						form.append("name='"+val+"'>");
+						form.append("\t\t\t</div>\n\t\t</div>\n");
+					}
+				}
+				if(field.getNodeName().equals("button")){
+					NamedNodeMap attr = field.getAttributes();							
+					String val = "";
+					for (int j = 0; j < attr.getLength(); j++) {
+						Node attNode = attr.item(j);
+						if (attNode.getNodeName().equals("string")) {
+							val = attNode.getNodeValue();
+							}
+						}			
+					}
+				}
+		}
+		return form.toString();
+	}
+	
+	public static String loadEditView(String model,Node node,Map<String, String>dataset){
+		NodeList fieldList = node.getChildNodes();
+		StringBuilder form = new StringBuilder();
+		for (int i = 0; i < fieldList.getLength(); i++) {
+			Node field = fieldList.item(i);
+			if (field.getNodeType() == Node.ELEMENT_NODE) {
+				if (field.getNodeName().equals("field")) {
+					NamedNodeMap attr = field.getAttributes();
+					String val = "";
+					String ext_class = "";
+					form.append("\t\t<div ");
+
+					for (int j = 0; j < attr.getLength(); j++) {
+						Node attNode = attr.item(j);
+						if (attNode.getNodeName().equals("name")) {
+							val = attNode.getNodeValue();
+						}
+						if (attNode.getNodeName().equals("class")) {
+							ext_class = attNode.getNodeValue();
+						} else {
+							form.append(attNode.getNodeName());
+							form.append("=\"");
+							form.append(attNode.getNodeValue());
+							form.append("\" ");
+						}
+					}
+					form.append("class=\"form-group " + ext_class + "\">\n");
+					String ttype = Model.getType(model, val);
+					if(ttype!=null&&ttype.equalsIgnoreCase("one2many")){
+						
+					}
+					else{
+						form.append("<label class=\"col-sm-2 control-label\">");
+						form.append(val);
+						form.append("</label>\n");
+						form.append("\t\t\t<div class=\"col-sm-10\">");
+						// TODO:对象翻译，读取String
+						form.append("<input type=\"text\" class=\"form-control\"");
+						form.append("name='"+val+"' value='"+ETool.get(dataset, val)+"'>");
+						form.append("\t\t\t</div>\n\t\t</div>\n");
+					}	
+				}
+				if (field.getNodeName().equals("button")) {
+					NamedNodeMap attr = field.getAttributes();
+					String val = "";
+					for (int j = 0; j < attr.getLength(); j++) {
+						Node attNode = attr.item(j);
+						if (attNode.getNodeName().equals("string")) {
+							val = attNode.getNodeValue();
+						}
+					}
+
+				}
+			}
+		}
+		return form.toString();
 	}
 	
 	/**
@@ -592,9 +607,68 @@ public class EWebView {
 		return html+"\n</html>";
 	};
 	
-	public static String loadO2mList(EViewType et){
-		Dict dt = et.getDict();
+	public static String loadO2mItem(Dict dict){
+		System.out.println(EGlobal.PATH);
+		System.out.println(dict);
+		Dict params = dict.getDict("params");
+		Node field = getFieldNode(params.get("model"),params.get("field"),"tree");
+		if(field!=null&&field.hasAttributes()){
+			if(params.get("type").equals("edit")){
+				String relation = Model.getRelation(params.get("model"), params.get("field"));
+				Self.model = relation;
+				Map<String, String> dataset = Self.env.browse(Integer.parseInt(params.get("id")));
+				if(dataset==null){
+					return "";
+				}
+				return loadEditView(relation,field,dataset);
+			}
+			if(params.get("type").equals("view")){
+				String relation = Model.getRelation(params.get("model"), params.get("field"));
+				Self.model = relation;
+				Map<String, String> dataset = Self.env.browse(Integer.parseInt(params.get("id")));
+				if(dataset==null){
+					return "";
+				}
+				return loadGeneralView(relation, field, Integer.parseInt(params.get("id")), dataset);
+			}
+			if(params.get("type").equals("add")){
+				String relation = Model.getRelation(params.get("model"), params.get("field"));
+				Self.model = relation;
+				Map<String, String> dataset = Self.env.browse(Integer.parseInt(params.get("id")));
+				if(dataset==null){
+					return "";
+				}
+				return loadCreateView(relation, field);
+			}
+		}
 		return "";
+	}
+	
+	/**
+	 * 根据模型和字段获取该字段的Node
+	 * @param dict
+	 * @return
+	 */
+	public static Node getFieldNode(String model,String field,String type){
+		EViewType et = getNodeByType(EGlobal.PATH+"/pages/"+model+".xml", type);
+		Node form = et.getNode();
+		if(form.hasChildNodes()){
+			NodeList fieldNodeList = form.getChildNodes();
+			for(int i=0;i<fieldNodeList.getLength();i++){
+				Node fieldNode = fieldNodeList.item(i);
+				if(fieldNode.getNodeType()==Node.ELEMENT_NODE){
+					NamedNodeMap attrs = fieldNode.getAttributes();
+					for(int j=0;j<attrs.getLength();j++){
+						Node attrNode = attrs.item(j);
+						if(attrNode.getNodeName().equals("name")&&attrNode.getNodeValue().equalsIgnoreCase(field)){
+							return fieldNode;
+						}
+					}
+				}
+			}
+		}
+		return null;
+		
 	}
 	/**
 	 * 读取tree 或from 的视图node

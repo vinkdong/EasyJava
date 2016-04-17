@@ -53,7 +53,6 @@ public class Self {
 		public static int add(HttpServletRequest request) {
 			Dict dict = rpcToDict(request);
 			Dict params = dict.getDict("params");
-			System.out.println("pARM:"+params);
 			List<String> file_list = new EXml().getFieldList(request.getServletPath(),params.get("model"));
 			Map<String, String> res = new HashMap<>();
 			for (String rec : file_list) {

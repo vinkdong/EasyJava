@@ -144,9 +144,16 @@ var easyjava = new Object({
         });
         $('.e_o2m_edit').live('click',function(){
         	res = {};
-        	var self = this;
-        	res.id = $(this).parent().attr("data-id");
-        	alert(res.id);
+        	self.$el = $(this);
+        	res.id = self.$el.parent().attr("data-id");
+        	res.field = self.$el.parent().parent().attr('field');
+        	res.model=self.res.model;
+        	res.type = 'edit';
+        	self.$el.attr('style','display:none');
+        	self.$el.next().removeAttr('style');
+        	self.loadO2mOp(res).done(function(e){
+        		self.$el.parent().prev().html(e);
+        	});
         });
         $('.e_o2m_delete').live('click',function(){
         	res = {};
@@ -193,7 +200,17 @@ var easyjava = new Object({
              }));
          });
     },
-
+    loadO2mOp:function(res){
+   	 var self = this;
+     return genericJsonRpc(res, function (data) {
+            return $.ajax(self.url+'_rpc_o2m', _.extend({}, '', {
+                url: self.url+'_rpc_o2m',
+                type: 'POST',
+                data: JSON.stringify(data, ''),
+                contentType: 'application/json'
+            }));
+        });
+    },   
     add_rpc: function (field_list) {
         var self = this;
         field_list.model =  self.res.model;
