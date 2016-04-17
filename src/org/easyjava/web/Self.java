@@ -50,10 +50,7 @@ public class Self {
 			return null;
 		}
 		
-		public static int add(HttpServletRequest request) {
-			Dict dict = rpcToDict(request);
-			Dict params = dict.getDict("params");
-			List<String> file_list = new EXml().getFieldList(request.getServletPath(),params.get("model"));
+		public static int update(Dict params,List<String>file_list){
 			Map<String, String> res = new HashMap<>();
 			for (String rec : file_list) {
 				String type = Model.getType(params.get("model"), rec);
@@ -68,6 +65,14 @@ public class Self {
 				return DB.add(params.get("model"), res);
 			}
 			return DB.update(params.get("model"), res, params.get("id"));
+		}
+		
+		public static int add(HttpServletRequest request) {
+			Dict dict = rpcToDict(request);
+			Dict params = dict.getDict("params");
+			List<String> file_list = new EXml().getFieldList(EGlobal.PATH,params.get("model"));
+			
+			return update(params,file_list);
 		}
 		
 		public static String read(HttpServletRequest request){

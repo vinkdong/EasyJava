@@ -142,6 +142,7 @@ var easyjava = new Object({
     			$(cr).attr('style','display:none');
         	});  	
         });
+        
         $('.e_o2m_edit').live('click',function(){
         	res = {};
         	self.$el = $(this);
@@ -155,6 +156,25 @@ var easyjava = new Object({
         		self.$el.parent().prev().html(e);
         	});
         });
+        $('.e_o2m_submit').live('click',function(){
+        	self.$el = $(this);
+        	var id = self.$el.parent().attr("data-id");
+        	res = self.read_field(self.$el.parent().prev(),id);
+        	res.model=self.$el.parent().attr("model");
+        	res.type = 'commit';
+        	self.$el.attr('style','display:none');
+        	self.$el.prev().removeAttr('style');
+        	return self.loadO2mOp(res).done(function(e){
+        		if(e>0){
+        			res.field = self.$el.parent().parent().attr('field');
+        			res.model = self.res.model;
+        			res.type = 'view';
+        			self.loadO2mOp(res).done(function(e){
+        				self.$el.parent().prev().html(e);
+        			});
+        		}
+        	});
+        });
         $('.e_o2m_delete').live('click',function(){
         	res = {};
         	var self = this;
@@ -165,12 +185,18 @@ var easyjava = new Object({
         });
         $('.e_o2m_add').live('click',function(){
         	res = {};
-        	var self = this;
-        	this.$el = $(this);
-        	res.id = this.$el.parent().attr("model");
-        	this.$el.parent().append("<input type='text'>");
-        	this.$el.parent().append("<a class=\"col-sm-10 e_o2m_add\">添加一个项目</a>");
-        	this.$el.remove();
+        	self.$el = $(this);
+        	res.id = self.$el.parent().attr("data-id");
+        	res.field = self.$el.parent().attr('field');
+        	res.model=self.res.model;
+        	res.type = 'add';
+        	self.$el.attr('style','display:none');
+        	self.$el.next().removeAttr('style');
+        	self.loadO2mOp(res).done(function(e){
+        		self.$el.parent().append("<br/>"+e);
+        		this.$el.parent().append("<a class=\"col-sm-10 e_o2m_add\">添加一个项目</a>");
+        		this.$el.remove();
+        	});
         });
     },
     read_field : function(cr,id){

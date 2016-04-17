@@ -611,6 +611,19 @@ public class EWebView {
 		System.out.println(EGlobal.PATH);
 		System.out.println(dict);
 		Dict params = dict.getDict("params");
+		if(params.get("field").equals("")&&params.get("type").equals("commit")){
+			List<String>field_list = new ArrayList<>();
+			for(String key:params.getKeys()){
+				if(!key.equalsIgnoreCase("model")&&!key.equalsIgnoreCase("type")){
+					field_list.add(key);
+				}
+			}
+			System.out.println("fds:"+params);
+			if(Self.env.update(params,field_list)>0){
+				return params.get("id");
+			}
+			return "-1";
+		}
 		Node field = getFieldNode(params.get("model"),params.get("field"),"tree");
 		if(field!=null&&field.hasAttributes()){
 			if(params.get("type").equals("edit")){
@@ -633,12 +646,21 @@ public class EWebView {
 			}
 			if(params.get("type").equals("add")){
 				String relation = Model.getRelation(params.get("model"), params.get("field"));
-				Self.model = relation;
-				Map<String, String> dataset = Self.env.browse(Integer.parseInt(params.get("id")));
-				if(dataset==null){
-					return "";
+				StringBuilder form = new StringBuilder();
+				form.append("<div class=\"e_o2m col-sm-10\" data-id=\"none\" model=\""+relation+"\">\n");
+				form.append(loadCreateView(relation, field));
+				form.append("</div>");
+				form.append("<div class=\"e_o2m_op col-sm-2\"  data-id='none' model='"+relation+"'>");
+				if(true){
+					form.append("\t\t\t<a class='e_o2m_edit'>编辑</a>");
+					form.append("\t\t\t<a class='e_o2m_submit' style='display:none'>提交</a>");
 				}
-				return loadCreateView(relation, field);
+				if(true){
+					form.append("\t\t\t<a class='e_o2m_delete'>删除</a>");
+				}
+				form.append("\t\t</div>");
+				
+				return form.toString();
 			}
 		}
 		return "";
