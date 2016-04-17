@@ -179,7 +179,7 @@ public class Dict {
 			}
 			if (deep == 1 && a == ','&&need_replace) {
 				res.add('$');
-				res.add('$');
+				res.add('*');
 			} else if (deep == 1 && a == ':'&&need_replace) {
 				res.add('*');
 				res.add('$');
@@ -191,10 +191,9 @@ public class Dict {
 				}
 			}
 		}
-
 		dict = new EList().charListToString(res);
 		dict = dict.substring(1, dict.length() - 1);
-		return dict.split("\\$\\$");
+		return dict.split("\\$\\*");
 	}
 
 	public Dict getDict(String para) {
@@ -221,7 +220,12 @@ public class Dict {
 				return tuple[1];
 			}
 			if (tuple[0].equals(para)) {
-				return tuple[1];
+				if(tuple.length==2){
+					return tuple[1];
+				}
+				else{
+					return "";
+				}
 			}
 		}
 		return "";

@@ -300,7 +300,6 @@ public class EWebView {
 					if(type!=null&&type.equalsIgnoreCase("one2many")){
 						String relation = Model.getRelation(model, val);
 						form.append("\t\t<div class=\"col-xs-8 e_o2m\" model=\""+relation+"\" field='"+val+"'>");
-						EOut.print(Model.getO2mId(model, id, val));
 						for(int cr:Model.getO2mId(model, id, val)){
 							form.append("<br/>\n<div class=\"e_o2m col-sm-10\" data-id='"+cr+"' model='"+relation+"'>");
 							EViewType e = new EViewType();
@@ -618,7 +617,7 @@ public class EWebView {
 						field_list.add(key);
 					}
 				}
-				return String.valueOf(Self.env.update(params,field_list)).replaceAll("\n", "");
+				return String.valueOf(Self.env.update(params,field_list));
 			}
 			if(params.get("type").equals("delete")){
 				Self.model = params.get("model");

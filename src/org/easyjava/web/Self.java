@@ -38,7 +38,6 @@ public class Self {
 				String dict_str = br.readLine();
 				String path = new EXml().urlToPath(request.getServletPath());
 				Dict dict = new Dict();
-				System.out.println(dict_str);
 				dict.update(dict_str.replaceAll("\"", "&%&").replaceAll("\\\\&%&", "\"").replace("&%&", ""));
 				Dict params = dict.getDict("params");
 				if(params.hasKey("model")){
