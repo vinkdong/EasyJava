@@ -300,6 +300,7 @@ public class EWebView {
 					if(type!=null&&type.equalsIgnoreCase("one2many")){
 						String relation = Model.getRelation(model, val);
 						form.append("\t\t<div class=\"col-xs-8 e_o2m\" model=\""+relation+"\" field='"+val+"'>");
+						EOut.print(Model.getO2mId(model, id, val));
 						for(int cr:Model.getO2mId(model, id, val)){
 							form.append("<br/>\n<div class=\"e_o2m col-sm-10\" data-id='"+cr+"' model='"+relation+"'>");
 							EViewType e = new EViewType();
@@ -608,21 +609,21 @@ public class EWebView {
 	};
 	
 	public static String loadO2mItem(Dict dict){
-		System.out.println(EGlobal.PATH);
-		System.out.println(dict);
 		Dict params = dict.getDict("params");
-		if(params.get("field").equals("")&&params.get("type").equals("commit")){
-			List<String>field_list = new ArrayList<>();
-			for(String key:params.getKeys()){
-				if(!key.equalsIgnoreCase("model")&&!key.equalsIgnoreCase("type")){
-					field_list.add(key);
+		if(params.get("field").equals("")){
+			if(params.get("type").equals("commit")){
+				List<String>field_list = new ArrayList<>();
+				for(String key:params.getKeys()){
+					if(!key.equalsIgnoreCase("model")&&!key.equalsIgnoreCase("type")){
+						field_list.add(key);
+					}
 				}
+				return String.valueOf(Self.env.update(params,field_list)).replaceAll("\n", "");
 			}
-			System.out.println("fds:"+params);
-			if(Self.env.update(params,field_list)>0){
-				return params.get("id");
+			if(params.get("type").equals("delete")){
+				Self.model = params.get("model");
+				Self.env.unlink(Integer.parseInt(params.get("id")));
 			}
-			return "-1";
 		}
 		Node field = getFieldNode(params.get("model"),params.get("field"),"tree");
 		if(field!=null&&field.hasAttributes()){
@@ -652,8 +653,8 @@ public class EWebView {
 				form.append("</div>");
 				form.append("<div class=\"e_o2m_op col-sm-2\"  data-id='none' model='"+relation+"'>");
 				if(true){
-					form.append("\t\t\t<a class='e_o2m_edit'>编辑</a>");
-					form.append("\t\t\t<a class='e_o2m_submit' style='display:none'>提交</a>");
+					form.append("\t\t\t<a class='e_o2m_edit' style='display:none'>编辑</a>");
+					form.append("\t\t\t<a class='e_o2m_submit'>提交</a>");
 				}
 				if(true){
 					form.append("\t\t\t<a class='e_o2m_delete'>删除</a>");

@@ -126,6 +126,24 @@ public class Model {
 		return null;		
 	}
 	
+	public static int unlink(String model,int id){
+		String sql = "delete from "+model + " where id = "+ id;
+		if(DB.connection==null){
+			DATABASE.init();
+			DB.init();
+		}
+		try {
+			Statement stmt = DB.connection.createStatement();
+			EOut.print(sql);
+			return stmt.executeUpdate(sql);
+		} catch (SQLException e) {
+			System.err.println("无法删除");
+			e.printStackTrace();
+		}
+		return -1;
+		
+	}
+	
 	public static String getString(String model_name,String field){
 		if(EGlobal.models.containsKey(model_name)){
 			Map<String,Map<String,String>>f = EGlobal.models.get(model_name);
@@ -172,6 +190,7 @@ public class Model {
 			int cr = 0;
 			while(rs.next()){
 				ids[cr] = rs.getInt(1);
+				cr++;
 			}
 			return ids;
 		} catch (SQLException e) {
