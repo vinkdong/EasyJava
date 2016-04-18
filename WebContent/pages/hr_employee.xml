@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+	<rec id="view_hr_employee_form">
+		<rec name="type">view</rec>
+		<rec name="model">hr_employee</rec>
+		<rec name="name">欢迎</rec>
+		<rec name="groups">all</rec>
+		<rec name="layout">none</rec>
+		<rec name="view">
+			<tree>
+				<field name="name" />
+				<field name="sex" />
+				<field name='company_id'/>
+				<field name="sex" />
+			</tree>
+		</rec>
+	</rec>
+	<action id="hr_employee_action">
+		<type>tree,form,edit</type>
+	</action>
+</data>

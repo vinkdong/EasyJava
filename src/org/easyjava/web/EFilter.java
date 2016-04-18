@@ -92,25 +92,7 @@ public class EFilter implements Filter {
 					DB.init();
 				}
 				
-				String[] fields = new String[3] ;
-				fields[0] = "field=name,string=User,type=Text";
-				fields[1] = "field=sex,string=Sex,type=Text";
-				fields[2] = "field=salary,string=Salary,type=float";
-//			    Model.add("hr_employee",fields);
-			    
-//			    One2Many
-				String[]  comment = new String[3];
-				comment[0] = "field=name,string=User,type=Text";
-				comment[1] = "field=date,string=Date,type=Date";
-				comment[2] = "field=content,string=Comment,type=Text";
-				Model.add("comment", comment);
-				
-				String[]  forum = new String[4];
-				forum[0] = "field=name,string=Name,type=Text";
-				forum[1] = "field=date,string=Date,type=Date";
-				forum[2] = "field=content,string=Content,type=Text";
-				forum[3] = "field=comment,string=Comment,type=one2many:comment";
-				Model.add("forum", forum);				
+				this.createModel();			
 //				Mo.define("ed",null, true);
 				
 //				out.print(new baseHTML().completeHTML(url));	
@@ -135,6 +117,10 @@ public class EFilter implements Filter {
 	public void init(FilterConfig fConfig) throws ServletException {
 		
 		// TODO Auto-generated method stub
+	}
+	
+	public void createModel(){
+		new Model().createModel();
 	}
 
 }

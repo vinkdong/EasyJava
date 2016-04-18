@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+	<rec id="view_company_form">
+		<rec name="type">view</rec>
+		<rec name="model">company</rec>
+		<rec name="name">欢迎</rec>
+		<rec name="groups">all</rec>
+		<rec name="layout">none</rec>
+		<rec name="view">
+			<tree>
+				<field name="name" />
+				<field name="addr" />
+				<field name='type'/>
+			</tree>
+		</rec>
+	</rec>
+	<action id="company_action">
+		<type>tree,form,edit</type>
+	</action>
+</data>

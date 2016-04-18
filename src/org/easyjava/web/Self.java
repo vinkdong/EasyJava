@@ -102,6 +102,20 @@ public class Self {
 			}
 		}
 		
+		public static Map<String,String> browse(String model, int id){
+			if(model.equals("")){
+				return null;
+			}
+			else{
+				List<Map<String, String>> dataset = Model.read(model, "id ="+id+"");
+				if (dataset!=null&&dataset.size()==1){
+					return dataset.get(0);
+				}
+				else
+					return null;
+			}
+		}
+		
 		public static int unlink(int id){
 			if(model.equals("")){
 				return -1;

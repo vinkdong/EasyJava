@@ -17,7 +17,7 @@
 	</servlet-mapping>
 	<filter>
 		<filter-name>easyjava</filter-name>
-		<filter-class>org.easyjava.web.EFilter</filter-class>
+		<filter-class>org.easyjava.test.Filter</filter-class>
 	</filter>
 	<filter-mapping>
 		<filter-name>easyjava</filter-name>

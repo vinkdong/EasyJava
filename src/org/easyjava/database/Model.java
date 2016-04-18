@@ -22,7 +22,25 @@ public class Model {
 	protected static String help ="";
 	protected static String type = "";
 	protected static String field = "";
+	protected static String inverse = "";
 	
+	public  void createModel(){
+		
+	    
+//	    One2Many
+		String[]  comment = new String[3];
+		comment[0] = "field=name,string=User,type=Text";
+		comment[1] = "field=date,string=Date,type=Date";
+		comment[2] = "field=content,string=Comment,type=Text";
+		Model.add("comment", comment);
+		
+		String[]  forum = new String[4];
+		forum[0] = "field=name,string=Name,type=Text";
+		forum[1] = "field=date,string=Date,type=Date";
+		forum[2] = "field=content,string=Content,type=Text";
+		forum[3] = "field=comment,string=Comment,type=one2many:comment";
+		Model.add("forum", forum);	
+	}
 	//添加模型数据
 	public  static void add(String model_name,String[] fields) {
 		String query_table_exist = "select count(*) from pg_class where relname = '"+model_name+"'";
@@ -69,12 +87,22 @@ public class Model {
 						
 					}
 				}
+				p = Pattern.compile("(M|m)any2one:.*");
+				if(p.matcher(ttype).matches()){
+					String[] t_r = ttype.replace(" ", "").split(":");
+					System.out.println(t_r[0]);
+					type = t_r[0];
+					relation = t_r[1];
+					inverse = field.get("inverse");
+					sql += " "+relation+"_id "+" INT ,\n"; 
+				}
 				break;
 			}
 			Map<String, String> m = new HashMap<>();
 			m.put("string", string);
 			m.put("type",type);
 			m.put("relation", relation);
+			m.put("inverse", inverse);
 			f.put(field.get("field"), m);
 		}
 		
@@ -169,6 +197,17 @@ public class Model {
 			Map<String,Map<String,String>>f = EGlobal.models.get(model_name);
 			if(f.containsKey(field)){
 				return f.get(field).get("relation");
+			}
+		}
+		return null;
+	}
+	
+	public static String getInverse(String model_name,String field){
+		System.out.println(EGlobal.models);
+		if(EGlobal.models.containsKey(model_name)){
+			Map<String,Map<String,String>>f = EGlobal.models.get(model_name);
+			if(f.containsKey(field)){
+				return f.get(field).get("inverse");
 			}
 		}
 		return null;

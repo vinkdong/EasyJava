@@ -127,7 +127,19 @@ public class EWebView {
 								if(init_head){
 									head.add(attNode.getNodeValue());
 								}
-								tbody.append(ETool.get(line, attNode.getNodeValue()));
+								String model = et.getDict().get("model");
+								String type = Model.getType(model, attNode.getNodeValue());
+								if(type!=null&&type.equalsIgnoreCase("many2one")){
+									String relation = Model.getRelation(model, attNode.getNodeValue());
+									String inverse = Model.getInverse(model, attNode.getNodeValue());
+									if(ETool.get(line, attNode.getNodeValue()).matches("[0-9]*")&&Integer.parseInt(ETool.get(line, attNode.getNodeValue()))>0){
+										Map<String, String> als = Self.env.browse(relation, Integer.parseInt(ETool.get(line, attNode.getNodeValue())));
+										tbody.append("<a>"+als.get(inverse)+"</a>");
+									}
+								}
+								else{
+									tbody.append(ETool.get(line, attNode.getNodeValue()));
+								}
 								tbody.append("</td>\n");
 							}
 						}
@@ -327,7 +339,17 @@ public class EWebView {
 					else{
 						//TODO:对象翻译，读取String
 						form.append("\t\t\t<div class=\"col-sm-10\">");
-						form.append(ETool.get(dataset, val));
+						if(type!=null&&type.equalsIgnoreCase("many2one")){
+							String relation = Model.getRelation(model, val);
+							String inverse = Model.getInverse(model, val);
+							if(ETool.get(dataset, val).matches("[0-9]*")&&Integer.parseInt(ETool.get(dataset, val))>0){
+								Map<String, String> als = Self.env.browse(relation, Integer.parseInt(ETool.get(dataset, val)));
+								form.append("<a>"+als.get(inverse)+"</a>");
+							}
+						}
+						else{
+							form.append(ETool.get(dataset, val));
+						}
 						form.append("\t\t\t</div>\n\t\t</div>\n");
 					}
 					
@@ -388,8 +410,26 @@ public class EWebView {
 						form.append(val);
 						form.append("</label>\n");
 						form.append("\t\t\t<div class=\"col-sm-10\">\n");
-						form.append("<input type=\"text\" class=\"form-control\"");
-						form.append("name='"+val+"'>");
+						if(ttype!=null&&ttype.equalsIgnoreCase("many2one")){
+							form.append("\t<div class=\"e_m2o\">");
+							form.append("\t\t<div class=\"select\">");
+							String relation = Model.getRelation(model, val);
+							String inverse = Model.getInverse(model, val);
+							form.append("\t\t\t<p data-id=\"0\" name='"+val+"'></p>");
+							form.append("\t\t\t\t<ul class=\"col-sm-12\">");
+							form.append("\t\t\t\t\t\t<li data-id=\"0\" class=\"Selected\"></li>");
+							List<Map<String, String>> lilist = Model.read(relation, " 1=1");
+							for(Map<String, String> vl:lilist){
+								form.append("\t\t\t\t\t\t<li data-id=\""+vl.get("id")+"\">"+vl.get(inverse)+"</li>");
+							}
+							form.append("\t\t\t\t</ul>");
+							form.append("\t\t</div>");
+							form.append("\t</div>");
+						}
+						else{
+							form.append("<input type=\"text\" class=\"form-control\"");
+							form.append("name='"+val+"'>");
+						}
 						form.append("\t\t\t</div>\n\t\t</div>\n");
 					}
 				}
@@ -445,8 +485,32 @@ public class EWebView {
 						form.append("</label>\n");
 						form.append("\t\t\t<div class=\"col-sm-10\">");
 						// TODO:对象翻译，读取String
-						form.append("<input type=\"text\" class=\"form-control\"");
-						form.append("name='"+val+"' value='"+ETool.get(dataset, val)+"'>");
+						if(ttype!=null&&ttype.equalsIgnoreCase("many2one")){
+							form.append("\t<div class=\"e_m2o\">");
+							form.append("\t\t<div class=\"select\">");
+							String vval = "";
+							String relation = Model.getRelation(model, val);
+							String inverse = Model.getInverse(model, val);
+							if(ETool.get(dataset, val).matches("[0-9]*")&&Integer.parseInt(ETool.get(dataset, val))>0){
+								Map<String, String> als = Self.env.browse(relation, Integer.parseInt(ETool.get(dataset, val)));
+								vval = als.get(inverse);
+							}
+							form.append("\t\t\t<p data-id=\"1\" name='"+val+"'>"+vval+"</p>");
+							form.append("\t\t\t\t<ul class=\"col-sm-12\">");
+							form.append("\t\t\t\t\t\t<li data-id=\"0\" class=\"Selected\"></li>");
+							List<Map<String, String>> lilist = Model.read(relation, " 1=1");
+							for(Map<String, String> vl:lilist){
+								form.append("\t\t\t\t\t\t<li data-id=\""+vl.get("id")+"\">"+vl.get(inverse)+"</li>");
+							}
+							form.append("\t\t\t\t</ul>");
+							form.append("\t\t</div>");
+							form.append("\t</div>");
+						}
+						else{
+							form.append("<input type=\"text\" class=\"form-control\"");
+							form.append("name='"+val+"' value='"+ETool.get(dataset, val)+"'>");
+						}
+						
 						form.append("\t\t\t</div>\n\t\t</div>\n");
 					}	
 				}

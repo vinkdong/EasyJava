@@ -10,6 +10,7 @@
 	js/underscore-min.js;
 	js/jquery.alertify.js;
 	js/base.js;
+	js/bootstrap.js;
 	</js>
 	<js-once page='upgrade'>js/upgrade.js</js-once>
 	<js-once page='upgrade2'>js/upgrade2.js</js-once>

@@ -139,6 +139,7 @@ var easyjava = new Object({
     			var s = $('.container.main');
     			s.html(data);
     			$('.e_create').attr('style','display:display');
+    			$('.e_edit').attr('style','display:none');
     			$(cr).attr('style','display:none');
         	});  	
         });
@@ -205,6 +206,28 @@ var easyjava = new Object({
         		self.$el.remove();
         	});
         });
+        
+        /**
+         * 下拉框
+         */
+        $(".select p").live('click',function(e){
+			$(".select").toggleClass('open');
+			e.stopPropagation();
+		});
+		
+		$(".e_m2o .select ul li").live('click',function(e){
+			var _this=$(this);
+			$(".select > p").text(_this.text());
+			$(".select > p").attr('data-id',_this.attr('data-id'));
+			_this.addClass("Selected").siblings().removeClass("Selected");
+			$(".select").removeClass("open");
+			e.stopPropagation();
+		});
+		
+		$(document).on('click',function(){
+			$(".select").removeClass("open");
+		})
+
     },
     read_field : function(cr,id){
         var res = {id:id}
@@ -213,6 +236,9 @@ var easyjava = new Object({
         });
         _.each(cr.find('textarea'),function(node){
             res[node.getAttribute('name')] = $(node).val();
+        });
+        _.each(cr.find('.e_m2o > div > p'),function(node){
+        	res[node.getAttribute('name')] = node.getAttribute('data-id');
         });
         return res;
     },
