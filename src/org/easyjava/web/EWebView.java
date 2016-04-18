@@ -174,6 +174,12 @@ public class EWebView {
 			tbody.append("</tr>\n");
 			init_head = false;
 		}
+		if(et.getDict().get("add").equals("true")){
+			tbody.append("<tr>");
+			tbody.append("<td colspan='2'>");
+			tbody.append("<a class=\"col-sm-10 e_m2m_add\">添加一个项目</a>");
+			tbody.append("</td></tr>");
+		}
 		StringBuilder thead = new StringBuilder();
 		thead.append("<thead>\n\t<tr>");
 		for(String h:head){
@@ -352,6 +358,7 @@ public class EWebView {
 							EViewType e = new EViewType();
 							Dict dt = new Dict();
 							dt.update("model",relation);
+							dt.update("add", "true");
 							e.setDict(dt);
 							e.setNode(field);
 							form.append(loadTree(e));
