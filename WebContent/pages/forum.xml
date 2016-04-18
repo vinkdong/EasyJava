@@ -16,6 +16,10 @@
 					<field name="content"></field>
 					<field name='name'/>
 				</field>
+				<field name='employee_ids'>
+					<field name='name'></field>
+					<field name='sex'></field>
+				</field>
 			</tree>
 		</rec>
 	</rec>

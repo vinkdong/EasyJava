@@ -14,12 +14,7 @@ public class Filter extends EFilter{
 		comment[2] = "field=content,string=Comment,type=Text";
 		Model.add("comment", comment);
 		
-		String[]  forum = new String[4];
-		forum[0] = "field=name,string=Name,type=Text";
-		forum[1] = "field=date,string=Date,type=Date";
-		forum[2] = "field=content,string=Content,type=Text";
-		forum[3] = "field=comment,string=Comment,type=one2many:comment";
-		Model.add("forum", forum);	
+		
 		
 		
 		String[] company = new String[3];
@@ -34,6 +29,14 @@ public class Filter extends EFilter{
 		fields[2] = "field=salary,string=Salary,type=float";
 		fields[3] = "field=company_id,string=Company,type=many2one:company,inverse=name";
 	    Model.add("hr_employee",fields);
+	    
+	    String[]  forum = new String[5];
+		forum[0] = "field=name,string=Name,type=Text";
+		forum[1] = "field=date,string=Date,type=Date";
+		forum[2] = "field=content,string=Content,type=Text";
+		forum[3] = "field=comment,string=Comment,type=one2many:comment";
+		forum[4] = "field=employee_ids,string=Employee,type=many2many:hr_employee,inverse=name";
+		Model.add("forum", forum);	
 	}
 
 }

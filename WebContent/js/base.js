@@ -143,7 +143,6 @@ var easyjava = new Object({
     			$(cr).attr('style','display:none');
         	});  	
         });
-        
         $('.e_o2m_edit').live('click',function(){
         	res = {};
         	self.$el = $(this);

@@ -54,7 +54,7 @@ public class Self {
 			Map<String, String> res = new HashMap<>();
 			for (String rec : file_list) {
 				String type = Model.getType(params.get("model"), rec);
-				if((type!=null&&type.equalsIgnoreCase("one2many"))||rec.equals("id")){
+				if((type!=null&&(type.equalsIgnoreCase("one2many")||type.equalsIgnoreCase("many2many")))||rec.equals("id")){
 					
 				}
 				else{

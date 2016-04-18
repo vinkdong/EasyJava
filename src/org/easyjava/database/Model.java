@@ -90,11 +90,34 @@ public class Model {
 				p = Pattern.compile("(M|m)any2one:.*");
 				if(p.matcher(ttype).matches()){
 					String[] t_r = ttype.replace(" ", "").split(":");
-					System.out.println(t_r[0]);
 					type = t_r[0];
 					relation = t_r[1];
 					inverse = field.get("inverse");
 					sql += " "+relation+"_id "+" INT ,\n"; 
+				}
+				p = Pattern.compile("(M|m)any2many:.*");
+				if(p.matcher(ttype).matches()){
+					String[] t_r = ttype.replace(" ", "").split(":");
+					type = t_r[0];
+					relation = t_r[1];
+					inverse = field.get("inverse");
+					String rel_table_exist = "select count(*) from pg_class where relname = '"+model_name+"_rel'";
+					String sql_rel = "CREATE TABLE "+model_name+"_rel(\n\t"+
+							model_name+"_id INT,\n\t"+
+							relation+"_id INT)";
+					 try {
+							Statement st = DB.connection.createStatement();
+							ResultSet rel_rs = st.executeQuery(rel_table_exist);
+							rel_rs.next();
+							if (rel_rs.getInt(1)==0){
+								EOut.print(sql_rel);
+								st.executeUpdate(sql_rel);
+							};
+							st.close();
+						} catch (SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 				}
 				break;
 			}

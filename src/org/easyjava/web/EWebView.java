@@ -334,7 +334,7 @@ public class EWebView {
 						if(true){
 							form.append("<a class=\"col-sm-10 e_o2m_add\">添加一个项目</a>");
 						}
-						form.append("</div>");
+						form.append("</div></div>");
 					}
 					else{
 						//TODO:对象翻译，读取String
@@ -346,6 +346,15 @@ public class EWebView {
 								Map<String, String> als = Self.env.browse(relation, Integer.parseInt(ETool.get(dataset, val)));
 								form.append("<a>"+als.get(inverse)+"</a>");
 							}
+						}
+						else if(type!=null&&type.equalsIgnoreCase("many2many")){
+							String relation = Model.getRelation(model, val);
+							EViewType e = new EViewType();
+							Dict dt = new Dict();
+							dt.update("model",relation);
+							e.setDict(dt);
+							e.setNode(field);
+							form.append(loadTree(e));
 						}
 						else{
 							form.append(ETool.get(dataset, val));
