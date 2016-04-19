@@ -417,7 +417,7 @@ public class EWebView {
 					}
 					form.append("class=\"form-group "+ext_class+"\">\n");
 					String ttype = Model.getType(model, val);
-					if(ttype!=null&&ttype.equalsIgnoreCase("one2many")){
+					if(ttype!=null&&(ttype.equalsIgnoreCase("one2many")||ttype.equalsIgnoreCase("many2many"))){
 						
 					}
 					else{
@@ -492,7 +492,7 @@ public class EWebView {
 					}
 					form.append("class=\"form-group " + ext_class + "\">\n");
 					String ttype = Model.getType(model, val);
-					if(ttype!=null&&ttype.equalsIgnoreCase("one2many")){
+					if(ttype!=null&&(ttype.equalsIgnoreCase("one2many")||ttype.equalsIgnoreCase("many2many"))){
 						
 					}
 					else{

@@ -24,9 +24,9 @@ var genericJsonRpc = function(params, fct) {
 
 var easyjava = new Object({
     init: function () {
-        var start = this.start();
         this.res = {};
         this.url = this.getUrl();
+        var start = this.start();
         this.$el= "";
         return start;
     },
@@ -60,8 +60,7 @@ var easyjava = new Object({
 	},
     start: function () {
         var self = this;
-
-        $('.e_panel_submit').live('click', function () {
+        $(document).on("click",".e_panel_submit",function(event){
             event.preventDefault();
             var cr = $(this);
             //this.url = cr.context.baseURI;
@@ -82,7 +81,7 @@ var easyjava = new Object({
             	}
             });
         });
-        $('.e_panel_cancel').live('click', function (e) {
+        $(document).on("click",".e_panel_cancel",function(e){
             e.preventDefault();
         	var id = $(this).parents().find('.e_form').attr("data-id");
         	self.res.type = 'view';
@@ -97,12 +96,12 @@ var easyjava = new Object({
     			$('.e_edit').attr('style','display:display');
         	});
         });
-        $('.row.e_form').find("tbody tr td").live('click',function(e){
+        $(document).on("click",".row.e_form tbody tr td",function(e){
         	e.preventDefault();
         	var id = $(this).parent().attr("data-id");
         	self.res.type = 'view';
         	self.res.id = id;
-        	if($(this).find('button').length>0){
+        	if($(this).find('button').length>0||$(this).find('.e_m2m_add').length>0){
         		return null;
         	}
         	self.loadview(self.res,self.url).done(function(data){
@@ -111,7 +110,7 @@ var easyjava = new Object({
     			$('.e_back').attr('style','display:display');
     			$('.e_edit').attr('style','display:display');
         	})});
-        $('.e_create').live('click',function(){
+        $(document).on("click",".e_create",function(){
         	delete self.res.id;
         	self.res.type='view';
         	var cr = this;
@@ -122,7 +121,7 @@ var easyjava = new Object({
             	$(cr).attr('style','display:none');
         	});
         });
-        $('.e_edit').live('click',function(){
+        $(document).on("click",".e_edit",function(){
         	self.res.type='edit';
         	var cr = this;
         	self.loadview(self.res,self.url).done(function(data){
@@ -132,7 +131,7 @@ var easyjava = new Object({
             	$(cr).attr('style','display:none');
         	});
         });
-        $('.e_back').live('click',function(){
+        $(document).on("click",".e_back",function(){
         	self.res.type='tree';
         	var cr = this;
         	self.loadview(self.res,self.url).done(function(data){
@@ -143,7 +142,7 @@ var easyjava = new Object({
     			$(cr).attr('style','display:none');
         	});  	
         });
-        $('.e_o2m_edit').live('click',function(){
+        $(document).on("click",".e_o2m_edit",function(){
         	res = {};
         	self.$el = $(this);
         	res.id = self.$el.parent().attr("data-id");
@@ -156,7 +155,7 @@ var easyjava = new Object({
         		self.$el.parent().prev().html(e);
         	});
         });
-        $('.e_o2m_submit').live('click',function(){
+        $(document).on("click",".e_o2m_submit",function(){
         	self.$el = $(this);
         	var id = self.$el.parent().attr("data-id");
         	res = self.read_field(self.$el.parent().prev(),id);
@@ -180,7 +179,7 @@ var easyjava = new Object({
         		}
         	});
         });
-        $('.e_o2m_delete').live('click',function(){
+        $(document).on("click",".e_o2m_delete",function(){
         	res = {};
         	self.$el = $(this);
         	res.id = self.$el.parent().attr("data-id");
@@ -190,7 +189,7 @@ var easyjava = new Object({
         	self.$el.parent().remove();
         	return self.loadO2mOp(res);
         });
-        $('.e_o2m_add').live('click',function(){
+        $(document).on("click",".e_o2m_add",function(){
         	res = {};
         	self.$el = $(this);
         	res.id = self.$el.parent().attr("data-id");
@@ -205,6 +204,18 @@ var easyjava = new Object({
         		self.$el.remove();
         	});
         });
+        $(document).on("click",".e_m2m_add",function(e){  
+        	e.preventDefault(); 
+        	alert('fasdfaf');
+        })  
+//        $('.e_m2m_add').live('click',function(e){
+//        	e.preventDefault();
+//        	
+//        });
+        
+        $('#myModal').on('shown.bs.modal', function () {
+        	  $('#myInput').focus();
+        })
         
         /**
          * 下拉框
