@@ -189,6 +189,19 @@ var easyjava = new Object({
         	self.$el.parent().remove();
         	return self.loadO2mOp(res);
         });
+        $(document).on("click",".select-all",function(){
+        	self.$el = $(this).closest('table');
+        	var lines = self.$el.find('tbody tr');
+        	_.each(lines,function(line){
+        		var checkbox = $(line).children(":first").children(":first");
+        		if(checkbox.prop('checked')==true){
+        			checkbox.prop('checked',false);
+        		}
+        		else{
+        			checkbox.prop('checked',true);
+        		}
+        	});
+        });
         $(document).on("click",".e_o2m_add",function(){
         	res = {};
         	self.$el = $(this);
@@ -205,8 +218,31 @@ var easyjava = new Object({
         	});
         });
         $(document).on("click",".e_m2m_add",function(e){  
-        	e.preventDefault(); 
-        	alert('fasdfaf');
+        	e.preventDefault();
+        	self.$el = $(this);
+        	res.model =self.res.model;
+        	res.field = self.$el.parents().find('table').attr('field');
+        	return self.loadM2mOp(res).done(function(e){
+        		var module = 	'<div class="modal fade" id="'+res.field+'" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">\n'+
+								'    <div class="modal-dialog" role="document">\n'+
+								'        <div class="modal-content">\n'+
+								'           <div class="modal-header">\n'+
+								'                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>\n'+
+								'                <h4 class="modal-title" id="myModalLabel">Modal title</h4>\n'+
+								'            </div>\n'+
+								'            <div class="modal-body">\n'+e+
+								'            </div>\n'+
+								'            <div class="modal-footer">\n'+
+								'                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>\n'+
+								'                <button type="button" class="btn btn-primary">Save changes</button>\n'+
+								'            </div>\n'+
+								'        </div>\n'+
+								'    </div>\n'+
+								'</div>\n';
+        		$('body').append(module);
+        		$('#'+res.field+'').modal('show');
+        	});
+        	
         })  
 //        $('.e_m2m_add').live('click',function(e){
 //        	e.preventDefault();
@@ -220,12 +256,12 @@ var easyjava = new Object({
         /**
          * 下拉框
          */
-        $(".select p").live('click',function(e){
+        $(document).on("click",".select p",function(e){  
 			$(".select").toggleClass('open');
 			e.stopPropagation();
 		});
 		
-		$(".e_m2o .select ul li").live('click',function(e){
+        $(document).on("click",".e_m2o .select ul li",function(e){  
 			var _this=$(this);
 			$(".select > p").text(_this.text());
 			$(".select > p").attr('data-id',_this.attr('data-id'));
@@ -279,7 +315,18 @@ var easyjava = new Object({
                 contentType: 'application/json'
             }));
         });
-    },   
+    },
+    loadM2mOp:function(res){
+    	var self = this;
+    	return genericJsonRpc(res, function (data) {
+            return $.ajax(self.url+'_rpc_m2m', _.extend({}, '', {
+                url: self.url+'_rpc_m2m',
+                type: 'POST',
+                data: JSON.stringify(data, ''),
+                contentType: 'application/json'
+            }));
+        });
+    },
     add_rpc: function (field_list) {
         var self = this;
         field_list.model =  self.res.model;

@@ -189,7 +189,12 @@ public class EWebView {
 		}
 		thead.append("\t</tr>\n</thead>");
 		StringBuilder table = new StringBuilder();
-		table.append("<table class=\"table table-responsive\">\n");
+		if(et.getDict().get("field").equals("")){
+			table.append("<table class=\"table table-responsive\">\n");
+		}
+		else{
+			table.append("<table class=\"table table-responsive\" field='"+et.getDict().get("field")+"'>\n");
+		}
 		table.append(thead);
 		table.append(tbody);
 		table.append("</table>");
@@ -359,6 +364,7 @@ public class EWebView {
 							Dict dt = new Dict();
 							dt.update("model",relation);
 							dt.update("add", "true");
+							dt.update("field", val);
 							e.setDict(dt);
 							e.setNode(field);
 							form.append(loadTree(e));
@@ -462,6 +468,100 @@ public class EWebView {
 				}
 		}
 		return form.toString();
+	}
+	
+	public static String loadMany2manyModelView(EViewType et){
+		NodeList nodelist = et.getNode().getChildNodes();
+		Dict properties = et.getDict();
+		List<Map<String, String>> dataset = Self.env.read(properties);
+		StringBuilder tbody = new StringBuilder();
+		List<String> head = new ArrayList<>(); 
+		boolean init_head = true;
+		for(Map<String,String> line :dataset){
+			tbody.append("<tr data-id="+ETool.get(line, "id")+">\n");
+			tbody.append("<td data-id="+ETool.get(line, "id")+"><input type=\"checkbox\" aria-label=\"...\">\n</td>");
+			for(int i=0;i<nodelist.getLength();i++){
+				Node node = nodelist.item(i);
+				//TODO:权限屏蔽
+				if(node.getNodeType()==Node.ELEMENT_NODE){
+					if(node.getNodeName().equals("field")){
+						NamedNodeMap attr = node.getAttributes();
+						for (int j = 0; j < attr.getLength(); j++) {
+							Node attNode = attr.item(j);
+							if (attNode.getNodeName().equals("name")) {
+								tbody.append("\t<td>");
+								//TODO:对象翻译，读取String
+								if(init_head){
+									head.add(attNode.getNodeValue());
+								}
+								String model = et.getDict().get("model");
+								String type = Model.getType(model, attNode.getNodeValue());
+								if(type!=null&&type.equalsIgnoreCase("many2one")){
+									String relation = Model.getRelation(model, attNode.getNodeValue());
+									String inverse = Model.getInverse(model, attNode.getNodeValue());
+									if(ETool.get(line, attNode.getNodeValue()).matches("[0-9]*")&&Integer.parseInt(ETool.get(line, attNode.getNodeValue()))>0){
+										Map<String, String> als = Self.env.browse(relation, Integer.parseInt(ETool.get(line, attNode.getNodeValue())));
+										tbody.append("<a>"+als.get(inverse)+"</a>");
+									}
+								}
+								else{
+									tbody.append(ETool.get(line, attNode.getNodeValue()));
+								}
+								tbody.append("</td>\n");
+							}
+						}
+					}
+					if(node.getNodeName().equals("button")){
+						tbody.append("\t<td>");
+						NamedNodeMap attr = node.getAttributes();
+						tbody.append("\n\t\t<button ");
+						String val = "";
+						for (int j = 0; j < attr.getLength(); j++) {
+							Node attNode = attr.item(j);
+							if (attNode.getNodeName().equals("string")) {								
+								//TODO:对象翻译，读取String
+								val = attNode.getNodeValue();
+								if(init_head){
+									head.add(val);
+								}
+							}
+							tbody.append(attNode.getNodeName());
+							tbody.append("=\"");
+							tbody.append(attNode.getNodeValue());
+							tbody.append("\" ");
+						}
+						tbody.append(">");
+						tbody.append(val);
+						tbody.append("</button>\n");
+						tbody.append("</td>\n");
+					}
+					
+				}
+			}
+			tbody.append("</tr>\n");
+			init_head = false;
+		}
+		if(et.getDict().get("add").equals("true")){
+			tbody.append("<tr>");
+			tbody.append("<td colspan='2'>");
+			tbody.append("<a class=\"col-sm-10 e_m2m_add\">添加一个项目</a>");
+			tbody.append("</td></tr>");
+		}
+		StringBuilder thead = new StringBuilder();
+		thead.append("<thead>\n\t<tr>");
+		thead.append("<th class=\"select-all\"><input type=\"checkbox\" aria-label=\"...\">\n</th>");
+		for(String h:head){
+			thead.append("<th>");
+			thead.append(h);
+			thead.append("</th>");
+		}
+		thead.append("\t</tr>\n</thead>");
+		StringBuilder table = new StringBuilder();
+		table.append("<table class=\"table table-responsive\">\n");
+		table.append(thead);
+		table.append(tbody);
+		table.append("</table>");
+		return table.toString();
 	}
 	
 	public static String loadEditView(String model,Node node,Map<String, String>dataset){
@@ -687,6 +787,21 @@ public class EWebView {
 		return html+"\n</html>";
 	};
 	
+	public static String loadMany2manyView(Dict dict){
+		Dict params = dict.getDict("params");
+		Node field = getFieldNode(params.get("model"),params.get("field"),"tree");
+		String relation = Model.getRelation(params.get("model"), params.get("field"));
+		if(field==null){
+			return "";
+		}
+		EViewType et = new EViewType();
+		et.setNode(field);
+		Dict dt = new Dict();
+		dt.update("model", relation);
+		et.setDict(dt);
+		return loadMany2manyModelView(et);
+	
+	}
 	public static String loadO2mItem(Dict dict){
 		Dict params = dict.getDict("params");
 		if(params.get("field").equals("")){

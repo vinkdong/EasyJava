@@ -67,6 +67,11 @@ public class EFilter implements Filter {
 				String html = EWebView.loadO2mItem(dict);
 				out.println(html);
 			}
+			else if(url.endsWith("_rpc_m2m")){
+				Dict dict = Self.env.rpcToDict(hq);
+				String html = EWebView.loadMany2manyView(dict);
+				out.println(html);
+			}
 			else if(url.endsWith("_rpc_loadview")){
 				Dict dict = Self.env.rpcToDict(hq);
 				String html = EWebView.loadPage(dict);
