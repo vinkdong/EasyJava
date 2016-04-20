@@ -109,8 +109,11 @@ public class EWebView {
 		Dict properties = et.getDict();
 		List<Map<String, String>> dataset = Self.env.read(properties);
 		StringBuilder tbody = new StringBuilder();
+		tbody.append("<tbody>");
 		List<String> head = new ArrayList<>(); 
 		boolean init_head = true;
+		if(dataset!=null){
+		
 		for(Map<String,String> line :dataset){
 			tbody.append("<tr data-id="+ETool.get(line, "id")+">\n");
 			for(int i=0;i<nodelist.getLength();i++){
@@ -174,12 +177,14 @@ public class EWebView {
 			tbody.append("</tr>\n");
 			init_head = false;
 		}
+		}
 		if(et.getDict().get("add").equals("true")){
 			tbody.append("<tr>");
 			tbody.append("<td colspan='2'>");
 			tbody.append("<a class=\"col-sm-10 e_m2m_add\">添加一个项目</a>");
 			tbody.append("</td></tr>");
 		}
+		tbody.append("</tbody>");
 		StringBuilder thead = new StringBuilder();
 		thead.append("<thead>\n\t<tr>");
 		for(String h:head){
@@ -349,7 +354,7 @@ public class EWebView {
 					}
 					else{
 						//TODO:对象翻译，读取String
-						form.append("\t\t\t<div class=\"col-sm-10\">");
+						form.append("\t\t\t<div class=\"col-sm-10 e_field\">");
 						if(type!=null&&type.equalsIgnoreCase("many2one")){
 							String relation = Model.getRelation(model, val);
 							String inverse = Model.getInverse(model, val);
@@ -365,6 +370,8 @@ public class EWebView {
 							dt.update("model",relation);
 							dt.update("add", "true");
 							dt.update("field", val);
+							dt.update("mid",String.valueOf(id));
+							dt.update("mmodel",model);
 							e.setDict(dt);
 							e.setNode(field);
 							form.append(loadTree(e));
@@ -806,7 +813,14 @@ public class EWebView {
 				Self.env.m2m.mid = params.get("id");
 				Self.env.m2m.add(params.get("model"), params.get("field"), ids);
 			}
-			return "";
+			EViewType e = new EViewType();
+			dt.update("add", "true");
+			dt.update("field", params.get("field"));
+			dt.update("mid",params.get("id"));
+			dt.update("mmodel",params.get("model"));
+			e.setDict(dt);
+			e.setNode(field);
+			return loadTree(e);
 		}
 		return loadMany2manyModelView(et);
 	

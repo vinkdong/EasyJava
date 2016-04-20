@@ -251,8 +251,8 @@ var easyjava = new Object({
         
         $(document).on("click",".add-m2m",function(e){  
 			e.stopPropagation();
-			self.$el = $(this).closest('.modal-content');
-			var body  = self.$el.find('.modal-body tbody tr');
+			var el = $(this).closest('.modal-content');
+			var body  = el.find('.modal-body tbody tr');
 			var ids = [];
 			_.each(body,function(line){
 				var selector = $(line).children(":first").children(":first");
@@ -262,12 +262,12 @@ var easyjava = new Object({
 			});
 			res.id = self.res.id;
 			res.model = self.res.model;
-			res.field = self.$el.closest('.e_m2m_dialog').attr('id');
+			res.field = el.closest('.e_m2m_dialog').attr('id');
 			res.ids = ids;
 			res.type = 'add';
-			alert(self.res.id);
 			self.loadM2mOp(res).done(function(e){
-				
+				self.$el.closest('.e_field').html(e);
+				$('#'+res.field+'').modal('hide');
 			});
 		});
         

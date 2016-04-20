@@ -99,7 +99,27 @@ public class Self {
 				return null;
 			}
 			else {
-				return Model.read(properties.get("model"), "1=1");
+				if(properties.get("mmodel").equals("")){
+					return Model.read(properties.get("model"), "1=1");
+				}
+				else{
+					int[]ids = Model.getM2mIds(properties.get("mmodel"),properties.get("field"),properties.get("mid"));
+					if(ids!=null){
+						StringBuilder condation = new StringBuilder();
+						condation.append("id in (");
+						for(int i=0;i<ids.length;i++){
+							condation.append(ids[i]);
+							if(i<(ids.length-1)){
+								condation.append(",");
+							}
+						}
+						condation.append(")");
+						return Model.read(properties.get("model"), condation.toString());
+					}
+					else{
+						return Model.read(properties.get("model"), "1=2");
+					}
+				}
 			}
 		}
 		

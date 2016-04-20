@@ -226,7 +226,6 @@ public class Model {
 	}
 	
 	public static String getInverse(String model_name,String field){
-		System.out.println(EGlobal.models);
 		if(EGlobal.models.containsKey(model_name)){
 			Map<String,Map<String,String>>f = EGlobal.models.get(model_name);
 			if(f.containsKey(field)){
@@ -236,6 +235,32 @@ public class Model {
 		return null;
 	}
 	
+	public static int[] getM2mIds(String model_name,String field,String id){
+		if(DB.connection==null){
+			DATABASE.init();
+			DB.init();
+		}
+		String relation = getRelation(model_name, field);
+		String sql = "select "+relation+"_id from "+model_name+"_rel where "+model_name+"_id = "+id;
+		try {
+			Statement stmt = DB.connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_READ_ONLY);
+			EOut.print(sql);
+			ResultSet rs = stmt.executeQuery(sql);
+			rs.last();
+			int[] ids = new int[rs.getRow()];
+			rs.beforeFirst();
+			int cr = 0;
+			while(rs.next()){
+				ids[cr] = rs.getInt(1);
+				cr++;
+			}
+			return ids;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
 	public static int[] getO2mId(String model_name,int id,String field){
 		if(DB.connection==null){
 			DATABASE.init();
