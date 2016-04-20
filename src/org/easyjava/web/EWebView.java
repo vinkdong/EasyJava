@@ -9,6 +9,7 @@ import org.easyjava.database.DATABASE;
 import org.easyjava.database.DB;
 import org.easyjava.database.Model;
 import org.easyjava.file.Dict;
+import org.easyjava.file.EFile;
 import org.easyjava.file.EViewType;
 import org.easyjava.file.EXml;
 import org.easyjava.util.EOut;
@@ -813,11 +814,14 @@ public class EWebView {
 		}
 	}
 	
-	public String fillLayer(BufferedReader reader,List<Map<String, String>> fieldList ,String url){
+	public String loadHomePage(){
+		BufferedReader reader = EFile.getBufferRead(EGlobal.PATH+"/system/homepage.html");
+		return fillLayer(reader, null);
+	}
+	
+	public String fillLayer(BufferedReader reader,List<Map<String, String>> fieldList){
 		String line ="";	
-		String html ="<!DOCTYPE html>\n"
-						+ "<html lang='en'>\n"
-						+new BaseHTML().getHeader(url)+new BaseHTML().getNav(url);
+		String html ="";
 		try {
 			while ((line=reader.readLine()) !=null) {
 				if(line.contains("$field_")){
@@ -827,7 +831,7 @@ public class EWebView {
 						if(li.get("start")!=null){
 							html+=li.get("start");
 						};
-						if(li.get("field")!=null){
+						if(li.get("field")!=null&&fieldList!=null){
 							if(li.get("field").equalsIgnoreCase("header")){
 								html += new BaseHTML().getFormHeader("edit", "forum", "1");
 //								html += Self.env.search("forum","id = 1"); 
@@ -838,7 +842,6 @@ public class EWebView {
 									break;
 								}
 							}
-							
 						};
 						if(li.get("end")!=null){
 							html+=li.get("end")+"\n";
@@ -853,7 +856,7 @@ public class EWebView {
 			// TODO Auto-generated catch block
 			return null;
 		}
-		return html+"\n</html>";
+		return html+"\n";
 	};
 	
 	public static String loadMany2manyView(Dict dict){

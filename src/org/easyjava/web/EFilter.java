@@ -62,6 +62,10 @@ public class EFilter implements Filter {
 	        	int id  = Self.env.add(hq);
 	        	out.print(id);        	
 	        }
+			else if(url.equalsIgnoreCase("/")){
+				String html = new EWebView().loadHomePage();
+				out.println(html);
+			}
 			else if(url.endsWith("_rpc_o2m")){
 				Dict dict = Self.env.rpcToDict(hq);
 				String html = EWebView.loadO2mItem(dict);
