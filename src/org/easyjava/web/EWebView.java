@@ -799,6 +799,15 @@ public class EWebView {
 		Dict dt = new Dict();
 		dt.update("model", relation);
 		et.setDict(dt);
+		if(params.get("type").equals("add")){
+			String ids_str = params.get("ids");
+			if(ids_str.startsWith("[")&&ids_str.endsWith("]")){
+				int[] ids = EString.StringToInt(ids_str.substring(1, ids_str.length()-1).split(","));
+				Self.env.m2m.mid = params.get("id");
+				Self.env.m2m.add(params.get("model"), params.get("field"), ids);
+			}
+			return "";
+		}
 		return loadMany2manyModelView(et);
 	
 	}

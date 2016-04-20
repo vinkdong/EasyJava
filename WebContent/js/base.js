@@ -98,12 +98,12 @@ var easyjava = new Object({
         });
         $(document).on("click",".row.e_form tbody tr td",function(e){
         	e.preventDefault();
-        	var id = $(this).parent().attr("data-id");
-        	self.res.type = 'view';
-        	self.res.id = id;
         	if($(this).find('button').length>0||$(this).find('.e_m2m_add').length>0){
         		return null;
         	}
+        	var id = $(this).parent().attr("data-id");
+        	self.res.type = 'view';
+        	self.res.id = id;
         	self.loadview(self.res,self.url).done(function(data){
     			var s = $('.container.main');
     			s.html(data);
@@ -223,7 +223,7 @@ var easyjava = new Object({
         	res.model =self.res.model;
         	res.field = self.$el.parents().find('table').attr('field');
         	return self.loadM2mOp(res).done(function(e){
-        		var module = 	'<div class="modal fade" id="'+res.field+'" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">\n'+
+        		var module = 	'<div class="modal fade e_m2m_dialog" id="'+res.field+'" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">\n'+
 								'    <div class="modal-dialog" role="document">\n'+
 								'        <div class="modal-content">\n'+
 								'           <div class="modal-header">\n'+
@@ -234,7 +234,7 @@ var easyjava = new Object({
 								'            </div>\n'+
 								'            <div class="modal-footer">\n'+
 								'                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>\n'+
-								'                <button type="button" class="btn btn-primary">Save changes</button>\n'+
+								'                <button type="button" class="btn btn-primary add-m2m">Save changes</button>\n'+
 								'            </div>\n'+
 								'        </div>\n'+
 								'    </div>\n'+
@@ -249,9 +249,27 @@ var easyjava = new Object({
 //        	
 //        });
         
-        $('#myModal').on('shown.bs.modal', function () {
-        	  $('#myInput').focus();
-        })
+        $(document).on("click",".add-m2m",function(e){  
+			e.stopPropagation();
+			self.$el = $(this).closest('.modal-content');
+			var body  = self.$el.find('.modal-body tbody tr');
+			var ids = [];
+			_.each(body,function(line){
+				var selector = $(line).children(":first").children(":first");
+				if(selector.is(':checked')){
+					ids.push(selector.parent().attr('data-id'));
+				}
+			});
+			res.id = self.res.id;
+			res.model = self.res.model;
+			res.field = self.$el.closest('.e_m2m_dialog').attr('id');
+			res.ids = ids;
+			res.type = 'add';
+			alert(self.res.id);
+			self.loadM2mOp(res).done(function(e){
+				
+			});
+		});
         
         /**
          * 下拉框

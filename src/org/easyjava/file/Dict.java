@@ -174,7 +174,7 @@ public class Dict {
 					}
 				}				
 			}
-			if (a == '{') {
+			if (a == '{'||a=='['){
 				deep++;
 			}
 			if (deep == 1 && a == ','&&need_replace) {
@@ -186,7 +186,7 @@ public class Dict {
 				mind = true;
 			} else {
 				res.add(a);
-				if (a == '}') {
+				if (a == '}'||a==']') {
 					deep--;
 				}
 			}

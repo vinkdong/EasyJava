@@ -119,7 +119,12 @@ public class EString {
 	public static int[] StringToInt(String[] strArr) {
 		int[] aArr = new int[strArr.length];
 		for (int i = 0; i < strArr.length; i++) {
-			aArr[i] = Integer.parseInt(strArr[i]);
+			if(strArr[i].matches("[0-9]*")){
+				aArr[i] = Integer.parseInt(strArr[i]);
+			}
+			else{
+				aArr[i] = 0;
+			}
 		}
 
 		return aArr;

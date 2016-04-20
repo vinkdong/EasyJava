@@ -19,6 +19,21 @@ public class Self {
 	public static String model = "";
 	
 	static class env{
+		
+		static class m2m{
+			public static String mid = "0";
+			public static int add(String model,String field,int[] ids){
+				for(int id:ids){
+					System.out.println(model);
+					Map<String, String> val = new HashMap<>();
+					val.put(model+"_id", mid);
+					String relation = Model.getRelation(model, field);
+					val.put(relation+"_id", String.valueOf(id));
+					DB.add(model+"_rel", val);
+				}
+				return 1;
+			}
+		}
 		public static String search(String model,String domain){
 			Model.read(model, domain);
 			String  html = "<div class=\"col-md-8\">" +
