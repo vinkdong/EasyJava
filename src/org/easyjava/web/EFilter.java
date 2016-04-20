@@ -97,6 +97,9 @@ public class EFilter implements Filter {
 					DB.init();
 				}
 				
+				String[] ir_groups = new String[8];
+				ir_groups[0] = "field=name,string=Name,type=Text";
+				ir_groups[1] = "field=name,string=Name,type=Text";
 				this.createModel();			
 //				Mo.define("ed",null, true);
 				

@@ -376,6 +376,14 @@ public class EWebView {
 							e.setNode(field);
 							form.append(loadTree(e));
 						}
+						else if(type!=null&&type.equalsIgnoreCase("boolean")){
+							if(ETool.get(dataset, val).equals("t")){
+								form.append("&radic;");
+							}
+							else{
+								form.append("✘");
+							}
+						}
 						else{
 							form.append(ETool.get(dataset, val));
 						}
@@ -628,6 +636,16 @@ public class EWebView {
 							form.append("\t\t\t\t</ul>");
 							form.append("\t\t</div>");
 							form.append("\t</div>");
+						}
+						else if(ttype!=null&&ttype.equalsIgnoreCase("boolean")){
+							if(ETool.get(dataset, val).equals("t")){
+								form.append("<input type=\"checkbox\" class=\"form-control\"");
+								form.append("name='"+val+"' checked='checked'>");
+							}
+							else{
+								form.append("<input type=\"checkbox\" class=\"form-control\"");
+								form.append("name='"+val+"'>");
+							}
 						}
 						else{
 							form.append("<input type=\"text\" class=\"form-control\"");

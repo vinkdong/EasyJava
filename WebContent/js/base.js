@@ -296,7 +296,12 @@ var easyjava = new Object({
     read_field : function(cr,id){
         var res = {id:id}
         _.each(cr.find('input'),function(node){
-            res[node.getAttribute('name')] = $(node).val();
+        	if(node.getAttribute('type')=='checkbox'){
+        		res[node.getAttribute('name')] = $(node).is(':checked');
+        	}
+        	else{
+        		res[node.getAttribute('name')] = $(node).val();
+        	}
         });
         _.each(cr.find('textarea'),function(node){
             res[node.getAttribute('name')] = $(node).val();

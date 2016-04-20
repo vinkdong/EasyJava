@@ -10,7 +10,7 @@ public class Filter extends EFilter{
 		
 		String[]  comment = new String[3];
 		comment[0] = "field=name,string=User,type=Text";
-		comment[1] = "field=date,string=Date,type=Date";
+		comment[1] = "field=date,string=Date,type=boolean";
 		comment[2] = "field=content,string=Comment,type=Text";
 		Model.add("comment", comment);
 		

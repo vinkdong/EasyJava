@@ -66,6 +66,10 @@ public class Model {
 			case "Double":
 				sql +=  " "+field.get("field")+" REAL  ,\n" ;
 				break;
+			case "boolean":
+			case "Boolean":
+				sql +=  " "+field.get("field")+" BOOLEAN  ,\n" ;
+				break;
 			default:
 				Pattern p = Pattern.compile("(o|O)ne2many:.*");
 				if(p.matcher(ttype).matches()){
