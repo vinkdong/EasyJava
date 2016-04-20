@@ -16,7 +16,8 @@
 				 <field name='comment'>
 					<field name="content"></field>
 					<field name='name'/>
-					<field name='date'/>
+					<field name='module'/>
+					
 				</field>
 				<field name='employee_ids'>
 					<field name='name'></field>

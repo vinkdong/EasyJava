@@ -287,6 +287,14 @@ var easyjava = new Object({
 			$(".select").removeClass("open");
 			e.stopPropagation();
 		});
+        
+        $(document).on("click",".e_selection_item",function(e){  
+        	e.stopPropagation();
+			var _this=$(this);
+			console.log(_this.closest('button').html());
+			_this.closest('.e_selection').find('button').html(_this.text()+'<span class="caret"></span>');
+			_this.closest('.e_selection').attr('data-value',_this.attr('data-value'));
+		});
 		
 		$(document).on('click',function(){
 			$(".select").removeClass("open");
@@ -308,6 +316,9 @@ var easyjava = new Object({
         });
         _.each(cr.find('.e_m2o > div > p'),function(node){
         	res[node.getAttribute('name')] = node.getAttribute('data-id');
+        });
+        _.each(cr.find('.e_selection'),function(node){
+        	res[node.getAttribute('name')] = node.getAttribute('data-value');
         });
         return res;
     },

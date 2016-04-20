@@ -8,10 +8,11 @@ public class Filter extends EFilter{
 	@Override
 	public void createModel() {
 		
-		String[]  comment = new String[3];
+		String[]  comment = new String[4];
 		comment[0] = "field=name,string=User,type=Text";
 		comment[1] = "field=date,string=Date,type=boolean";
 		comment[2] = "field=content,string=Comment,type=Text";
+		comment[3] = "field=module,string=Model,type=Selection,selection=[(a:A)(b:B)]";
 		Model.add("comment", comment);
 		
 		

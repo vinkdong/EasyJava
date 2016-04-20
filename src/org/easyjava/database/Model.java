@@ -23,6 +23,7 @@ public class Model {
 	protected static String type = "";
 	protected static String field = "";
 	protected static String inverse = "";
+	protected static String selection = "";
 	
 	public  void createModel(){
 		
@@ -59,7 +60,12 @@ public class Model {
 				sql +=  " "+field.get("field")+" CHAR(255)  ,\n" ;
 				break;
 			case "Text":
-			case "text":	
+			case "text":
+				sql +=  " "+field.get("field")+" TEXT  ,\n" ;
+				break;
+			case "Selection":
+			case "selection":
+				selection = field.get("selection");
 				sql +=  " "+field.get("field")+" TEXT  ,\n" ;
 				break;		
 			case "Float":
@@ -130,6 +136,7 @@ public class Model {
 			m.put("type",type);
 			m.put("relation", relation);
 			m.put("inverse", inverse);
+			m.put("selection",selection);
 			f.put(field.get("field"), m);
 		}
 		
@@ -234,6 +241,15 @@ public class Model {
 			Map<String,Map<String,String>>f = EGlobal.models.get(model_name);
 			if(f.containsKey(field)){
 				return f.get(field).get("inverse");
+			}
+		}
+		return null;
+	}
+	public static String getSelection(String model_name,String field){
+		if(EGlobal.models.containsKey(model_name)){
+			Map<String,Map<String,String>>f = EGlobal.models.get(model_name);
+			if(f.containsKey(field)){
+				return f.get(field).get("selection");
 			}
 		}
 		return null;

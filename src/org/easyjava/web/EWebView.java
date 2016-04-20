@@ -463,6 +463,28 @@ public class EWebView {
 							form.append("\t\t</div>");
 							form.append("\t</div>");
 						}
+						else if(ttype!=null&&ttype.equalsIgnoreCase("selection")){
+							form.append("<div class=\"e_selection dropdown\" data-value='' name='"+val+"'>");
+							form.append("<button class=\"btn btn-default dropdown-toggle\" type=\"button\" id=\"dropdownMenu1\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">");
+							form.append("");
+							form.append("<span class=\"caret\"></span>");
+							form.append("</button>");
+							form.append("<ul class=\"dropdown-menu\" aria-labelledby=\"dropdownMenu1\">");
+							String selection = Model.getSelection(model, val);
+							if(selection.startsWith("[")&&selection.endsWith("]")){
+								selection = selection.substring(1, selection.length()-1);
+								if(selection.startsWith("(")&&selection.endsWith(")")){
+									selection = selection.substring(1, selection.length()-1);
+									String[] sel = selection.split("\\)\\(");
+									for(String l:sel){
+										String[] sels = l.split(":");
+										form.append("<li><a class=\"e_selection_item\" data-value='"+sels[0]+"'>"+sels[1]+"</a></li>");
+									}
+								}
+							}
+							form.append("</ul>");
+							form.append("</div>");
+						}
 						else{
 							form.append("<input type=\"text\" class=\"form-control\"");
 							form.append("name='"+val+"'>");
@@ -646,6 +668,28 @@ public class EWebView {
 								form.append("<input type=\"checkbox\" class=\"form-control\"");
 								form.append("name='"+val+"'>");
 							}
+						}
+						else if(ttype!=null&&ttype.equalsIgnoreCase("selection")){
+							form.append("<div class=\"dropdown e_selection\" data-value='"+ETool.get(dataset, val)+"' name='"+val+"'>");
+							form.append("<button class=\"btn btn-default dropdown-toggle\" type=\"button\" id=\"dropdownMenu1\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">");
+							form.append(ETool.get(dataset, val));
+							form.append("<span class=\"caret\"></span>");
+							form.append("</button>");
+							form.append("<ul class=\"dropdown-menu\" aria-labelledby=\"dropdownMenu1\">");
+							String selection = Model.getSelection(model, val);
+							if(selection.startsWith("[")&&selection.endsWith("]")){
+								selection = selection.substring(1, selection.length()-1);
+								if(selection.startsWith("(")&&selection.endsWith(")")){
+									selection = selection.substring(1, selection.length()-1);
+									String[] sel = selection.split("\\)\\(");
+									for(String l:sel){
+										String[] sels = l.split(":");
+										form.append("<li><a class=\"e_selection_item\" data-value='"+sels[0]+"'>"+sels[1]+"</a></li>");
+									}
+								}
+							}
+							form.append("</ul>");
+							form.append("</div>");
 						}
 						else{
 							form.append("<input type=\"text\" class=\"form-control\"");
