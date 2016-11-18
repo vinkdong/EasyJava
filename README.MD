@@ -25,7 +25,7 @@
 
 ```java
   vink = {
-    Name  : "VinkDong",
+    Name  : "VinkDong ",
     site : "http://vinkdong.com"
     mail:"dong@wenqi.us"
   }
