@@ -11,6 +11,7 @@ public class Dict {
 	private String dict_str = "";
 
 	@Test
+<<<<<<< Updated upstream
 	public void xx() {
 		String dict = "{\"jsonrpc\":  \"2,0\",\"params\":{\"id\":\"1\",\"name\":\""
 				+ "341\",\"sex\":\"4241\",content:\"42341412\"},,\"id\":\"742983313\"}";
@@ -20,6 +21,19 @@ public class Dict {
 		dd.delete("id");
 		System.out.println(dd);
 	    
+=======
+	public void xx(){
+		
+		Object x  = "fdaaf";
+		Map<String, Object> y = new HashMap<>();
+		Map<String, Object> z = new HashMap<>();
+		z.put("fadf", y);
+		z.put("fdaf", "fefwe");
+		System.out.println(z.get("fdaf"));
+		System.out.println(x.toString());
+		String dict = "{\"jsonrpc\":  \"2.0\",\" params\":{\"id\":\"1\",\"name\":\"341\",\"sex\":\"4241\",\"content\":\"42341412\"},\"id\":742983313}";
+		update(dict);
+>>>>>>> Stashed changes
 	}
 	
 	public String toString(){
